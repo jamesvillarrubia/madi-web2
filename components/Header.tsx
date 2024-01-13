@@ -1,7 +1,11 @@
 'use client'
 
+
+
 import { usePathname } from 'next/navigation'
 import NextLink from 'next/link'
+import Logo from './Logo'
+
 import { Flex, Heading, IconButton, Select, Tooltip } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import cs from 'classnames'
@@ -31,9 +35,13 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
       style={{ backgroundColor: 'var(--color-background)' }}
     >
       <Flex align="center" gap="3">
-        <NextLink href="/">
-          <Heading as="h2">ChatGPTLite</Heading>
-        </NextLink>
+      <NextLink href="/">
+        <div className="flex items-center">
+          <Logo fill="currentColor" width={50}/>
+          <Heading as="h1" className="ml-3 text-4xl	font-mono tracking-wider	">MADI</Heading>
+          <span className="ml-3 text-sm mt-1 italic" style={{color:'var(--accent-a10)'}}>ARMD AI Assistant</span>
+        </div>
+      </NextLink>
         <Flex align="center" gap="3" className="ml-auto">
           <HeaderUser />
           <Select.Root value={theme} onValueChange={setTheme}>

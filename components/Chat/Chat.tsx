@@ -1,5 +1,5 @@
 'use client'
-
+import { postChat } from './getResponse'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { Flex, Heading, IconButton, ScrollArea, TextArea } from '@radix-ui/themes'
@@ -7,9 +7,10 @@ import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
 import { useToast } from '@/components'
-import { ChatMessage, Chat } from './interface'
+import { ChatMessage } from './interface'
 import ChatContext from './chatContext'
 import Message from './Message'
+import { EditableText } from './EditableText'
 
 import './index.scss'
 
@@ -21,29 +22,6 @@ export interface ChatGPInstance {
   focus: () => void
 }
 
-const postChatOrQuestion = async (chat: Chat, messages: any[], input: string) => {
-  const url = chat.persona?.key ? '/api/document/question' : '/api/chat'
-
-  const data = chat.persona?.key
-    ? {
-        key: chat.persona?.key,
-        messages: [...messages!],
-        question: input
-      }
-    : {
-        prompt: chat?.persona?.prompt,
-        messages: [...messages!],
-        input
-      }
-
-  return await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify(data)
-  })
-}
 
 const Chat = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
@@ -80,40 +58,33 @@ const Chat = (props: ChatProps, ref: any) => {
     setIsLoading(true)
     setConversation?.([...conversation!, { content: input, role: 'user' }])
 
+
     try {
-      const response = await postChatOrQuestion(currentChat!, conversation, input)
+      const response = await postChat(currentChat!, conversation, input) as ReadableStream
 
-      if (response.ok) {
-        const data = response.body
-
+      if (response instanceof ReadableStream) {
+        const data = response;
+    
         if (!data) {
-          throw new Error('No data')
+          throw new Error('No data');
         }
-
-        const reader = data.getReader()
-        const decoder = new TextDecoder('utf-8')
-        let done = false
-        let resultContent = ''
-
-        while (!done) {
-          try {
-            const { value, done: readerDone } = await reader.read()
-            const char = decoder.decode(value)
-            if (char) {
-              setCurrentMessage((state) => {
-                if (debug) {
-                  console.log({ char })
-                }
-                resultContent = state + char
-                return resultContent
-              })
-            }
-            done = readerDone
-          } catch {
-            done = true
+    
+        const decoder = new TextDecoder('utf-8');
+        let resultContent = '';
+    
+        for await (const chunk of data as any) {
+          const char = decoder.decode(chunk);
+          if (char) {
+            setCurrentMessage((state) => {
+              if (debug) {
+                console.log({ char })
+              }
+              resultContent = state + char;
+              return resultContent;
+            });
           }
         }
-        // The delay of timeout can not be 0 as it will cause the message to not be rendered in racing condition
+    
         setTimeout(() => {
           if (debug) {
             console.log({ resultContent })
@@ -125,33 +96,93 @@ const Chat = (props: ChatProps, ref: any) => {
           ])
           setCurrentMessage('')
         }, 1)
-      } else {
-        const reuslt = await response.json()
-        if (response.status === 401) {
-          setConversation?.((state) => {
-            state.pop()
-            return [...state]
-          })
-          location.href =
-            reuslt.redirect +
-            `?callbackUrl=${encodeURIComponent(location.pathname + location.search)}`
-        } else {
-          toast({
-            title: 'Error',
-            description: reuslt.error
-          })
-        }
       }
-
-      setIsLoading(false)
+    
+      setIsLoading(false);
     } catch (error: any) {
-      console.error(error)
+      console.error(error);
       toast({
         title: 'Error',
         description: error.message
-      })
-      setIsLoading(false)
+      });
+      setIsLoading(false);
     }
+  
+  //   try {
+  //     const response = await postChat(currentChat!, conversation, input)
+  //     console.log('RESPONSE', response)
+  //     if (response instanceof ReadableStream) {
+  //       const data = response
+
+  //       if (!data) {
+  //         throw new Error('No data')
+  //       }
+
+  //       const reader = data.getReader()
+  //       const decoder = new TextDecoder('utf-8')
+  //       let done = false
+  //       let resultContent = ''
+
+  //       let i=0
+  //       while (!done) {
+  //         console.log(i++)
+  //         try {
+  //           const { value, done: readerDone } = await reader.read()
+  //           const char = decoder.decode(value)
+  //           if (char) {
+  //             setCurrentMessage((state) => {
+  //               if (debug) {
+  //                 console.log({ char })
+  //               }
+  //               resultContent = state + char
+  //               return resultContent
+  //             })
+  //           }
+  //           done = readerDone
+  //         } catch {
+  //           done = true
+  //         }
+  //       }
+  //       // The delay of timeout can not be 0 as it will cause the message to not be rendered in racing condition
+  //       setTimeout(() => {
+  //         if (debug) {
+  //           console.log({ resultContent })
+  //         }
+  //         setConversation?.([
+  //           ...conversation!,
+  //           { content: input, role: 'user' },
+  //           { content: resultContent, role: 'assistant' }
+  //         ])
+  //         setCurrentMessage('')
+  //       }, 1)
+  //     }
+  //     // } else {
+  //     //   const reuslt = await response.json()
+  //     //   if (response.status === 401) {
+  //     //     setConversation?.((state) => {
+  //     //       state.pop()
+  //     //       return [...state]
+  //     //     })
+  //     //     location.href =
+  //     //       reuslt.redirect +
+  //     //       `?callbackUrl=${encodeURIComponent(location.pathname + location.search)}`
+  //     //   } else {
+  //     //     toast({
+  //     //       title: 'Error',
+  //     //       description: reuslt.error
+  //     //     })
+  //     //   }
+  //     // }
+
+  //     setIsLoading(false)
+  //   } catch (error: any) {
+  //     console.error(error)
+  //     toast({
+  //       title: 'Error',
+  //       description: error.message
+  //     })
+  //     setIsLoading(false)
+  //   }
   }
 
   const handleKeypress = (e: any) => {
@@ -218,6 +249,7 @@ const Chat = (props: ChatProps, ref: any) => {
         px="4"
         style={{ backgroundColor: 'var(--gray-a2)' }}
       >
+        <EditableText>{currentChat?.persona?.name || 'None'}</EditableText>
         <Heading size="4">{currentChat?.persona?.name || 'None'}</Heading>
       </Flex>
       <ScrollArea

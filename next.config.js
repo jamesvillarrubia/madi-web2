@@ -7,15 +7,15 @@ const nextConfig = {
     // includePaths: [path.join(__dirname, 'styles')]
   },
   reactStrictMode: false,
-  async redirects() {
-    return [
-      {
-        source: '/',
-        destination: '/chat',
-        permanent: true
-      }
-    ]
-  }
+  // async redirects() {
+  //   return [
+  //     {
+  //       source: '/',
+  //       destination: '/chat',
+  //       permanent: true
+  //     }
+  //   ]
+  // }
 }
 
 module.exports = nextConfig

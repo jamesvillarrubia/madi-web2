@@ -5,7 +5,7 @@ import { Theme, ThemePanel } from '@radix-ui/themes'
 export const ThemesProvider = ({ children }: PropsWithChildren) => {
   return (
     <ThemeProvider>
-      <Theme accentColor="violet" style={{ height: '100%' }} className="h-full">
+      <Theme accentColor="blue" style={{ height: '100%' }} className="h-full">
         {children}
         {/* <ThemePanel /> */}
       </Theme>

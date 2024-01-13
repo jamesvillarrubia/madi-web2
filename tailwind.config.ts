@@ -19,7 +19,6 @@ const config: Config = {
   plugins: [
     require('postcss-import'),
     require('@tailwindcss/typography'),
-    require('@tailwindcss/line-clamp')
   ]
 }
 export default config

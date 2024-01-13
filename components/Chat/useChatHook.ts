@@ -194,12 +194,29 @@ const useChatHook = () => {
     })
   }
 
+  const saveChatMetadata = (metadata) => {
+    let chats = JSON.parse(localStorage.getItem('chats') || '{}')
+      chats[currentChat?.id || ''] = {
+        ...chats[currentChat?.id || ''],
+        ...metadata
+      }
+    localStorage.setItem('chats', JSON.stringify(chats))
+  }
+
   const saveMessages = (messages: ChatMessage[]) => {
+    let chats = JSON.parse(localStorage.getItem('chats') || '{}')
     if (messages.length > 0) {
-      localStorage.setItem(`ms_${currentChat?.id}`, JSON.stringify(messages))
+      chats[currentChat?.id || ''] = {
+        ...chats[currentChat?.id || ''],
+        messages: messages
+      }
     } else {
-      localStorage.removeItem(`ms_${currentChat?.id}`)
+      chats[currentChat?.id || ''] = {
+        ...chats[currentChat?.id || ''],
+        messages: []
+      }
     }
+    localStorage.setItem('chats', JSON.stringify(chats))
   }
 
   useEffect(() => {
@@ -211,7 +228,8 @@ const useChatHook = () => {
       setChatList(chatList)
 
       chatList.forEach((chat) => {
-        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[]
+        const chatStack = JSON.parse(localStorage.getItem(`chats`) || '{}') as any
+        const messages = chatStack[`${chat?.id}`] as ChatMessage[]
         messagesMap.current.set(chat.id!, messages)
       })
 

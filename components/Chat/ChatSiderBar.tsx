@@ -21,6 +21,7 @@ export const ChatSiderBar = () => {
     onOpenPersonaPanel
   } = useContext(ChatContext)
 
+
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
       <Flex className="p-2 h-full overflow-hidden w-64" direction="column" gap="3">
@@ -34,8 +35,10 @@ export const ChatSiderBar = () => {
         </Box>
         <ScrollArea className="flex-1" type="auto" scrollbars="vertical">
           <Flex direction="column" gap="3">
-            {chatList.map((chat) => (
-              <Box
+            {chatList.map((chat) => {
+              const chatStack = JSON.parse(localStorage.getItem(`chats`) || '{}') as any
+              let chatStart = (chatStack[chat.id || '']||[]).messages?.filter((m:any)=>m.role ==='user')[0] || ''
+              return (<Box
                 key={chat.id}
                 width="auto"
                 className={cs('bg-token-surface active:scale-95 truncate', {
@@ -44,7 +47,8 @@ export const ChatSiderBar = () => {
                 onClick={() => onChangeChat?.(chat)}
               >
                 <Text as="p" className="truncate">
-                  {chat.persona?.name}
+                  {/* {chat.persona?.name}:  */}
+                  {chatStart.content || 'ChatGPT'}
                 </Text>
                 <IconButton
                   size="2"
@@ -59,7 +63,8 @@ export const ChatSiderBar = () => {
                   <AiOutlineCloseCircle className="h-4 w-4" />
                 </IconButton>
               </Box>
-            ))}
+            )}
+            )}
           </Flex>
         </ScrollArea>
         <Box
