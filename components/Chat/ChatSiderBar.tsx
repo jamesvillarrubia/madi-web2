@@ -6,6 +6,7 @@ import cs from 'classnames'
 import { SiOpenai } from 'react-icons/si'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import ChatContext from './chatContext'
+import { FaPlus } from "react-icons/fa6";
 
 import './index.scss'
 
@@ -30,14 +31,13 @@ export const ChatSiderBar = () => {
           onClick={() => onCreateChat?.(DefaultPersonas[0])}
           className="bg-token-surface-primary active:scale-95 "
         >
-          <SiOpenai className="h-5 w-5" />
+          {/* <SiOpenai className="h-5 w-5" /> */}
+          <FaPlus/>
           <Text>New Chat</Text>
         </Box>
         <ScrollArea className="flex-1" type="auto" scrollbars="vertical">
           <Flex direction="column" gap="3">
             {chatList.map((chat) => {
-              const chatStack = JSON.parse(localStorage.getItem(`chats`) || '{}') as any
-              let chatStart = (chatStack[chat.id || '']||[]).messages?.filter((m:any)=>m.role ==='user')[0] || ''
               return (<Box
                 key={chat.id}
                 width="auto"
@@ -47,8 +47,7 @@ export const ChatSiderBar = () => {
                 onClick={() => onChangeChat?.(chat)}
               >
                 <Text as="p" className="truncate">
-                  {/* {chat.persona?.name}:  */}
-                  {chatStart.content || 'ChatGPT'}
+                  {chat?.name || chat.persona?.name}
                 </Text>
                 <IconButton
                   size="2"

@@ -11,6 +11,8 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import cs from 'classnames'
 import { Link } from './Link'
 import { FaAdjust, FaMoon, FaRegSun } from 'react-icons/fa'
+import { IoSunny } from "react-icons/io5";
+
 import { HeaderUser } from './HeaderUser'
 import { useTheme } from './Themes'
 import { useCallback, useState } from 'react'
@@ -48,7 +50,7 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
             <Select.Trigger radius="full" />
             <Select.Content>
               <Select.Item value="light">
-                <FaRegSun />
+                <IoSunny />
               </Select.Item>
               <Select.Item value="dark">
                 <FaMoon />

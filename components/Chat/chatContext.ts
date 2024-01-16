@@ -1,7 +1,7 @@
 'use client'
 
 import { createContext } from 'react'
-import { Chat, ChatMessage, Persona } from './interface'
+import { Chat, ChatMessage, Persona, Tool } from './interface'
 
 const ChatContext = createContext<{
   debug?: boolean
@@ -15,6 +15,8 @@ const ChatContext = createContext<{
   personaModalLoading?: boolean
   openPersonaPanel?: boolean
   toggleSidebar?: boolean
+  currentTool?: string
+  toolList?: Tool[]
   onOpenPersonaModal?: () => void
   onClosePersonaModal?: () => void
   setCurrentChat?: (chat: Chat) => void
@@ -28,6 +30,9 @@ const ChatContext = createContext<{
   onOpenPersonaPanel?: (type?: string) => void
   onClosePersonaPanel?: () => void
   onToggleSidebar?: () => void
+  saveChatName?: (name: string)=>void
+  setCurrentTool?: (tool:string)=>void
+  setToolList?: (toolList:Tool[])=>void
 }>({
   personaPanelType: 'chat',
   DefaultPersonas: [],
