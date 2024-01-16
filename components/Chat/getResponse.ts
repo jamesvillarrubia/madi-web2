@@ -117,7 +117,7 @@ const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
 export const postChat = async (
   systemPrompt:string, 
   messageArray: any[], 
-  newMessage?: string, 
+  newMessage?: string | null, 
   currentTool?: string, 
   tools?:Tool[]
 ) : Promise<ResponseSet> => {
