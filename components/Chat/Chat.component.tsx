@@ -19,14 +19,14 @@ import './index.scss'
 
 export interface ChatProps {}
 
-export interface ChatGPInstance {
+export interface ChatGPTInstance {
   setConversation: (messages: ChatMessage[]) => void
   getConversation: () => ChatMessage[]
   focus: () => void
 }
 
 
-const Chat = (props: ChatProps, ref: any) => {
+const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
   const toastRef = useRef<any>(null)
   const { currentChat, currentTool, toolList, saveMessages, saveChatName, onToggleSidebar } =
@@ -287,4 +287,4 @@ const Chat = (props: ChatProps, ref: any) => {
   )
 }
 
-export default forwardRef<ChatGPInstance, ChatProps>(Chat)
+export default forwardRef<ChatGPTInstance, ChatProps>(ChatBox)

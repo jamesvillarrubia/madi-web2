@@ -3,7 +3,7 @@
 import { Flex } from '@radix-ui/themes'
 import { Chat, SideBar, PersonaPanel, ChatContext, useChatContext } from '@/components'
 
-import PersonaModal from './chat/PersonaModal'
+import PersonaModal from '../components/Persona/PersonaModal'
 
 const ChatPage = () => {
   const provider = useChatContext()

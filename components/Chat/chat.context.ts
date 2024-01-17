@@ -4,7 +4,7 @@ import { useCallback, useEffect, useRef, useState } from 'react'
 import { createContext } from 'react'
 
 import { v4 as uuid } from 'uuid'
-import { ChatGPInstance } from './Chat.component'
+import { ChatGPTInstance } from './Chat.component'
 import { useSearchParams } from 'next/navigation'
 
 import { ChatMessage, Chat, Persona, Tool } from '../interface'
@@ -80,7 +80,7 @@ export const useChatContext = () => {
 
   const messagesMap = useRef<Map<string, ChatMessage[]>>(new Map<string, ChatMessage[]>())
 
-  const chatRef = useRef<ChatGPInstance>(null)
+  const chatRef = useRef<ChatGPTInstance>(null)
 
   const [currentChat, setCurrentChat] = useState<Chat | undefined>(undefined)
 

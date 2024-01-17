@@ -1,13 +1,9 @@
 'use client'
 
-import { useCallback, useEffect, useRef, useState } from 'react'
-// import toast from 'react-hot-toast'
-import axios from 'axios'
+import { useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ChatGPInstance } from '../Chat/Chat.component'
-import { useSearchParams } from 'next/navigation'
 
-import { ChatMessage, Chat, Persona, Tool } from '../interface'
+import { Persona } from '../interface'
 import { useToast } from '..'
 import { uploadFiles } from '../helpers'
 
