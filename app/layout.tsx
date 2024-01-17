@@ -1,17 +1,17 @@
 import { Inter } from 'next/font/google'
 import ThemesProvider from '@/providers/ThemesProvider'
 import { Toaster } from '@/components'
-import { Header } from '@/components/Header'
+import { Header } from '@/components/Header/Header'
 
 import '@/styles/globals.scss'
 import '@/styles/theme-config.css'
 
 export const metadata = {
   title: {
-    default: 'ChatGPT Lite',
-    template: `%s - ChatGPT Lite`
+    default: 'MADI',
+    template: `%s - MADI`
   },
-  description: 'AI assistant powered by ChatGPT',
+  description: 'NASA ARMD AI assistant',
   icons: {
     icon: '/favicon.ico',
     shortcut: '/favicon-16x16.png',

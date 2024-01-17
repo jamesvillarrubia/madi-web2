@@ -1,5 +1,5 @@
 'use client'
-import { postRunner, convertChunktoJsonArray } from './getResponse'
+import { postRunner, convertChunktoJsonArray } from '../../app/getResponse'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select } from '@radix-ui/themes'
@@ -7,14 +7,14 @@ import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
 import { useToast } from '@/components'
-import { ChatMessage } from './interface'
-import ChatContext from './chatContext'
-import Message from './Message'
+import { ChatMessage } from '../interface'
+import { ChatContext } from './chat.context'
+import Message from './Message.component'
 import EditableText from './EditableText'
 import { FaRegEdit } from "react-icons/fa";
 import { FaCheck } from "react-icons/fa6";
 import { FaXmark } from "react-icons/fa6";
-import { ToolSelect } from './ToolSelect'
+import { ToolSelect } from '../Tools/ToolSelect'
 import './index.scss'
 
 export interface ChatProps {}
@@ -29,7 +29,7 @@ export interface ChatGPInstance {
 const Chat = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
   const toastRef = useRef<any>(null)
-  const { debug, currentChat, currentTool, toolList, saveMessages, saveChatName, onToggleSidebar } =
+  const { currentChat, currentTool, toolList, saveMessages, saveChatName, onToggleSidebar } =
     useContext(ChatContext)
 
   const [isLoading, setIsLoading] = useState(false)
@@ -80,12 +80,10 @@ const Chat = (props: ChatProps, ref: any) => {
       for await (const chunk of currentStream as any) {
         const decoder = new TextDecoder('utf-8');
         const decoded = convertChunktoJsonArray(decoder.decode(chunk))||[];
+        console.log('decoded',decoded)
         const char = decoded.reduce((acc,d)=>`${acc}${(d?.choices?.[0]?.delta?.content||'')}`,'')
         if (char) {
           setCurrentMessage((state) => {
-            if (debug) {
-              console.log({ char })
-            }
             resultContent = state + char;
             console.log('content',resultContent)
             return resultContent;
@@ -93,9 +91,6 @@ const Chat = (props: ChatProps, ref: any) => {
         }
       }
       setTimeout(() => {
-        if (debug) {
-          console.log({ resultContent })
-        }
         setConversation?.([
           ...conversation!,
           { content: input, role: 'user' },
@@ -170,7 +165,7 @@ const Chat = (props: ChatProps, ref: any) => {
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
-
+  console.log('currentChat', currentChat)
   return (
     <Flex direction="column" height="100%" className="relative" gap="3"
     style={{    backgroundColor: 'var(--accent-2)'}}
@@ -194,10 +189,13 @@ const Chat = (props: ChatProps, ref: any) => {
           editButtonContent={FaRegEdit()}
           cancelButtonContent={FaXmark()}
           saveButtonContent={FaCheck()}
-          value={currentChat?.persona?.name}
+          value={currentChat?.name || currentChat?.persona?.name}
           type="text"
           onSave={saveChatName}
         />
+        <div className="text-xs italic" style={{color: 'var(--accent-11)'}}>
+          {currentChat?.persona?.name}
+        </div>
       </Flex>
       <ScrollArea
         className="flex-1 px-4"

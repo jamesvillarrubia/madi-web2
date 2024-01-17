@@ -5,8 +5,8 @@ import { Avatar, Flex } from '@radix-ui/themes'
 import { SiOpenai } from 'react-icons/si'
 import { HiUser } from 'react-icons/hi'
 import { Markdown } from '@/components'
-import ChatContext from './chatContext'
-import { ChatMessage } from './interface'
+import { ChatContext, useChatContext } from './chat.context'
+import { ChatMessage } from '../interface'
 import * as Collapsible from '@radix-ui/react-collapsible';
 import { RowSpacingIcon, Cross2Icon } from '@radix-ui/react-icons';
 import { FaAngleDown } from "react-icons/fa";
@@ -24,7 +24,7 @@ function isJsonString(str:string) {
   return true;
 }
 const Message = (props: MessageProps) => {
-  const { currentChat } = useContext(ChatContext)
+  // const { currentChat } = useContext(ChatContext)
   const { role, content, name } = props.message
   const isUser = role === 'user'
   const [open, setOpen] = useState(false);

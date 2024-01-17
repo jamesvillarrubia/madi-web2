@@ -9,12 +9,12 @@ import Logo from './Logo'
 import { Flex, Heading, IconButton, Select, Tooltip } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import cs from 'classnames'
-import { Link } from './Link'
+import { Link } from '../Link'
 import { FaAdjust, FaMoon, FaRegSun } from 'react-icons/fa'
 import { IoSunny } from "react-icons/io5";
 
 import { HeaderUser } from './HeaderUser'
-import { useTheme } from './Themes'
+import { useTheme } from '../Themes'
 import { useCallback, useState } from 'react'
 export interface HeaderProps {
   children?: React.ReactNode

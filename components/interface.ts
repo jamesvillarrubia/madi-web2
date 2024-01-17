@@ -1,5 +1,5 @@
 export interface ChatMessage {
-  content: string
+  content: string|null
   role: ChatRole
   tool_calls?:ToolCall[]
   tool_call_id?: string

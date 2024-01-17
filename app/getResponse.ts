@@ -1,6 +1,6 @@
-import { API_CHAT_PATH, API_HOST, API_PORT, API_TOOL_PATH } from '../../constants'
+import { API_CHAT_PATH, API_HOST, API_PORT, API_TOOL_PATH } from '../constants'
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
-import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet } from './interface'
+import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet } from '../components/interface'
 import { json, text } from 'stream/consumers'
 import { read } from 'fs'
 
@@ -93,16 +93,18 @@ export function messageReducer(previous={}, item:any) {
 // }
 
 export const convertChunktoJsonArray = (string:string)=>{
-  try{
     let a = string.replace('data: [DONE]','')
-    let b = a.split('data: ')
+    let b = a.split('data: ').map(c=>c.replace(/\n/g,''))
     let c = b.filter(c=>c.length)
-    let d = c.map(c=>JSON.parse(c))
+    let d = c.map(c=>{
+      try{
+        return JSON.parse(c)
+      }catch(e){
+        console.log(`${c}`,e)
+        return c
+      }
+    })
     return d
-  }catch(e){
-    console.log(string)
-    console.log(e)
-  }
 }
 
 const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
@@ -114,6 +116,15 @@ const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
 }
 
 
+/**
+ * 
+ * @param systemPrompt 
+ * @param messageArray 
+ * @param newMessage 
+ * @param currentTool 
+ * @param tools 
+ * @returns Just return the stream of the response, which may be a tool_call or not
+ */
 export const postChat = async (
   systemPrompt:string, 
   messageArray: any[], 
@@ -126,6 +137,13 @@ export const postChat = async (
   if(newMessage){
     messageArray = [...messageArray,{"role": "user", "content": newMessage}]
   }  
+  
+  let tool_choice = 'auto' as any
+  if(tools && currentTool && currentTool !== 'auto'){
+    tool_choice = {type:"function", function:{"name":currentTool}}
+  }
+
+
 
   const res = await fetch(url, {
     headers: {
@@ -139,7 +157,7 @@ export const postChat = async (
           ...messageArray!
         ],
         tools:(tools)?tools:undefined,
-        tool_choice: (tools)? {"name":currentTool}:undefined
+        tool_choice: (tools)? tool_choice :undefined
     })
   })
 
@@ -170,7 +188,7 @@ export const postTools = async (tool_calls:ToolCall[]): Promise<ChatMessage[]> =
       tool_calls:tool_calls
     })
   })
-
+  
   if (res.status !== 201) {
     const statusText = res.statusText
     const responseBody = await res.text()
@@ -193,10 +211,14 @@ export const postRunner = async (
   currentTool?:string, 
   tools?:Tool[]
 ): Promise<ResponseSet> =>{
-
-  let chatResponses = [] as ChatMessage[]
+  // Debug('\n\n************')
+  console.log('starting messageArray', messageArray)
+  console.log('starting message', newMessage)
+  console.log('starting systemPrompt', systemPrompt)
   // send message to postChat
   let { currentStream, additionalMessages } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
+
+  console.log('postChat additional Messages', additionalMessages)
 
   if(currentStream instanceof ReadableStream){
     let [checkStream, textStream] = currentStream.tee()
@@ -207,38 +229,50 @@ export const postRunner = async (
     if (first.choices[0].delta.tool_calls) {
       
       // Process the textStream for the remaining data
-      let message = {} as ChatMessage
+      let toolCallMessage = {} as ChatMessage
       //@ts-ignore
       for await (const textChunk of textStream) {
         const decoder = new TextDecoder('utf-8');
         let textArray = convertChunktoJsonArray(decoder.decode(textChunk)) || []
         for(const bit of textArray){
-          message = messageReducer(message, bit)
+          toolCallMessage = messageReducer(toolCallMessage, bit)
         }
       }
-      console.log(message)
+      console.log('toolCallMessage', toolCallMessage)
 
 
       // Iterate through the tool calls
-      if(message.tool_calls){
-        let toolResponse = await postTools(message.tool_calls)
-        chatResponses.push(...toolResponse); // extend conversation with function response
-        console.log('tool message', message)
+      let toolResponses = [] as ChatMessage[]
+      if(toolCallMessage.tool_calls){
+        let toolResponse = await postTools(toolCallMessage.tool_calls)
+        toolResponses.push(...toolResponse); // extend conversation with function response
+        console.log('Messages with Tool Responses', toolResponses)
       }
 
-      messageArray = [...messageArray, message, ...chatResponses]
+
+      // now rebuild a message array with the right stuff
+      // add the original message
       
-      let { currentStream } = await postChat(systemPrompt, messageArray, null, currentTool, tools)
+      if(newMessage){
+        messageArray = [...messageArray, {"role": "user", "content": newMessage}, toolCallMessage, ...toolResponses,]
+      }
+      console.log('Final messageArray before Post',messageArray)
+
+      let { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
+
 
 
       return {
+        // returns the final stream after tool calls 
         currentStream: currentStream,
-        additionalMessages: [message, ...chatResponses]
+        // but should also include the relevant new stuff as appended
+        additionalMessages: [toolCallMessage, ...toolResponses]
       }
     }
     return {
+      // defaults response, returns the original stream as a new message
       currentStream: textStream,
-      additionalMessages: chatResponses
+      additionalMessages: []
     }
   }else{
     console.error(currentStream)

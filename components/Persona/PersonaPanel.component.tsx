@@ -6,8 +6,8 @@ import { LuMessageSquarePlus } from 'react-icons/lu'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { debounce } from 'lodash-es'
 
-import ChatContext from './chatContext'
-import { Persona } from './interface'
+import ChatContext from '../Chat/chat.context'
+import { Persona } from '../interface'
 import {
   Text,
   Button,

@@ -1,13 +1,12 @@
 import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select } from '@radix-ui/themes'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState, Fragment } from 'react'
-import { ChatMessage, Tool } from './interface'
-import ChatContext from './chatContext'
+import { ChatMessage, Tool } from '../interface'
+import ChatContext from '../Chat/chat.context'
 
 export const ToolSelect = () => {
 
     const [conversation, setConversation] = useState<ChatMessage[]>([])
-    const {currentTool, setCurrentTool } = useContext(ChatContext)
-    let { toolList } = useContext(ChatContext)
+    let { toolList, currentTool, setCurrentTool } = useContext(ChatContext)
 
 
     const splitByPlugin = (toolList:Tool[]) => {
@@ -21,14 +20,7 @@ export const ToolSelect = () => {
         }, {});
     }
     const splitTools = splitByPlugin(toolList||[]);
-    // const tools = [
-    //     {
-    //         "type":"function",
-    //         "id": "auto",
-    //         ""
-    //     },
-    //     ...splitTools
-    // ]
+
   return (
     <Select.Root 
         defaultValue={currentTool} 

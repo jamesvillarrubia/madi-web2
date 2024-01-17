@@ -5,12 +5,13 @@ import React, { useContext } from 'react'
 import cs from 'classnames'
 import { SiOpenai } from 'react-icons/si'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import ChatContext from './chatContext'
+import { ChatContext } from './chat.context'
 import { FaPlus } from "react-icons/fa6";
+import { FaTheaterMasks } from "react-icons/fa";
 
 import './index.scss'
 
-export const ChatSiderBar = () => {
+export const SideBar = () => {
   const {
     currentChat,
     chatList,
@@ -71,11 +72,16 @@ export const ChatSiderBar = () => {
           onClick={() => onOpenPersonaPanel?.('chat')}
           className="bg-token-surface-primary active:scale-95 "
         >
-          <Text>Persona Store</Text>
+          <Flex align="center" gap="3">
+            <FaTheaterMasks className="inline"/>
+          <Text>
+             System Personas
+          </Text>
+          </Flex>
         </Box>
       </Flex>
     </Flex>
   )
 }
 
-export default ChatSiderBar
+export default SideBar
