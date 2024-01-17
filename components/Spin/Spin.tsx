@@ -1,7 +1,7 @@
 'use client'
 
 import React, { ReactElement, useState, useEffect, useCallback } from 'react'
-import { debounce } from 'lodash-es'
+import { debounce, DebouncedFunc } from 'lodash-es'
 import cs from 'classnames'
 import { Box, Text } from '@radix-ui/themes'
 import { SpinProps } from './interface'
@@ -32,6 +32,8 @@ const Spin = (props: SpinProps, ref: any) => {
   } = props
 
   const [loading, setLoading] = useState<boolean>(delay ? false : propLoading)
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const debouncedSetLoading = useCallback(debounce(setLoading, delay), [delay])
 
   const _usedLoading = delay ? loading : propLoading

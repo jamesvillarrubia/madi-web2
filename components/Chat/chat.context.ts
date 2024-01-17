@@ -191,7 +191,7 @@ export const useChatContext = () => {
       document.body.removeAttribute('style')
       localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList))
     }
-  }, [])
+  }, [onChangeChat, onCreateChat, DefaultPersonas])
 
   useEffect(() => {
     if (currentChat?.id) {
@@ -213,7 +213,7 @@ export const useChatContext = () => {
       return persona
     })
     setPersonas(updatedPersonas)
-  }, [])
+  }, [setPersonas])
 
   useEffect(() => {
     localStorage.setItem('Personas', JSON.stringify(personas))
@@ -224,7 +224,7 @@ export const useChatContext = () => {
       onCreateChat(DefaultPersonas[0])
     }
     isInit = true
-  }, [chatList, openPersonaPanel, onCreateChat])
+  }, [chatList, openPersonaPanel, onCreateChat, DefaultPersonas])
 
   return {
     debug,
