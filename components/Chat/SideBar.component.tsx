@@ -3,7 +3,6 @@
 import { Box, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
 import React, { useContext } from 'react'
 import cs from 'classnames'
-import { SiOpenai } from 'react-icons/si'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
 import { ChatContext } from './chat.context'
 import { FaPlus } from "react-icons/fa6";

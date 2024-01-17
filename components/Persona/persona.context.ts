@@ -73,7 +73,7 @@ export const usePersonaContext = () => {
         const data = await uploadFiles(files)
         persona.key = data.key
       } catch (e) {
-        console.log(e)
+        console.error(e)
         toast({
           title: 'Error',
           description: 'Error uploading files'

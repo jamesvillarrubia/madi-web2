@@ -167,31 +167,31 @@ export const useChatContext = () => {
     }
   }, [currentChat?.id])
 
-
+  
   useEffect(() => {
-    const chatList = (JSON.parse(localStorage.getItem(StorageKeys.Chat_List) || '[]') ||
-      []) as Chat[]
-    const currentChatId = localStorage.getItem(StorageKeys.Chat_Current_ID)
+    const chatList = JSON.parse(localStorage.getItem(StorageKeys.Chat_List) || '[]') as Chat[];
+    const currentChatId = localStorage.getItem(StorageKeys.Chat_Current_ID);
     if (chatList.length > 0) {
-      const currentChat = chatList.find((chat) => chat.id === currentChatId)
-      setChatList(chatList)
-
+      const currentChat = chatList.find((chat) => chat.id === currentChatId);
+      setChatList(chatList);
+  
       chatList.forEach((chat) => {
-        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[]
-        messagesMap.current.set(chat.id!, messages)
-      })
-
-      onChangeChat(currentChat || chatList[0])
+        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[];
+        messagesMap.current.set(chat.id!, messages);
+      });
+  
+      onChangeChat(currentChat || chatList[0]);
     } else {
-      onCreateChat(DefaultPersonas[0])
+      onCreateChat(DefaultPersonas[0]);
     }
-
-
+  
     return () => {
-      document.body.removeAttribute('style')
-      localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList))
-    }
-  }, [onChangeChat, onCreateChat, DefaultPersonas])
+      document.body.removeAttribute('style');
+      localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList));
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   useEffect(() => {
     if (currentChat?.id) {
@@ -204,7 +204,6 @@ export const useChatContext = () => {
   }, [chatList])
 
   useEffect(() => {
-    console.log('load persona from local storage')
     const loadedPersonas = JSON.parse(localStorage.getItem('Personas') || '[]') as Persona[]
     const updatedPersonas = loadedPersonas.map((persona) => {
       if (!persona.id) {
@@ -224,7 +223,7 @@ export const useChatContext = () => {
       onCreateChat(DefaultPersonas[0])
     }
     isInit = true
-  }, [chatList, openPersonaPanel, onCreateChat, DefaultPersonas])
+  }, [chatList.length, openPersonaPanel, onCreateChat, DefaultPersonas])
 
   return {
     debug,

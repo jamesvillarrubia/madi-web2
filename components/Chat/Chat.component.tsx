@@ -80,12 +80,10 @@ const ChatBox = (props: ChatProps, ref: any) => {
       for await (const chunk of currentStream as any) {
         const decoder = new TextDecoder('utf-8');
         const decoded = convertChunktoJsonArray(decoder.decode(chunk))||[];
-        console.log('decoded',decoded)
         const char = decoded.reduce((acc,d)=>`${acc}${(d?.choices?.[0]?.delta?.content||'')}`,'')
         if (char) {
           setCurrentMessage((state) => {
             resultContent = state + char;
-            console.log('content',resultContent)
             return resultContent;
           });
         }
@@ -165,7 +163,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
-  console.log('currentChat', currentChat)
+
   return (
     <Flex direction="column" height="100%" className="relative" gap="3"
     style={{    backgroundColor: 'var(--accent-2)'}}

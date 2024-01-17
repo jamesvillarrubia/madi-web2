@@ -1,14 +1,7 @@
 'use client'
 
-// import { useCallback, useEffect, useRef, useState } from 'react'
-// import toast from 'react-hot-toast'
-import axios from 'axios'
-// import { v4 as uuid } from 'uuid'
-// import { ChatGPTInstance } from './Chat/Chat.component'
-// import { useSearchParams } from 'next/navigation'
 
-// import { ChatMessage, Chat, Persona, Tool } from './interface'
-// import { useToast } from '.'
+import axios from 'axios'
 
 export const uploadFiles = async (files: File[]) => {
   let formData = new FormData()

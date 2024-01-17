@@ -100,7 +100,7 @@ export const convertChunktoJsonArray = (string:string)=>{
       try{
         return JSON.parse(c)
       }catch(e){
-        console.log(`${c}`,e)
+        console.error(`${c}`,e)
         return c
       }
     })
@@ -212,13 +212,13 @@ export const postRunner = async (
   tools?:Tool[]
 ): Promise<ResponseSet> =>{
   // Debug('\n\n************')
-  console.log('starting messageArray', messageArray)
-  console.log('starting message', newMessage)
-  console.log('starting systemPrompt', systemPrompt)
+  // console.log('starting messageArray', messageArray)
+  // console.log('starting message', newMessage)
+  // console.log('starting systemPrompt', systemPrompt)
   // send message to postChat
   let { currentStream, additionalMessages } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
 
-  console.log('postChat additional Messages', additionalMessages)
+  // console.log('postChat additional Messages', additionalMessages)
 
   if(currentStream instanceof ReadableStream){
     let [checkStream, textStream] = currentStream.tee()
@@ -238,7 +238,7 @@ export const postRunner = async (
           toolCallMessage = messageReducer(toolCallMessage, bit)
         }
       }
-      console.log('toolCallMessage', toolCallMessage)
+      // console.log('toolCallMessage', toolCallMessage)
 
 
       // Iterate through the tool calls
@@ -246,7 +246,7 @@ export const postRunner = async (
       if(toolCallMessage.tool_calls){
         let toolResponse = await postTools(toolCallMessage.tool_calls)
         toolResponses.push(...toolResponse); // extend conversation with function response
-        console.log('Messages with Tool Responses', toolResponses)
+        // console.log('Messages with Tool Responses', toolResponses)
       }
 
 
@@ -256,7 +256,7 @@ export const postRunner = async (
       if(newMessage){
         messageArray = [...messageArray, {"role": "user", "content": newMessage}, toolCallMessage, ...toolResponses,]
       }
-      console.log('Final messageArray before Post',messageArray)
+      // console.log('Final messageArray before Post',messageArray)
 
       let { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
 
@@ -284,45 +284,4 @@ export const postRunner = async (
 
 
 }
-
-
-
-
-// async function streamToText(res:Response){
-//   const encoder = new TextEncoder()
-//   const decoder = new TextDecoder()
-
-//   return new ReadableStream({
-//     async start(controller) {
-//       const onParse = (event: ParsedEvent | ReconnectInterval) => {
-//         if (event.type === 'event') {
-//           const data = event.data
-//           if (data.trim() === '[DONE]') {
-//             controller.close()
-//             return
-//           }
-  
-//           try {
-//             const json = JSON.parse(data)
-//             console.log('json',json)
-//             const text = json.choices[0].delta.content
-//             const queue = encoder.encode(text)
-//             controller.enqueue(queue)
-          
-//           } catch (e) {
-//             controller.error(e)
-//           }
-//         }
-//       }
-  
-//       const parser = createParser(onParse)
-  
-//       for await (const chunk of res.body as any) {
-//         // An extra newline is required to make AzureOpenAI work.
-//         const str = decoder.decode(chunk)
-//         parser.feed(str)
-//       }
-//     }
-//   })
-// }
 
