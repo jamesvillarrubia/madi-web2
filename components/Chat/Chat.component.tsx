@@ -163,7 +163,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
-
+  // console.log('conversation',conversation)
   return (
     <Flex direction="column" height="100%" className="relative" gap="3"
     style={{    backgroundColor: 'var(--accent-2)'}}

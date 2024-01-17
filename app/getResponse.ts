@@ -226,7 +226,7 @@ export const postRunner = async (
     // Determine if there are any tool calls
     let checkChunks = await convertStreamtoJsonArray(checkStream)
     let first = (checkChunks||[])[0]
-    if (first.choices[0].delta.tool_calls) {
+    if (first.choices[0].delta.role==='assistant' && first.choices[0].delta.content === null) {
       
       // Process the textStream for the remaining data
       let toolCallMessage = {} as ChatMessage
