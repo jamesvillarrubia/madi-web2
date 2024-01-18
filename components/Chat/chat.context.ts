@@ -300,6 +300,6 @@ export const ChatContext = createContext<{
   personaPanelType: 'chat',
   DefaultPersonas: [],
   chatList: [],
-  personas: []
+  personas: [],
 })
 export default ChatContext

@@ -39,10 +39,7 @@ jobs:
 
       - name: Install dependencies
         run: npm ci
-
-      - name: Build static files
-        run: npm run build
-        
+      
       - id: 'upload-folder'
         uses: 'google-github-actions/upload-cloud-storage@v2'
         with:

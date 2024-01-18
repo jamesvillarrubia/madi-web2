@@ -1,6 +1,6 @@
-import { API_CHAT_PATH, API_HOST, API_PORT, API_TOOL_PATH } from '../constants'
+import { API_CHAT_PATH, API_HOST, API_TOOL_PATH } from '../constants'
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
-import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet } from '../components/interface'
+import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet, ToolObject } from '../components/interface'
 import { json, text } from 'stream/consumers'
 import { read } from 'fs'
 
@@ -116,6 +116,20 @@ const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
 }
 
 
+export const getTools = async (): Promise =>{
+  const url = `${API_HOST}${API_TOOL_PATH}`
+
+  const res = await fetch(url, {
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    method: 'GET'
+  })
+
+  let json = await res.json()
+  return json.data
+}
+
 /**
  * 
  * @param systemPrompt 
@@ -132,7 +146,7 @@ export const postChat = async (
   currentTool?: string, 
   tools?:Tool[]
 ) : Promise<ResponseSet> => {
-  const url = `${API_HOST}:${API_PORT}${API_CHAT_PATH}`
+  const url = `${API_HOST}${API_CHAT_PATH}`
 
   if(newMessage){
     messageArray = [...messageArray,{"role": "user", "content": newMessage}]
@@ -177,7 +191,7 @@ export const postChat = async (
 
 
 export const postTools = async (tool_calls:ToolCall[]): Promise<ChatMessage[]> => {
-  const url = `${API_HOST}:${API_PORT}${API_TOOL_PATH}`
+  const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
     headers: {

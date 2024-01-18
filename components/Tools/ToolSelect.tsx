@@ -2,11 +2,13 @@ import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select } from 
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState, Fragment } from 'react'
 import { ChatMessage, Tool } from '../interface'
 import ChatContext from '../Chat/chat.context'
+import { getTools } from '@/app/getResponse'
 
 export const ToolSelect = () => {
 
     const [conversation, setConversation] = useState<ChatMessage[]>([])
-    let { toolList, currentTool, setCurrentTool } = useContext(ChatContext)
+    let { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
+
 
 
     const splitByPlugin = (toolList:Tool[]) => {
@@ -21,6 +23,14 @@ export const ToolSelect = () => {
     }
     const splitTools = splitByPlugin(toolList||[]);
 
+    useEffect(()=>{
+        (async ()=>{
+            const fetchTools = await getTools()
+            if(setToolList)
+                setToolList(fetchTools)
+            console.log('fetchTools', fetchTools)
+        })()
+    },[])
   return (
     <Select.Root 
         defaultValue={currentTool} 
