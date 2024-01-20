@@ -240,7 +240,7 @@ export const postRunner = async (
 
 
     //@ts-ignore
-  for await (let chunk of a){
+  for await (let chunk of currentStream){
     const decoder = new TextDecoder('utf-8');
     console.log('chunked', decoder.decode(chunk))
   }
