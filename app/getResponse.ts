@@ -238,7 +238,9 @@ export const postRunner = async (
 
   // console.log('postChat additional Messages', additionalMessages)
 
-  for await (let chunk of currentStream){
+
+    //@ts-ignore
+  for await (let chunk of a){
     const decoder = new TextDecoder('utf-8');
     console.log('chunked', decoder.decode(chunk))
   }
