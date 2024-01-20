@@ -238,13 +238,18 @@ export const postRunner = async (
 
   // console.log('postChat additional Messages', additionalMessages)
 
+  for await (let chunk of currentStream){
+    const decoder = new TextDecoder('utf-8');
+    console.log('chunked', decoder.decode(chunk))
+  }
+
   if(currentStream instanceof ReadableStream){
     let [checkStream, textStream] = currentStream.tee()
 
     // Determine if there are any tool calls
     let checkChunks = await convertStreamtoJsonArray(checkStream)
     let first = (checkChunks||[])[0]
-    if (first.choices[0].delta.role==='assistant' && first.choices[0].delta.content === null) {
+    if (first?.choices?.[0]?.delta?.role==='assistant' && first.choices[0].delta.content === null) {
       
       // Process the textStream for the remaining data
       let toolCallMessage = {} as ChatMessage
