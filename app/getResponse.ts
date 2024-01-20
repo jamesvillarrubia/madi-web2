@@ -116,7 +116,7 @@ const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
 }
 
 
-export const getTools = async (): Promise =>{
+export const getTools = async (): Promise<any> =>{
   const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
