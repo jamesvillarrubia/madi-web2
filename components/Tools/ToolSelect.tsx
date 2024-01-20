@@ -3,11 +3,12 @@ import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useStat
 import { ChatMessage, Tool } from '../interface'
 import ChatContext from '../Chat/chat.context'
 import { getTools } from '@/app/getResponse'
+import { useAuthContext } from '@/app/authenticate'
 
 export const ToolSelect = () => {
 
-    const [conversation, setConversation] = useState<ChatMessage[]>([])
     let { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
+    let { currentUser } = useAuthContext()
 
     const splitByPlugin = (toolList:Tool[]) => {
         return toolList.reduce((acc:any, tool:Tool) => {
@@ -28,7 +29,7 @@ export const ToolSelect = () => {
                 setToolList(fetchTools)
             console.log('fetchTools', fetchTools)
         })()
-    },[])
+    },[currentUser, setToolList])
   return (
     <Select.Root 
         defaultValue={currentTool} 
@@ -56,7 +57,7 @@ export const ToolSelect = () => {
                 <Select.Label>{plugin}</Select.Label>
                 {splitTools[plugin].map((tool: Tool) => (
                 <Select.Item key={tool.function.name} value={tool.function.name}>
-                    {tool.function.name}
+                    {tool.display || tool.function.name}
                 </Select.Item>
                 ))}
             </Select.Group>

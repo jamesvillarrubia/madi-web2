@@ -122,6 +122,7 @@ export const getTools = async (): Promise<any> =>{
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
+      ...GCP_IAP_HEADERS
     },
     method: 'GET'
   })
