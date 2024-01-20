@@ -9,8 +9,6 @@ export const ToolSelect = () => {
     const [conversation, setConversation] = useState<ChatMessage[]>([])
     let { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
 
-
-
     const splitByPlugin = (toolList:Tool[]) => {
         return toolList.reduce((acc:any, tool:Tool) => {
             const pluginName = tool.plugin || "Common";

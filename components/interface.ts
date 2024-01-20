@@ -6,6 +6,11 @@ export interface ChatMessage {
   name?:string
 }
 
+export interface User {
+  email: string
+  googleId: string
+}
+
 export interface ResponseSet{
   currentStream: ReadableStream<Uint8Array> | null
   additionalMessages: ChatMessage[]

@@ -1,4 +1,4 @@
-import { API_CHAT_PATH, API_HOST, API_TOOL_PATH } from '../constants'
+import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet, ToolObject } from '../components/interface'
 import { json, text } from 'stream/consumers'
@@ -162,6 +162,7 @@ export const postChat = async (
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
+      ...GCP_IAP_HEADERS
     },
     method: 'POST',
     body: JSON.stringify({
@@ -196,6 +197,7 @@ export const postTools = async (tool_calls:ToolCall[]): Promise<ChatMessage[]> =
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
+      ...GCP_IAP_HEADERS
     },
     method: 'POST',
     body: JSON.stringify({
