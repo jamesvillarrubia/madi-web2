@@ -79,6 +79,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
       let resultContent = ''
       for await (const chunk of currentStream as any) {
         const decoder = new TextDecoder('utf-8');
+        console.log('sendMessage Chunks',decoder.decode(chunk))
         const decoded = convertChunktoJsonArray(decoder.decode(chunk))||[];
         const char = decoded.reduce((acc,d)=>`${acc}${(d?.choices?.[0]?.delta?.content||'')}`,'')
         if (char) {

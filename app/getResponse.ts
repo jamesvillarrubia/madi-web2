@@ -1,8 +1,8 @@
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import { ChatMessage, Chat, Persona, Tool, ToolCall, ResponseSet, ToolObject } from '../components/interface'
-import { json, text } from 'stream/consumers'
-import { read } from 'fs'
+import {EventSourceParserStream} from 'eventsource-parser/stream'
+
 
 
 //@ts-ignore
@@ -92,28 +92,6 @@ export function messageReducer(previous={}, item:any) {
 //   }
 // }
 
-export const convertChunktoJsonArray = (string:string)=>{
-    let a = string.replace('data: [DONE]','')
-    let b = a.split('data: ').map(c=>c.replace(/\n/g,''))
-    let c = b.filter(c=>c.length)
-    let d = c.map(c=>{
-      try{
-        return JSON.parse(c)
-      }catch(e){
-        console.error(`${c}`,e)
-        return c
-      }
-    })
-    return d
-}
-
-const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
-  const decoder = new TextDecoder('utf-8');
-  const reader = stream.getReader();
-  const { value: chunk } = await reader.read();
-  const fullString = decoder.decode(chunk);
-  return convertChunktoJsonArray(fullString)
-}
 
 
 export const getTools = async (): Promise<any> =>{
@@ -220,6 +198,29 @@ export const postTools = async (tool_calls:ToolCall[]): Promise<ChatMessage[]> =
 
 
 
+
+export const convertChunktoJsonArray = (string:string)=>{
+  let a = string.replace('data: [DONE]','')
+  let b = a.split('data: ').map(c=>c.replace(/\n/g,''))
+  let c = b.filter(c=>c.length)
+  let d = c.map(c=>{
+    try{
+      return JSON.parse(c)
+    }catch(e){
+      console.error(`${c}`,e)
+      return c
+    }
+  })
+  return d
+}
+
+const convertStreamtoJsonArray = async (stream:ReadableStream)=>{
+  const decoder = new TextDecoder('utf-8');
+  const reader = stream.getReader();
+  const { value: chunk } = await reader.read();
+  const fullString = decoder.decode(chunk);
+  return convertChunktoJsonArray(fullString)
+}
 
 export const postRunner = async (  
   systemPrompt:string, 
