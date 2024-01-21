@@ -141,13 +141,16 @@ export const postChat = async (
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
+      'Accept':'text/event-stream',
+      'Cache-Control': 'no-cache',
+      'Connection': 'keep-alive',
       ...GCP_IAP_HEADERS
     },
     method: 'POST',
     body: JSON.stringify({
         stream:true,
         messages: [
-          {"role": "system", "content": systemPrompt},
+          {'role': 'system', 'content': systemPrompt},
           ...messageArray!
         ],
         tools:(tools)?tools:undefined,
