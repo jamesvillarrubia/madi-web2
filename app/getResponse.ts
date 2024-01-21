@@ -141,9 +141,9 @@ export const postChat = async (
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      'Accept':'text/event-stream',
-      'Cache-Control': 'no-cache',
-      'Connection': 'keep-alive',
+      // 'Accept':'text/event-stream',
+      // 'Cache-Control': 'no-cache',
+      // 'Connection': 'keep-alive',
       ...GCP_IAP_HEADERS
     },
     method: 'POST',
@@ -158,7 +158,7 @@ export const postChat = async (
     })
   })
 
-  if (res.status !== 201) {
+  if (res.status !== 200) {
     const statusText = res.statusText
     const responseBody = await res.text()
     console.error(responseBody)
@@ -232,21 +232,11 @@ export const postRunner = async (
   currentTool?:string, 
   tools?:Tool[]
 ): Promise<ResponseSet> =>{
-  // Debug('\n\n************')
-  // console.log('starting messageArray', messageArray)
-  // console.log('starting message', newMessage)
-  // console.log('starting systemPrompt', systemPrompt)
+
   // send message to postChat
   let { currentStream, additionalMessages } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
 
-  // console.log('postChat additional Messages', additionalMessages)
 
-
-    //@ts-ignore
-  for await (let chunk of currentStream){
-    const decoder = new TextDecoder('utf-8');
-    console.log('chunked', decoder.decode(chunk))
-  }
 
   if(currentStream instanceof ReadableStream){
     let [checkStream, textStream] = currentStream.tee()
@@ -266,7 +256,6 @@ export const postRunner = async (
           toolCallMessage = messageReducer(toolCallMessage, bit)
         }
       }
-      // console.log('toolCallMessage', toolCallMessage)
 
 
       // Iterate through the tool calls
