@@ -24,11 +24,11 @@ export const Toaster = () => {
           >
             <div>
               {title && (
-                <ToastTitle className="[grid-area:_title] mb-[5px] font-medium text-slate12 text-[15px]">
+                <ToastTitle className="[grid-area:_title] mb-[5px] font-medium text-slate12 break-words text-[15px]">
                   {title}
                 </ToastTitle>
               )}
-              {description && <ToastDescription>{description}</ToastDescription>}
+              {description && <ToastDescription className='break-words'>{description}</ToastDescription>}
             </div>
             {action}
             <ToastClose aria-label="Close">

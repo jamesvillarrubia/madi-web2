@@ -34,12 +34,12 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
   return (
     <header
       className={cs('block shadow-sm sticky top-0 dark:shadow-gray-500 py-3 px-4 z-20')}
-      style={{ backgroundColor: 'var(--color-background)' }}
+      style={{ backgroundColor: 'var(--color-background)', height:64 }}
     >
       <Flex align="center" gap="3">
       <NextLink href="/">
         <div className="flex items-center">
-          <Logo fill="currentColor" width={45} height={40}/>
+          <Logo fill="currentColor" width={45} height={35}/>
           <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	">MADI</Heading>
           <span className="ml-3 text-sm mt-1 italic" style={{color:'var(--accent-a10)'}}>ARMD AI Assistant</span>
         </div>

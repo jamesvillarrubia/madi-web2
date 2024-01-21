@@ -36,20 +36,21 @@ const Message = (props: MessageProps) => {
           style={{color:'var(--accent-a10)'}}
         >
           <Collapsible.Root className="CollapsibleRoot" open={open} onOpenChange={setOpen}>
-            <div style={{ display: 'flex', alignItems: 'left' }}>
+            <div style={{ display: 'flex', alignItems: 'center' }}>
               <Collapsible.Trigger asChild className='mr-3 text-md'>
                 <button className="IconButton">{open ? <FaAngleUp /> : <FaAngleDown />}</button>
               </Collapsible.Trigger>
-              Tool: {name}
+              <span>Tool: {name}</span>
             </div>
             <Collapsible.Content>
-              <pre>
+              <pre style={{
+                whiteSpace: 'pre-wrap',      /* Since CSS 2.1 */
+                wordWrap: 'break-word',       /* Internet Explorer 5.5+ */
+              }}>
                 {JSON.stringify(JSON.parse(content), null, 2)}
               </pre>
             </Collapsible.Content>
           </Collapsible.Root>
-          
-    
         </Flex>
       )
     }
@@ -61,7 +62,7 @@ const Message = (props: MessageProps) => {
           size="3"
           radius="full"
         />
-        <Flex direction="column" gap="2" className={`py-1 px-3 flex-1 break-all rounded-lg role-${role}`} 
+        <Flex direction="column" gap="2" className={`py-1 px-3 flex-1 break-word rounded-lg role-${role}`} 
         // style={{backgroundColor:`var(--gray-a2)`}}
         >
           <Markdown>{content}</Markdown>
