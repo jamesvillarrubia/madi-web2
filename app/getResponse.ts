@@ -105,6 +105,15 @@ export const getTools = async (): Promise<any> =>{
     method: 'GET'
   })
 
+  console.log(
+    url, {
+    headers: {
+      'Content-Type': 'application/json',
+      ...GCP_IAP_HEADERS
+    },
+    method: 'GET'
+  })
+
   let json = await res.json()
   return json.data
 }

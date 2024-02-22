@@ -23,13 +23,16 @@ export const ToolSelect = () => {
     const splitTools = splitByPlugin(toolList||[]);
 
     useEffect(()=>{
-        (async ()=>{
-            const fetchTools = await getTools()
-            if(setToolList)
-                setToolList(fetchTools)
-            console.log('fetchTools', fetchTools)
-        })()
+        if (currentUser) {
+            (async ()=>{
+                const fetchTools = await getTools()
+                if(setToolList)
+                    setToolList(fetchTools)
+                console.log('fetchTools', fetchTools)
+            })()
+        }
     },[currentUser, setToolList])
+
   return (
     <Select.Root 
         defaultValue={currentTool} 
