@@ -1,6 +1,6 @@
 import { Inter } from 'next/font/google'
 import ThemesProvider from '@/providers/ThemesProvider'
-import { Toaster } from '@/components'
+import { Toaster, Banner } from '@/components'
 import { Header } from '@/components/Header/Header'
 
 import '@/styles/globals.scss'
@@ -26,6 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemesProvider>
+          <Banner/>
           <Header />
           {children}
           <Toaster />
