@@ -10,42 +10,39 @@ import { useSearchParams } from 'next/navigation'
 import { ChatMessage, Chat, Persona, Tool } from '../interface'
 import { usePersonaContext } from '../Persona/persona.context'
 
-
-
-
-export const DefaultTools: Tool[]=[
-    {
-        "type":"function",
-        "display": "Get Weather",
-        "function":{
-            "name": "get_current_weather",
-            "description": "Get the current weather in a given location",
-            "parameters": {
-              "type": "object",
-              "properties": {
-                "location": {
-                  "type": "string",
-                  "description": "The city and state, e.g. San Francisco, CA"
-                },
-                "unit": {
-                  "type": "string",
-                  "enum": ["celsius", "fahrenheit"]
-                }
-              },
-              "required": ["location"]
-            }
-        }    
-    },
-    {
-        "type":"function",
-        "display":"get_joke",
-        "plugin":"CAS Scenarios",
-        "function":{
-            "name": "get_joke",
-            "description": "Get a joke from the joke database",
-            "parameters": {}
-        }    
+export const DefaultTools: Tool[] = [
+  {
+    type: 'function',
+    display: 'Get Weather',
+    function: {
+      name: 'get_current_weather',
+      description: 'Get the current weather in a given location',
+      parameters: {
+        type: 'object',
+        properties: {
+          location: {
+            type: 'string',
+            description: 'The city and state, e.g. San Francisco, CA'
+          },
+          unit: {
+            type: 'string',
+            enum: ['celsius', 'fahrenheit']
+          }
+        },
+        required: ['location']
+      }
     }
+  },
+  {
+    type: 'function',
+    display: 'get_joke',
+    plugin: 'CAS Scenarios',
+    function: {
+      name: 'get_joke',
+      description: 'Get a joke from the joke database',
+      parameters: {}
+    }
+  }
 ]
 
 enum StorageKeys {
@@ -91,7 +88,6 @@ export const useChatContext = () => {
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
 
   const [toolList, setToolList] = useState<Tool[]>(DefaultTools)
-
 
   const onChangeChat = useCallback(
     (chat: Chat) => {
@@ -139,18 +135,16 @@ export const useChatContext = () => {
     }
   }
 
-
-
   const saveChatName = (name: string) => {
     const updatedChatList = chatList.map((chat) => {
       if (chat.id === currentChat?.id) {
-        chat.name = name;
+        chat.name = name
         // chat.persona.name = name;
       }
-      return chat;
-    });
-    setChatList(updatedChatList);
-    localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(updatedChatList));
+      return chat
+    })
+    setChatList(updatedChatList)
+    localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(updatedChatList))
   }
 
   const saveMessages = (messages: ChatMessage[]) => {
@@ -160,38 +154,36 @@ export const useChatContext = () => {
       localStorage.removeItem(`ms_${currentChat?.id}`)
     }
   }
-  
+
   useEffect(() => {
     if (currentChat?.id) {
       localStorage.setItem(StorageKeys.Chat_Current_ID, currentChat.id)
     }
   }, [currentChat?.id])
 
-  
   useEffect(() => {
-    const chatList = JSON.parse(localStorage.getItem(StorageKeys.Chat_List) || '[]') as Chat[];
-    const currentChatId = localStorage.getItem(StorageKeys.Chat_Current_ID);
+    const chatList = JSON.parse(localStorage.getItem(StorageKeys.Chat_List) || '[]') as Chat[]
+    const currentChatId = localStorage.getItem(StorageKeys.Chat_Current_ID)
     if (chatList.length > 0) {
-      const currentChat = chatList.find((chat) => chat.id === currentChatId);
-      setChatList(chatList);
-  
-      chatList.forEach((chat) => {
-        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[];
-        messagesMap.current.set(chat.id!, messages);
-      });
-  
-      onChangeChat(currentChat || chatList[0]);
-    } else {
-      onCreateChat(DefaultPersonas[0]);
-    }
-  
-    return () => {
-      document.body.removeAttribute('style');
-      localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList));
-    };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+      const currentChat = chatList.find((chat) => chat.id === currentChatId)
+      setChatList(chatList)
 
+      chatList.forEach((chat) => {
+        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[]
+        messagesMap.current.set(chat.id!, messages)
+      })
+
+      onChangeChat(currentChat || chatList[0])
+    } else {
+      onCreateChat(DefaultPersonas[0])
+    }
+
+    return () => {
+      document.body.removeAttribute('style')
+      localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList))
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [])
 
   useEffect(() => {
     if (currentChat?.id) {
@@ -259,13 +251,6 @@ export const useChatContext = () => {
   }
 }
 
-
-
-
-
-
-
-
 export const ChatContext = createContext<{
   debug?: boolean
   personaPanelType: string
@@ -293,13 +278,13 @@ export const ChatContext = createContext<{
   onOpenPersonaPanel?: (type?: string) => void
   onClosePersonaPanel?: () => void
   onToggleSidebar?: () => void
-  saveChatName?: (name: string)=>void
-  setCurrentTool?: (tool:string)=>void
-  setToolList?: (toolList:Tool[])=>void
+  saveChatName?: (name: string) => void
+  setCurrentTool?: (tool: string) => void
+  setToolList?: (toolList: Tool[]) => void
 }>({
   personaPanelType: 'chat',
   DefaultPersonas: [],
   chatList: [],
-  personas: [],
+  personas: []
 })
 export default ChatContext

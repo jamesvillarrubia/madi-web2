@@ -1,7 +1,5 @@
 'use client'
 
-
-
 import { usePathname } from 'next/navigation'
 import NextLink from 'next/link'
 import Logo from './Logo'
@@ -11,7 +9,7 @@ import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import cs from 'classnames'
 import { Link } from '../Link'
 import { FaAdjust, FaMoon, FaRegSun } from 'react-icons/fa'
-import { IoSunny } from "react-icons/io5";
+import { IoSunny } from 'react-icons/io5'
 
 import { HeaderUser } from './HeaderUser'
 import { useTheme } from '../Themes'
@@ -34,16 +32,20 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
   return (
     <header
       className={cs('block shadow-sm sticky top-0 dark:shadow-gray-500 py-3 px-4 z-20')}
-      style={{ backgroundColor: 'var(--color-background)', height:64 }}
+      style={{ backgroundColor: 'var(--color-background)', height: 64 }}
     >
       <Flex align="center" gap="3">
-      <NextLink href="/">
-        <div className="flex items-center">
-          <Logo fill="currentColor" width={45} height={35}/>
-          <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	">MADI</Heading>
-          <span className="ml-3 text-sm mt-1 italic" style={{color:'var(--accent-a10)'}}>ARMD AI Assistant</span>
-        </div>
-      </NextLink>
+        <NextLink href="/">
+          <div className="flex items-center">
+            <Logo fill="currentColor" width={45} height={35} />
+            <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	">
+              MADI
+            </Heading>
+            <span className="ml-3 text-sm mt-1 italic" style={{ color: 'var(--accent-a10)' }}>
+              ARMD AI Assistant
+            </span>
+          </div>
+        </NextLink>
         <Flex align="center" gap="3" className="ml-auto">
           <HeaderUser />
           <Select.Root value={theme} onValueChange={setTheme}>

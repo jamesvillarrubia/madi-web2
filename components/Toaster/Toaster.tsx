@@ -28,7 +28,9 @@ export const Toaster = () => {
                   {title}
                 </ToastTitle>
               )}
-              {description && <ToastDescription className='break-words'>{description}</ToastDescription>}
+              {description && (
+                <ToastDescription className="break-words">{description}</ToastDescription>
+              )}
             </div>
             {action}
             <ToastClose aria-label="Close">

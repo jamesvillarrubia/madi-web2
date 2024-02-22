@@ -38,23 +38,24 @@ const PersonaPanel = (props: PersonaPanelProps) => {
   const [promptList, setPromptList] = useState<Persona[]>([])
   const [searchText, setSearchText] = useState('')
 
-  const handleSearch = useCallback((type: string, list: Persona[], searchText: string)=>{
-        debounce((type: string, list: Persona[], searchText: string) => {
-          setPromptList(
-            list.filter((item) => {
-              if (type === 'chat') {
-                return (
-                  !item.key && (item.prompt?.includes(searchText) || item.name?.includes(searchText))
-                )
-              } else {
-                return (
-                  item.key && (item.prompt?.includes(searchText) || item.name?.includes(searchText))
-                )
-              }
-            })
-          )
-        }, 350)(type, list, searchText);
-      },
+  const handleSearch = useCallback(
+    (type: string, list: Persona[], searchText: string) => {
+      debounce((type: string, list: Persona[], searchText: string) => {
+        setPromptList(
+          list.filter((item) => {
+            if (type === 'chat') {
+              return (
+                !item.key && (item.prompt?.includes(searchText) || item.name?.includes(searchText))
+              )
+            } else {
+              return (
+                item.key && (item.prompt?.includes(searchText) || item.name?.includes(searchText))
+              )
+            }
+          })
+        )
+      }, 350)(type, list, searchText)
+    },
     [setPromptList]
   )
 

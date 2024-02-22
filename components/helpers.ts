@@ -1,6 +1,5 @@
 'use client'
 
-
 import axios from 'axios'
 
 export const uploadFiles = async (files: File[]) => {
@@ -17,5 +16,3 @@ export const uploadFiles = async (files: File[]) => {
   })
   return data
 }
-
-

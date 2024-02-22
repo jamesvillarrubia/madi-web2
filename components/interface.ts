@@ -1,9 +1,9 @@
 export interface ChatMessage {
-  content: string|null
+  content: string | null
   role: ChatRole
-  tool_calls?:ToolCall[]
+  tool_calls?: ToolCall[]
   tool_call_id?: string
-  name?:string
+  name?: string
 }
 
 export interface User {
@@ -11,7 +11,7 @@ export interface User {
   googleId: string
 }
 
-export interface ResponseSet{
+export interface ResponseSet {
   currentStream: ReadableStream<Uint8Array> | null
   additionalMessages: ChatMessage[]
 }
@@ -22,12 +22,12 @@ export interface Message {
 }
 
 export interface ToolCall {
-  function:{
-    arguments:string
-    name:string
+  function: {
+    arguments: string
+    name: string
   }
-  type:string
-  id:string
+  type: string
+  id: string
 }
 
 export interface Persona {
@@ -41,7 +41,7 @@ export interface Persona {
 }
 
 export interface ToolObject {
-  description:string
+  description: string
   name: string
   parameters: object
 }

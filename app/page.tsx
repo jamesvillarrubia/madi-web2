@@ -11,17 +11,16 @@ const ChatPage = () => {
   const authProvider = useAuthContext()
   return (
     <Authentication.Provider value={authProvider}>
-  
-    <ChatContext.Provider value={provider}>
-      <Flex style={{ height: 'calc(100% - 64px)' }} className="relative">
-        <SideBar />
-        <div className="flex-1 relative">
-          <Chat ref={provider.chatRef} />
-          <PersonaPanel />
-        </div>
-      </Flex>
-      <PersonaModal />
-    </ChatContext.Provider>
+      <ChatContext.Provider value={provider}>
+        <Flex style={{ height: 'calc(100% - 64px)' }} className="relative">
+          <SideBar />
+          <div className="flex-1 relative">
+            <Chat ref={provider.chatRef} />
+            <PersonaPanel />
+          </div>
+        </Flex>
+        <PersonaModal />
+      </ChatContext.Provider>
     </Authentication.Provider>
   )
 }

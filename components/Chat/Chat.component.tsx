@@ -11,9 +11,9 @@ import { ChatMessage } from '../interface'
 import { ChatContext } from './chat.context'
 import Message from './Message.component'
 import EditableText from './EditableText'
-import { FaRegEdit } from "react-icons/fa";
-import { FaCheck } from "react-icons/fa6";
-import { FaXmark } from "react-icons/fa6";
+import { FaRegEdit } from 'react-icons/fa'
+import { FaCheck } from 'react-icons/fa6'
+import { FaXmark } from 'react-icons/fa6'
 import { ToolSelect } from '../Tools/ToolSelect'
 import './index.scss'
 
@@ -24,7 +24,6 @@ export interface ChatGPTInstance {
   getConversation: () => ChatMessage[]
   focus: () => void
 }
-
 
 const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
@@ -49,7 +48,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   const sendMessage = async (e: any) => {
     const encoder = new TextEncoder()
     const decoder = new TextDecoder()
-  
+
     e.preventDefault()
     const input = textAreaRef.current?.value || ''
 
@@ -64,29 +63,33 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setIsLoading(true)
     setConversation?.([...conversation!, { content: input, role: 'user' }])
 
-
     let systemPrompt = currentChat?.persona?.prompt || ''
 
     try {
-      const {currentStream, additionalMessages} = await postRunner(systemPrompt, conversation, input, currentTool, toolList)
+      const { currentStream, additionalMessages } = await postRunner(
+        systemPrompt,
+        conversation,
+        input,
+        currentTool,
+        toolList
+      )
 
-      setConversation?.([
-          ...conversation!, 
-          { content: input, role: 'user' },
-          ...additionalMessages,
-      ])
+      setConversation?.([...conversation!, { content: input, role: 'user' }, ...additionalMessages])
 
       let resultContent = ''
       for await (const chunk of currentStream as any) {
-        const decoder = new TextDecoder('utf-8');
-        console.log('sendMessage Chunks',decoder.decode(chunk))
-        const decoded = convertChunktoJsonArray(decoder.decode(chunk))||[];
-        const char = decoded.reduce((acc,d)=>`${acc}${(d?.choices?.[0]?.delta?.content||'')}`,'')
+        const decoder = new TextDecoder('utf-8')
+        console.log('sendMessage Chunks', decoder.decode(chunk))
+        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
+        const char = decoded.reduce(
+          (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
+          ''
+        )
         if (char) {
           setCurrentMessage((state) => {
-            resultContent = state + char;
-            return resultContent;
-          });
+            resultContent = state + char
+            return resultContent
+          })
         }
       }
       setTimeout(() => {
@@ -98,15 +101,15 @@ const ChatBox = (props: ChatProps, ref: any) => {
         ])
         setCurrentMessage('')
       }, 1)
-           
-      setIsLoading(false);
+
+      setIsLoading(false)
     } catch (error: any) {
-      console.error(error);
+      console.error(error)
       toast({
         title: 'Error',
         description: error.message
-      });
-      setIsLoading(false);
+      })
+      setIsLoading(false)
     }
   }
 
@@ -166,8 +169,12 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }, [])
   // console.log('conversation',conversation)
   return (
-    <Flex direction="column" height="100%" className="relative" gap="3"
-    style={{    backgroundColor: 'var(--accent-2)'}}
+    <Flex
+      direction="column"
+      height="100%"
+      className="relative"
+      gap="3"
+      style={{ backgroundColor: 'var(--accent-2)' }}
     >
       <Flex
         justify="between"
@@ -178,11 +185,10 @@ const ChatBox = (props: ChatProps, ref: any) => {
       >
         <EditableText
           viewProps={{
-            className:"rt-Heading rt-r-weight-bold",
+            className: 'rt-Heading rt-r-weight-bold'
           }}
-
           submitOnEnter={true}
-          validation={(value:string)=>value.trim().length > 0}
+          validation={(value: string) => value.trim().length > 0}
           showButtonsOnHover={true}
           editOnViewClick={true}
           editButtonContent={FaRegEdit()}
@@ -192,7 +198,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
           type="text"
           onSave={saveChatName}
         />
-        <div className="text-xs italic" style={{color: 'var(--accent-11)'}}>
+        <div className="text-xs italic" style={{ color: 'var(--accent-11)' }}>
           {currentChat?.persona?.name}
         </div>
       </Flex>
@@ -206,18 +212,17 @@ const ChatBox = (props: ChatProps, ref: any) => {
         {currentMessage && <Message message={{ content: currentMessage, role: 'assistant' }} />}
         <div ref={bottomOfChatRef}></div>
       </ScrollArea>
-      <Flex className="px-4 pb-3" gap="3" direction={'column'} >
+      <Flex className="px-4 pb-3" gap="3" direction={'column'}>
         <Flex shrink="1">
-          <ToolSelect/>
+          <ToolSelect />
         </Flex>
-        
+
         {/* <Button
           
           >
             hello
           </Button> */}
         <Flex align="end" justify="between" gap="3" className="relative">
-          
           <TextArea
             ref={textAreaRef}
             data-id="root"

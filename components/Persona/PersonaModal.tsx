@@ -2,7 +2,7 @@ import React, { useContext, useEffect } from 'react'
 
 import { Button, Dialog, Flex, TextField, TextArea } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
-import { Persona  } from '../interface'
+import { Persona } from '../interface'
 
 import { ChatContext } from '@/components'
 
