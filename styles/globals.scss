@@ -43,3 +43,14 @@ body {
     height: 168px;
   }
 }
+
+
+/* This is when it's a sibling of .isolate */
+.isolate ~ .chat-flex {
+  height: calc(100% - 110px);
+}
+
+/* This is when it's not a sibling of .isolate */
+.chat-flex {
+  height: calc(100% - 64px);
+}

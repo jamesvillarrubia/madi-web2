@@ -12,7 +12,7 @@ const ChatPage = () => {
   return (
     <Authentication.Provider value={authProvider}>
       <ChatContext.Provider value={provider}>
-        <Flex style={{ height: 'calc(100% - 64px)' }} className="relative">
+        <Flex className="relative chat-flex">
           <SideBar />
           <div className="flex-1 relative">
             <Chat ref={provider.chatRef} />
