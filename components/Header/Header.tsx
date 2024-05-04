@@ -13,7 +13,10 @@ import { IoSunny } from 'react-icons/io5'
 
 import { HeaderUser } from './HeaderUser'
 import { useTheme } from '../Themes'
-import { useCallback, useState } from 'react'
+import { useCallback, useState, useContext } from 'react'
+import { ChatContext } from '../Chat/chat.context'
+
+
 export interface HeaderProps {
   children?: React.ReactNode
   gitHubLink?: string
@@ -25,11 +28,10 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
   const { theme, setTheme } = useTheme()
   const [show, setShow] = useState(false)
 
-  const toggleNavBar = useCallback(() => {
-    setShow((state) => !state)
-  }, [])
+  const { onToggleSidebar } = useContext(ChatContext)
 
   return (
+
     <header
       className={cs('block shadow-sm sticky top-0 dark:shadow-gray-500 py-3 px-4 z-20')}
       style={{ backgroundColor: 'var(--color-background)', height: 64 }}
@@ -69,7 +71,7 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
             variant="ghost"
             color="gray"
             className="md:hidden"
-            onClick={toggleNavBar}
+            onClick={onToggleSidebar}
           >
             <HamburgerMenuIcon width="16" height="16" />
           </IconButton>

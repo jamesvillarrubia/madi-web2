@@ -26,10 +26,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
         <ThemesProvider>
-          <Banner />
-          <Header />
           {children}
-          <Toaster />
         </ThemesProvider>
       </body>
     </html>
