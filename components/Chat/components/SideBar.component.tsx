@@ -45,8 +45,6 @@ export const SideBar = () => {
               let chat = getChatById(id) || ({} as Chat)
               if (currentChatId === id) {
                 console.log('current Id', currentChatId)
-                //   console.log('current Chat', chat)
-                //   console.log('chat Id List:', chatList)
               }
               return (
                 <Box
