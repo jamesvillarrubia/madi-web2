@@ -40,11 +40,10 @@ export const ToolSelect = () => {
   }, [currentUser, setToolList])
 
   if (!toolList || toolList.length === 0) {
-    return null;
+    return null
   }
-  
+
   return (
-    
     <Select.Root defaultValue={currentTool} size="2" onValueChange={setCurrentTool}>
       <Select.Trigger
         className="rounded-3xl"

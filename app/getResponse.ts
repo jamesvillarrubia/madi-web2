@@ -146,8 +146,8 @@ export const postChat = async (
   }
 
   if (currentTool === 'off') {
-    tools = undefined;
-    tool_choice = undefined;
+    tools = undefined
+    tool_choice = undefined
   }
 
   const res = await fetch(url, {
