@@ -1,21 +1,16 @@
 import { useCallback, useEffect, useState, useRef } from 'react'
 import { createContext } from 'react'
 import { v4 as uuid } from 'uuid'
-import { ChatGPTInstance } from '../Chat.component'
 import { useSearchParams } from 'next/navigation'
-import { ChatMessage, Chat, Persona, Tool } from '../../interface'
+import { ChatMessage, Chat, Persona, Tool, ChatGPTInstance } from '../../interface'
 import { usePersonaContext } from '../../Persona/persona.context'
 import { DefaultTools } from '../../Tools/default_tools'
 import { useLocalStorageContext } from '../../localStorage'
 
-enum StorageKeys {
-  Chat_List = 'chatList',
-  Chat_Current_ID = 'chatCurrentID'
-}
 
 export const useChatContext = () => {
   const {
-    personas,
+    // personas,
     onClosePersonaPanel,
     setPersonas,
     DefaultPersonas
@@ -33,6 +28,7 @@ export const useChatContext = () => {
   }  = useLocalStorageContext()
 
   const searchParams = useSearchParams()
+  const chatRef = useRef<ChatGPTInstance>(null)
   const debug = searchParams.get('debug') === 'true'
   const [chatList, setChatList] = useState<string[]>([])
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
@@ -108,6 +104,7 @@ export const useChatContext = () => {
 
   return {
     debug,
+    chatRef,
 
     onCreateChat,
     onDeleteChat,

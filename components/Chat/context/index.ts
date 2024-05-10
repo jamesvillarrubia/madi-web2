@@ -1,13 +1,13 @@
 
 import { createContext } from 'react'
-import { Tool, ChatMessage, Chat, Persona } from '../../interface'
-import { defaultError } from '@/components/helpers'
+import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
 
 export { useChatContext } from './chat.context'
 
 
 export type ChatContextType = {
   debug: boolean
+  chatRef: ChatGPTInstance
 
   // sidebar fields
   toggleSidebar: boolean
@@ -39,32 +39,3 @@ export type ChatContextType = {
 
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)
-
-// {
-//   debug: false,
-
-//   toggleSidebar: false,
-//   onToggleSidebar: defaultError('onToggleSidebar'),
-  
-//   currentTool: '',
-//   toolList:[],
-//   setCurrentTool: defaultError('onToggleSidebar'),
-//   setToolList: defaultError('onToggleSidebar'),
-  
-//   // Chat specific fields
-//   chatList: [],
-//   currentChatId: '',
-//   onCreateChat: defaultError('onCreateChat'),
-//   setCurrentChatId: defaultError('setCurrentChatId'),
-//   onDeleteChat: defaultError('onDeleteChat'),
-//   onChangeChat: defaultError('onChangeChat'),
-  
-//   // Local Storage Fields
-//   setStorageState: defaultError('setStorageState'),
-//   appendMessageById: defaultError('appendMessageById'),
-//   setMessagesById: defaultError('setMessagesById'),
-//   getChatById: defaultError('getChatById'),
-//   setChatById: defaultError('setChatById'),
-//   setChatNameById: defaultError('setChatNameById'),
-//   deleteChatById: defaultError('deleteChatById'),
-// });

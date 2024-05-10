@@ -60,5 +60,11 @@ export interface Chat {
   name: string
   date: number
 }
+export interface ChatGPTInstance {
+  setConversation: (messages: ChatMessage[]) => void
+  getConversation: () => ChatMessage[]
+  focus: () => void
+}
+
 
 export type ChatRole = 'assistant' | 'user' | 'system' | 'tool'

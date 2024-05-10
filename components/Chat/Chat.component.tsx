@@ -7,7 +7,7 @@ import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
 import { useToast } from '@/components'
-import { ChatMessage, Chat } from '../interface'
+import { ChatMessage, Chat, ChatGPTInstance } from '../interface'
 import { ChatContext } from './context'
 import Message from './components/Message.component'
 import EditableText from './components/EditableText'
@@ -20,15 +20,10 @@ import './index.scss'
 
 export interface ChatProps {}
 
-export interface ChatGPTInstance {
-  setConversation: (messages: ChatMessage[]) => void
-  getConversation: () => ChatMessage[]
-  focus: () => void
-}
 
 const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
-  const toastRef = useRef<any>(null)
+  // const toastRef = useRef<any>(null)
   const { currentChatId, getChatById, currentTool, toolList, setMessagesById, setChatNameById, onToggleSidebar } =
     useContext(ChatContext)
 
@@ -48,8 +43,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
   const bottomOfChatRef = useRef<HTMLDivElement>(null)
 
   const sendMessage = async (e: any) => {
-    const encoder = new TextEncoder()
-    const decoder = new TextDecoder()
+    // const encoder = new TextEncoder()
+    // const decoder = new TextDecoder()
 
     e.preventDefault()
     const input = textAreaRef.current?.value || ''
