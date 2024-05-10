@@ -16,7 +16,6 @@ import { useTheme } from '../Themes'
 import { useCallback, useState, useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 
-
 export interface HeaderProps {
   children?: React.ReactNode
   gitHubLink?: string
@@ -31,7 +30,6 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
   const { onToggleSidebar } = useContext(ChatContext)
 
   return (
-
     <header
       className={cs('block shadow-sm sticky top-0 dark:shadow-gray-500 py-3 px-4 z-20')}
       style={{ backgroundColor: 'var(--color-background)', height: 64 }}

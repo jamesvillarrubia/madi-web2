@@ -13,9 +13,9 @@ import { ChatContextType } from '@/components/Chat/context'
 import { PersonaContextType } from '@/components/Persona/persona.context'
 
 const ChatPage = () => {
-  const chatProvider:ChatContextType = useChatContext()
-  const authProvider:AuthContextType = useAuthContext()
-  const personaProvider:PersonaContextType = usePersonaContext()
+  const chatProvider: ChatContextType = useChatContext()
+  const authProvider: AuthContextType = useAuthContext()
+  const personaProvider: PersonaContextType = usePersonaContext()
 
   return (
     <Authentication.Provider value={authProvider}>

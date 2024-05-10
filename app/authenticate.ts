@@ -7,8 +7,9 @@ export type AuthContextType = {
   authenticateUser: () => void
 }
 
-export const Authentication = createContext<AuthContextType>(undefined as unknown as AuthContextType)
-
+export const Authentication = createContext<AuthContextType>(
+  undefined as unknown as AuthContextType
+)
 
 export const useAuthContext = () => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)

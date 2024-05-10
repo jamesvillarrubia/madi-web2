@@ -66,5 +66,4 @@ export interface ChatGPTInstance {
   focus: () => void
 }
 
-
 export type ChatRole = 'assistant' | 'user' | 'system' | 'tool'

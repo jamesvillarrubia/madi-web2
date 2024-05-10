@@ -7,7 +7,6 @@ import { usePersonaContext } from '../../Persona/persona.context'
 import { DefaultTools } from '../../Tools/default_tools'
 import { useLocalStorageContext } from '../../localStorage'
 
-
 export const useChatContext = () => {
   const {
     // personas,
@@ -24,8 +23,8 @@ export const useChatContext = () => {
     getChatById,
     setChatById,
     setChatNameById,
-    deleteChatById,
-  }  = useLocalStorageContext()
+    deleteChatById
+  } = useLocalStorageContext()
 
   const searchParams = useSearchParams()
   const chatRef = useRef<ChatGPTInstance>(null)
@@ -34,15 +33,12 @@ export const useChatContext = () => {
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   const [currentTool, setCurrentTool] = useState<string>('auto')
   const [toolList, setToolList] = useState<Tool[]>(DefaultTools || [])
-  const [currentChatId, setCurrentChatId] = useState<string|undefined>(undefined)
+  const [currentChatId, setCurrentChatId] = useState<string | undefined>(undefined)
 
-  const onChangeChat = useCallback(
-    (id: string) => {
-      console.log('onChangeChat', id)
-      setCurrentChatId(id)
-    },
-    []
-  )
+  const onChangeChat = useCallback((id: string) => {
+    console.log('onChangeChat', id)
+    setCurrentChatId(id)
+  }, [])
 
   const onCreateChat = useCallback(
     (persona: Persona) => {
@@ -74,23 +70,23 @@ export const useChatContext = () => {
 
   useEffect(() => {
     let stateKeys = Object.keys(state?.chats)
-    stateKeys.sort((a:string, b:string) => {
-      const dateA = state.chats[a].date;
-      const dateB = state.chats[b].date;
+    stateKeys.sort((a: string, b: string) => {
+      const dateA = state.chats[a].date
+      const dateB = state.chats[b].date
       return dateB - dateA
-    });
+    })
     setChatList(stateKeys)
     if (stateKeys.length === 0 && state.appState.loaded === true) {
-      onCreateChat(DefaultPersonas[0]);
+      onCreateChat(DefaultPersonas[0])
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [DefaultPersonas, state]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DefaultPersonas, state])
 
   useEffect(() => {
     if ((!currentChatId || !chatList.includes(currentChatId)) && chatList.length > 0) {
-      setCurrentChatId(chatList[0]);
+      setCurrentChatId(chatList[0])
     }
-  }, [currentChatId, chatList, setCurrentChatId]);
+  }, [currentChatId, chatList, setCurrentChatId])
 
   useEffect(() => {
     const loadedPersonas = JSON.parse(localStorage.getItem('Personas') || '[]') as Persona[]
@@ -121,13 +117,13 @@ export const useChatContext = () => {
     currentTool,
     toolList,
     setToolList,
-    
+
     setStorageState,
     appendMessageById,
     setMessagesById,
     getChatById,
     setChatById,
     setChatNameById,
-    deleteChatById,
+    deleteChatById
   }
 }

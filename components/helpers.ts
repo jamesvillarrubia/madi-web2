@@ -18,7 +18,7 @@ export const uploadFiles = async (files: File[]) => {
 }
 
 export function defaultError(name: string) {
-  return function() {
-    throw new Error(`${name} function must be overridden`);
-  };
+  return function () {
+    throw new Error(`${name} function must be overridden`)
+  }
 }

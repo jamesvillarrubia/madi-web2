@@ -37,9 +37,7 @@ const PersonaPanel = (props: PersonaPanelProps) => {
     onClosePersonaPanel
   } = useContext(PersonaContext)
 
-  const {
-    onCreateChat
-  } = useContext(ChatContext)
+  const { onCreateChat } = useContext(ChatContext)
 
   const [promptList, setPromptList] = useState<Persona[]>([])
   const [searchText, setSearchText] = useState('')

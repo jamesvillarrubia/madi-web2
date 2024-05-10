@@ -1,9 +1,7 @@
-
 import { createContext, Ref } from 'react'
 import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
 
 export { useChatContext } from './chat.context'
-
 
 export type ChatContextType = {
   debug: boolean
@@ -26,16 +24,15 @@ export type ChatContextType = {
   setCurrentChatId: (id: string) => void
   onDeleteChat: (id: string) => void
   onChangeChat: (id: string) => void
-  
+
   // LocalStorage
   setStorageState: (state: any) => void
-  appendMessageById: (id: string, message:ChatMessage) => void
-  setChatById: (id: string, chat:Chat) => void
+  appendMessageById: (id: string, message: ChatMessage) => void
+  setChatById: (id: string, chat: Chat) => void
   setChatNameById: (id: string, name: string) => void
-  deleteChatById: (id: string) => void 
+  deleteChatById: (id: string) => void
   getChatById: (id: string) => Chat
-  setMessagesById: (id: string, messages: ChatMessage[]) => void 
+  setMessagesById: (id: string, messages: ChatMessage[]) => void
 }
-
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)

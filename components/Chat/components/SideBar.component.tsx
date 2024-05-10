@@ -23,12 +23,10 @@ export const SideBar = () => {
     onChangeChat,
     onCreateChat,
     getChatById
-  }  = extra
+  } = extra
   console.log(extra)
 
-  const { DefaultPersonas, onOpenPersonaPanel} = useContext(PersonaContext)
-
-
+  const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
 
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
@@ -43,12 +41,12 @@ export const SideBar = () => {
         </Box>
         <ScrollArea type="auto" scrollbars="vertical">
           <Flex direction="column" gap="3">
-            {chatList.map((id:string) => {
-              let chat = getChatById(id) || {} as Chat
-              if(currentChatId === id){
+            {chatList.map((id: string) => {
+              let chat = getChatById(id) || ({} as Chat)
+              if (currentChatId === id) {
                 console.log('current Id', currentChatId)
-              //   console.log('current Chat', chat)
-              //   console.log('chat Id List:', chatList)
+                //   console.log('current Chat', chat)
+                //   console.log('chat Id List:', chatList)
               }
               return (
                 <Box
@@ -60,10 +58,10 @@ export const SideBar = () => {
                   display="block"
                   onClick={() => {
                     onChangeChat(id)
-                    console.log('onClick',id)
+                    console.log('onClick', id)
                   }}
                 >
-                  <Text as="p" className="truncate" style={{maxWidth: 190}}>
+                  <Text as="p" className="truncate" style={{ maxWidth: 190 }}>
                     {chat?.name || 'FAKE'}
                   </Text>
                   <IconButton
