@@ -1,5 +1,5 @@
 
-import { createContext } from 'react'
+import { createContext, Ref } from 'react'
 import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
 
 export { useChatContext } from './chat.context'
@@ -7,7 +7,7 @@ export { useChatContext } from './chat.context'
 
 export type ChatContextType = {
   debug: boolean
-  chatRef: ChatGPTInstance
+  chatRef: Ref<ChatGPTInstance> | undefined
 
   // sidebar fields
   toggleSidebar: boolean
