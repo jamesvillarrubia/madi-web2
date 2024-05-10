@@ -39,7 +39,12 @@ export const ToolSelect = () => {
     }
   }, [currentUser, setToolList])
 
+  if (!toolList || toolList.length === 0) {
+    return null;
+  }
+  
   return (
+    
     <Select.Root defaultValue={currentTool} size="2" onValueChange={setCurrentTool}>
       <Select.Trigger
         className="rounded-3xl"
@@ -53,6 +58,9 @@ export const ToolSelect = () => {
         {/* <Select.Label>Auto</Select.Label> */}
         <Select.Item key="auto" value="auto">
           Auto
+        </Select.Item>
+        <Select.Item key="off" value="off">
+          Off
         </Select.Item>
         <Select.Separator />
 

@@ -145,12 +145,14 @@ export const postChat = async (
     tool_choice = { type: 'function', function: { name: currentTool } }
   }
 
+  if (currentTool === 'off') {
+    tools = undefined;
+    tool_choice = undefined;
+  }
+
   const res = await fetch(url, {
     headers: {
       'Content-Type': 'application/json',
-      // 'Accept':'text/event-stream',
-      // 'Cache-Control': 'no-cache',
-      // 'Connection': 'keep-alive',
       ...GCP_IAP_HEADERS
     },
     method: 'POST',
