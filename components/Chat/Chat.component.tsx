@@ -155,7 +155,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
       if(chat?.messages)
         setConversation(chat.messages)
     }
-  }, [currentChatId, conversation])
+  }, [currentChatId, conversation, getChatById])
 
 
   useEffect(() => {

@@ -83,7 +83,8 @@ export const useChatContext = () => {
     if (stateKeys.length === 0 && state.appState.loaded === true) {
       onCreateChat(DefaultPersonas[0]);
     }
-  }, [state]);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [DefaultPersonas, state]);
 
   useEffect(() => {
     if ((!currentChatId || !chatList.includes(currentChatId)) && chatList.length > 0) {

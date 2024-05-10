@@ -38,7 +38,7 @@ export const useLocalStorageContext = (userId:string = 'shared') => {
           loaded: true,
         },
       }))
-  }, []);
+  }, [setState]);
 
 
 
