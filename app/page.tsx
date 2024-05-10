@@ -13,9 +13,15 @@ import { ChatContextType } from '@/components/Chat/context'
 import { PersonaContextType } from '@/components/Persona/persona.context'
 
 const ChatPage = () => {
+<<<<<<< HEAD
   const chatProvider: ChatContextType = useChatContext()
   const authProvider: AuthContextType = useAuthContext()
   const personaProvider: PersonaContextType = usePersonaContext()
+=======
+  const chatProvider = useChatContext()
+  const authProvider = useAuthContext()
+  const personaProvider = usePersonaContext()
+>>>>>>> c57a4da (Initial Cleanup with new Persona Context.  Also adds defaultError code.)
 
   return (
     <Authentication.Provider value={authProvider}>

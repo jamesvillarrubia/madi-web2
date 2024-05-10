@@ -5,6 +5,10 @@ import { Avatar, Flex } from '@radix-ui/themes'
 import { SiOpenai } from 'react-icons/si'
 import { HiUser } from 'react-icons/hi'
 import { Markdown } from './Markdown'
+<<<<<<< HEAD
+=======
+import { ChatContext, useChatContext } from '../context'
+>>>>>>> c57a4da (Initial Cleanup with new Persona Context.  Also adds defaultError code.)
 import { ChatMessage } from '../../interface'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { FaAngleDown } from 'react-icons/fa'
