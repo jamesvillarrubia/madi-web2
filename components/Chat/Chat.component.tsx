@@ -17,7 +17,6 @@ import { FaXmark } from 'react-icons/fa6'
 import { ToolSelect } from '../Tools/ToolSelect'
 import './index.scss'
 
-
 export interface ChatProps {}
 
 const ChatBox = (props: ChatProps, ref: any) => {
@@ -81,7 +80,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
         input,
         currentTool,
         toolList
-      );
+      )
 
       updatedConversation = [
         ...conversation!,
@@ -91,15 +90,15 @@ const ChatBox = (props: ChatProps, ref: any) => {
       setConversation?.(updatedConversation)
       localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation) : undefined
 
-      let resultContent = '';
+      let resultContent = ''
       for await (const chunk of currentStream as any) {
-        const decoder = new TextDecoder('utf-8');
-        console.log('sendMessage Chunks', decoder.decode(chunk));
-        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || [];
+        const decoder = new TextDecoder('utf-8')
+        console.log('sendMessage Chunks', decoder.decode(chunk))
+        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
         const char = decoded.reduce(
           (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
           ''
-        );
+        )
         if (char) {
           resultContent += char
           setCurrentMessage(resultContent)
@@ -142,15 +141,12 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setConversation([])
   }
 
-
-
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = '50px'
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 2}px`
     }
   }, [message, textAreaRef])
-
 
   useEffect(() => {
     if (bottomOfChatRef.current) {

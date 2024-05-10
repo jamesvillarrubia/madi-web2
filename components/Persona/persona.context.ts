@@ -45,10 +45,6 @@ export const DefaultPersonas: Persona[] = [
   }
 ]
 
-
-
-
-
 export const usePersonaContext = () => {
   const { toast } = useToast()
 
