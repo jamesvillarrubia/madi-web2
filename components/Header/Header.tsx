@@ -14,7 +14,7 @@ import { IoSunny } from 'react-icons/io5'
 import { HeaderUser } from './HeaderUser'
 import { useTheme } from '../Themes'
 import { useCallback, useState, useContext } from 'react'
-import { ChatContext } from '../Chat/chat.context'
+import { ChatContext } from '../Chat/context'
 
 
 export interface HeaderProps {

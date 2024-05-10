@@ -9,7 +9,7 @@ import {
   Fragment
 } from 'react'
 import { ChatMessage, Tool } from '../interface'
-import ChatContext from '../Chat/chat.context'
+import { ChatContext } from '../Chat/context'
 import { getTools } from '@/app/getResponse'
 import { useAuthContext } from '@/app/authenticate'
 

@@ -1,11 +1,31 @@
 'use client'
 
-import { useCallback, useState } from 'react'
+import { createContext, useCallback, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 
 import { Persona } from '../interface'
 import { useToast } from '..'
-import { uploadFiles } from '../helpers'
+import { uploadFiles, defaultError } from '../helpers'
+
+type PersonaContextType = {
+  DefaultPersonas: Persona[],
+  personas: Persona[],
+  editPersona: Persona | undefined,
+  isOpenPersonaModal: boolean,
+  personaModalLoading: boolean,
+  openPersonaPanel: boolean,
+  personaPanelType: string,
+  onOpenPersonaModal: () => void,
+  onClosePersonaModal: () => void,
+  onCreatePersona: (values: any) => Promise<void>,
+  onDeletePersona: (persona: Persona) => void,
+  onEditPersona: (persona: Persona) => Promise<void>,
+  onOpenPersonaPanel: (type: string) => void,
+  onClosePersonaPanel: () => void,
+  setPersonas: React.Dispatch<React.SetStateAction<Persona[]>>
+};
+
+export type { PersonaContextType };
 
 export const DefaultPersonas: Persona[] = [
   {
@@ -24,6 +44,10 @@ export const DefaultPersonas: Persona[] = [
     isDefault: false
   }
 ]
+
+
+
+
 
 export const usePersonaContext = () => {
   const { toast } = useToast()
@@ -128,4 +152,21 @@ export const usePersonaContext = () => {
   }
 }
 
-export default usePersonaContext
+
+export const PersonaContext = createContext<PersonaContextType>({
+  DefaultPersonas: [],
+  personas: [],
+  editPersona: undefined,
+  isOpenPersonaModal: false,
+  personaModalLoading: false,
+  openPersonaPanel: false,
+  personaPanelType: 'chat',
+  onOpenPersonaModal: defaultError('onOpenPersonaModal'),
+  onClosePersonaModal: defaultError('onClosePersonaModal'),
+  onCreatePersona: defaultError('onCreatePersona'),
+  onDeletePersona: defaultError('onDeletePersona'),
+  onEditPersona: defaultError('onEditPersona'),
+  onOpenPersonaPanel: defaultError('onOpenPersonaPanel'),
+  onClosePersonaPanel: defaultError('onClosePersonaPanel'),
+  setPersonas: defaultError('setPersonas'),
+});

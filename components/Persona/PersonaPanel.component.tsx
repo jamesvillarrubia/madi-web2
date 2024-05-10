@@ -6,8 +6,10 @@ import { LuMessageSquarePlus } from 'react-icons/lu'
 import { MagnifyingGlassIcon } from '@radix-ui/react-icons'
 import { debounce } from 'lodash-es'
 
-import ChatContext from '../Chat/chat.context'
+// import ChatContext from '../Chat/context'
 import { Persona } from '../interface'
+import { PersonaContext } from './persona.context'
+import { PersonaContextType } from './persona.context'
 import {
   Text,
   Button,
@@ -19,6 +21,7 @@ import {
   ScrollArea,
   Box
 } from '@radix-ui/themes'
+import { ChatContext } from '../Chat'
 
 export interface PersonaPanelProps {}
 
@@ -30,9 +33,12 @@ const PersonaPanel = (props: PersonaPanelProps) => {
     openPersonaPanel,
     onDeletePersona,
     onEditPersona,
-    onCreateChat,
     onOpenPersonaModal,
     onClosePersonaPanel
+  } = useContext(PersonaContext)
+
+  const {
+    onCreateChat
   } = useContext(ChatContext)
 
   const [promptList, setPromptList] = useState<Persona[]>([])

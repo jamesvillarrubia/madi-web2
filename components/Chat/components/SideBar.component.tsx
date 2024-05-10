@@ -4,23 +4,28 @@ import { Box, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { ChatContext } from '../chat.context'
+import { ChatContext } from '@/components/Chat'
 import { FaPlus } from 'react-icons/fa6'
 import { FaTheaterMasks } from 'react-icons/fa'
+import { Chat } from '../../interface'
 
-import '../chat.scss'
+import '../index.scss'
+import { PersonaContext } from '@/components/Persona'
 
 export const SideBar = () => {
   const {
-    currentChat,
+    currentChatId,
     chatList,
-    DefaultPersonas,
     toggleSidebar,
     onDeleteChat,
     onChangeChat,
     onCreateChat,
-    onOpenPersonaPanel
+    getChatById
   } = useContext(ChatContext)
+
+  const { DefaultPersonas, onOpenPersonaPanel} = useContext(PersonaContext)
+
+
 
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
@@ -30,27 +35,33 @@ export const SideBar = () => {
           onClick={() => onCreateChat?.(DefaultPersonas[0])}
           className="bg-token-surface-primary active:scale-95 "
         >
-          {/* <SiOpenai className="h-5 w-5" /> */}
           <FaPlus />
           <Text>New Chat</Text>
         </Box>
-        <ScrollArea className="flex-1" type="auto" scrollbars="vertical">
+        <ScrollArea type="auto" scrollbars="vertical">
           <Flex direction="column" gap="3">
-            {chatList.map((chat) => {
+            {chatList.map((id:string) => {
+              let chat = getChatById?.(id) || {} as Chat
+              if(currentChatId === id){
+                console.log('current Id', currentChatId)
+              //   console.log('current Chat', chat)
+              //   console.log('chat Id List:', chatList)
+              }
               return (
                 <Box
-                  key={chat.id}
+                  key={id}
                   width="auto"
                   className={cs('bg-token-surface active:scale-95 truncate', {
-                    active: currentChat?.id === chat.id
+                    active: currentChatId === id
                   })}
+                  display="block"
                   onClick={() => {
-                    console.log('clicked new chat', chat)
-                    onChangeChat?.(chat)
+                    onChangeChat?.(id)
+                    console.log('onClick',id)
                   }}
                 >
-                  <Text as="p" className="truncate">
-                    {chat?.name || chat.persona?.name}
+                  <Text as="p" className="truncate" style={{maxWidth: 190}}>
+                    {chat?.name || 'FAKE'}
                   </Text>
                   <IconButton
                     size="2"
@@ -59,7 +70,7 @@ export const SideBar = () => {
                     radius="full"
                     onClick={(e) => {
                       e.stopPropagation()
-                      onDeleteChat?.(chat)
+                      onDeleteChat?.(id)
                     }}
                   >
                     <AiOutlineCloseCircle className="h-4 w-4" />

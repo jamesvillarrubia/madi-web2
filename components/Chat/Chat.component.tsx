@@ -8,9 +8,9 @@ import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } fro
 import clipboard from 'clipboard'
 import { useToast } from '@/components'
 import { ChatMessage, Chat } from '../interface'
-import { ChatContext } from './chat.context'
-import Message from './Message.component'
-import EditableText from './EditableText'
+import { ChatContext } from './context'
+import Message from './components/Message.component'
+import EditableText from './components/EditableText'
 import { FaRegEdit } from 'react-icons/fa'
 import { FaCheck } from 'react-icons/fa6'
 import { FaXmark } from 'react-icons/fa6'
@@ -218,9 +218,9 @@ const ChatBox = (props: ChatProps, ref: any) => {
           validation={(value: string) => value.trim().length > 0}
           showButtonsOnHover={true}
           editOnViewClick={true}
-          editButtonContent={FaRegEdit()}
-          cancelButtonContent={FaXmark()}
-          saveButtonContent={FaCheck()}
+          editButtonContent={FaRegEdit({})}
+          cancelButtonContent={FaXmark({})}
+          saveButtonContent={FaCheck({})}
           value={getChatById?.(currentChatId||'')?.name || getChatById?.(currentChatId||'')?.persona?.name}
           type="text"
           onSave={(value:string)=>{

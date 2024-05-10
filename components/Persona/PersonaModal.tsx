@@ -4,16 +4,16 @@ import { Button, Dialog, Flex, TextField, TextArea } from '@radix-ui/themes'
 import { useForm } from 'react-hook-form'
 import { Persona } from '../interface'
 
-import { ChatContext } from '@/components'
+import { PersonaContext } from '@/components'
 
 const PersonaModal = () => {
   const {
     isOpenPersonaModal: open,
-    personaModalLoading: isLoading,
+    // personaModalLoading: isLoading,
     editPersona: detail,
     onCreatePersona,
     onClosePersonaModal
-  } = useContext(ChatContext)
+  } = useContext(PersonaContext)
 
   const {
     register,
