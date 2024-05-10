@@ -6,14 +6,16 @@ import { Chat, SideBar, ChatContext, useChatContext } from '@/components'
 import { PersonaContext, PersonaPanel, usePersonaContext } from '@/components'
 
 import PersonaModal from '../components/Persona/PersonaModal'
-import { Authentication, useAuthContext } from './authenticate'
+import { Authentication, useAuthContext, AuthContextType } from './authenticate'
 import { Toaster, Banner } from '@/components'
 import { Header } from '@/components/Header/Header'
+import { ChatContextType } from '@/components/Chat/context'
+import { PersonaContextType } from '@/components/Persona/persona.context'
 
 const ChatPage = () => {
-  const chatProvider = useChatContext()
-  const authProvider = useAuthContext()
-  const personaProvider = usePersonaContext()
+  const chatProvider:ChatContextType = useChatContext()
+  const authProvider:AuthContextType = useAuthContext()
+  const personaProvider:PersonaContextType = usePersonaContext()
 
   return (
     <Authentication.Provider value={authProvider}>

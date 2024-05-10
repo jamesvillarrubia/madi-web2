@@ -4,15 +4,17 @@ import { Box, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { ChatContext } from '@/components/Chat'
+import { ChatContext } from '../context/index'
 import { FaPlus } from 'react-icons/fa6'
 import { FaTheaterMasks } from 'react-icons/fa'
 import { Chat } from '../../interface'
+import { ChatContextType } from '../context/index'
 
 import '../index.scss'
 import { PersonaContext } from '@/components/Persona'
 
 export const SideBar = () => {
+  const extra = useContext(ChatContext)
   const {
     currentChatId,
     chatList,
@@ -21,7 +23,8 @@ export const SideBar = () => {
     onChangeChat,
     onCreateChat,
     getChatById
-  } = useContext(ChatContext)
+  }  = extra
+  console.log(extra)
 
   const { DefaultPersonas, onOpenPersonaPanel} = useContext(PersonaContext)
 
@@ -41,7 +44,7 @@ export const SideBar = () => {
         <ScrollArea type="auto" scrollbars="vertical">
           <Flex direction="column" gap="3">
             {chatList.map((id:string) => {
-              let chat = getChatById?.(id) || {} as Chat
+              let chat = getChatById(id) || {} as Chat
               if(currentChatId === id){
                 console.log('current Id', currentChatId)
               //   console.log('current Chat', chat)
@@ -56,7 +59,7 @@ export const SideBar = () => {
                   })}
                   display="block"
                   onClick={() => {
-                    onChangeChat?.(id)
+                    onChangeChat(id)
                     console.log('onClick',id)
                   }}
                 >
@@ -70,7 +73,7 @@ export const SideBar = () => {
                     radius="full"
                     onClick={(e) => {
                       e.stopPropagation()
-                      onDeleteChat?.(id)
+                      onDeleteChat(id)
                     }}
                   >
                     <AiOutlineCloseCircle className="h-4 w-4" />

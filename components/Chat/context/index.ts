@@ -6,7 +6,7 @@ import { defaultError } from '@/components/helpers'
 export { useChatContext } from './chat.context'
 
 
-type ChatContextType = {
+export type ChatContextType = {
   debug: boolean
 
   // sidebar fields
@@ -21,7 +21,7 @@ type ChatContextType = {
 
   // Chat specific fields
   chatList: string[]
-  currentChatId: string
+  currentChatId: string | undefined
   onCreateChat: (persona: Persona) => void
   setCurrentChatId: (id: string) => void
   onDeleteChat: (id: string) => void
@@ -29,8 +29,8 @@ type ChatContextType = {
   
   // LocalStorage
   setStorageState: (state: any) => void
-  appendMessageById: (id: string) => void
-  setChatById: (id: string) => void
+  appendMessageById: (id: string, message:ChatMessage) => void
+  setChatById: (id: string, chat:Chat) => void
   setChatNameById: (id: string, name: string) => void
   deleteChatById: (id: string) => void 
   getChatById: (id: string) => Chat
@@ -38,31 +38,33 @@ type ChatContextType = {
 }
 
 
-export const ChatContext = createContext<ChatContextType>({
-  debug: false,
+export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)
 
-  toggleSidebar: false,
-  onToggleSidebar: defaultError('onToggleSidebar'),
+// {
+//   debug: false,
+
+//   toggleSidebar: false,
+//   onToggleSidebar: defaultError('onToggleSidebar'),
   
-  currentTool: '',
-  toolList:[],
-  setCurrentTool: defaultError('onToggleSidebar'),
-  setToolList: defaultError('onToggleSidebar'),
+//   currentTool: '',
+//   toolList:[],
+//   setCurrentTool: defaultError('onToggleSidebar'),
+//   setToolList: defaultError('onToggleSidebar'),
   
-  // Chat specific fields
-  chatList: [],
-  currentChatId: '',
-  onCreateChat: defaultError('onCreateChat'),
-  setCurrentChatId: defaultError('setCurrentChatId'),
-  onDeleteChat: defaultError('onDeleteChat'),
-  onChangeChat: defaultError('onChangeChat'),
+//   // Chat specific fields
+//   chatList: [],
+//   currentChatId: '',
+//   onCreateChat: defaultError('onCreateChat'),
+//   setCurrentChatId: defaultError('setCurrentChatId'),
+//   onDeleteChat: defaultError('onDeleteChat'),
+//   onChangeChat: defaultError('onChangeChat'),
   
-  // Local Storage Fields
-  setStorageState: defaultError('setStorageState'),
-  appendMessageById: defaultError('appendMessageById'),
-  setMessagesById: defaultError('setMessagesById'),
-  getChatById: defaultError('getChatById'),
-  setChatById: defaultError('setChatById'),
-  setChatNameById: defaultError('setChatNameById'),
-  deleteChatById: defaultError('deleteChatById'),
-});
+//   // Local Storage Fields
+//   setStorageState: defaultError('setStorageState'),
+//   appendMessageById: defaultError('appendMessageById'),
+//   setMessagesById: defaultError('setMessagesById'),
+//   getChatById: defaultError('getChatById'),
+//   setChatById: defaultError('setChatById'),
+//   setChatNameById: defaultError('setChatNameById'),
+//   deleteChatById: defaultError('deleteChatById'),
+// });

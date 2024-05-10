@@ -2,13 +2,13 @@ import { createContext, useState, useEffect } from 'react'
 import { API_HOST, GCP_IAP_HEADERS } from '../constants'
 import { User } from '../components/interface'
 
-export const Authentication = createContext<{
+export type AuthContextType = {
   currentUser?: User
   authenticateUser: () => void
-}>({
-  currentUser: undefined,
-  authenticateUser: () => {}
-})
+}
+
+export const Authentication = createContext<AuthContextType>(undefined as unknown as AuthContextType)
+
 
 export const useAuthContext = () => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)

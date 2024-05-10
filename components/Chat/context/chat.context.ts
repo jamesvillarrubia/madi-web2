@@ -107,38 +107,23 @@ export const useChatContext = () => {
   }, [setPersonas])
 
   return {
-    // debug,
-    // onCreateChat,
-    // onDeleteChat,
-    // onChangeChat,
-    // currentChatId,
+    debug,
+
+    onCreateChat,
+    onDeleteChat,
+    onChangeChat,
+    currentChatId,
     chatList,
-    // setCurrentChatId,
-    // onToggleSidebar,
-    // toggleSidebar,
+    setCurrentChatId,
+
+    onToggleSidebar,
+    toggleSidebar,
+
     setCurrentTool,
     currentTool,
-    // toolList,
-    // setToolList,
-
-    // onOpenPersonaModal,
-    // onClosePersonaModal,
-    // onCreatePersona,
-    // onDeletePersona,
-    // onOpenPersonaPanel,
-    // onClosePersonaPanel,
-    // onEditPersona,
-    DefaultPersonas,
-    personas,
-    // editPersona,
-    // isOpenPersonaModal,
-    // personaModalLoading,
-    // openPersonaPanel,
-    // personaPanelType,
-
-
-
-
+    toolList,
+    setToolList,
+    
     setStorageState,
     appendMessageById,
     setMessagesById,
