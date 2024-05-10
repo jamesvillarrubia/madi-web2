@@ -9,41 +9,9 @@ import { useSearchParams } from 'next/navigation'
 
 import { ChatMessage, Chat, Persona, Tool } from '../interface'
 import { usePersonaContext } from '../Persona/persona.context'
-
-export const DefaultTools: Tool[] = [
-  {
-    type: 'function',
-    display: 'Get Weather',
-    function: {
-      name: 'get_current_weather',
-      description: 'Get the current weather in a given location',
-      parameters: {
-        type: 'object',
-        properties: {
-          location: {
-            type: 'string',
-            description: 'The city and state, e.g. San Francisco, CA'
-          },
-          unit: {
-            type: 'string',
-            enum: ['celsius', 'fahrenheit']
-          }
-        },
-        required: ['location']
-      }
-    }
-  },
-  {
-    type: 'function',
-    display: 'get_joke',
-    plugin: 'CAS Scenarios',
-    function: {
-      name: 'get_joke',
-      description: 'Get a joke from the joke database',
-      parameters: {}
-    }
-  }
-]
+// export { useChatContext } from './context/chat.hooks'
+import { DefaultTools } from '../Tools/default_tools'
+import { useLocalStorageContext } from '../localStorage'
 
 enum StorageKeys {
   Chat_List = 'chatList',
@@ -71,34 +39,55 @@ export const useChatContext = () => {
     DefaultPersonas
   } = usePersonaContext()
 
+
+
+  const {
+    // getStorageState,
+    state,
+    setStorageState,
+    appendMessageById,
+    setMessagesById,
+    getChatById,
+    setChatById,
+    setChatNameById,
+    deleteChatById, // Add the deleteChat function to the returned object
+  }  = useLocalStorageContext()
+
+
   const searchParams = useSearchParams()
 
   const debug = searchParams.get('debug') === 'true'
-
-  const messagesMap = useRef<Map<string, ChatMessage[]>>(new Map<string, ChatMessage[]>())
-
   const chatRef = useRef<ChatGPTInstance>(null)
 
-  const [currentChat, setCurrentChat] = useState<Chat | undefined>(undefined)
 
-  const [currentTool, setCurrentTool] = useState<string>('auto')
 
-  const [chatList, setChatList] = useState<Chat[]>([])
+  const [chatList, setChatList] = useState<string[]>([])
+
+
+
+
+
 
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
 
-  const [toolList, setToolList] = useState<Tool[]>(DefaultTools)
+
+
+
+  const [currentTool, setCurrentTool] = useState<string>('auto')
+  const [toolList, setToolList] = useState<Tool[]>(DefaultTools || [])
+
+
+
+  // Changes the current chat
+  const [currentChatId, setCurrentChatId] = useState<string|undefined>(undefined)
+
 
   const onChangeChat = useCallback(
-    (chat: Chat) => {
-      const oldMessages = chatRef.current?.getConversation() || []
-      const newMessages = messagesMap.current.get(chat.id) || []
-      chatRef.current?.setConversation(newMessages)
-      chatRef.current?.focus()
-      messagesMap.current.set(currentChat?.id!, oldMessages)
-      setCurrentChat(chat)
+    (id: string) => {
+      console.log('onChangeChat', id)
+      setCurrentChatId(id) //sets the currentChat
     },
-    [currentChat?.id]
+    []
   )
 
   const onCreateChat = useCallback(
@@ -106,94 +95,64 @@ export const useChatContext = () => {
       const id = uuid()
       const newChat: Chat = {
         id,
-        persona: persona
+        name: 'Untitled', //persona.name,
+        messages: [],
+        persona: persona,
+        date: Date.now()
       }
-
-      setChatList((state) => {
-        return [...state, newChat]
+      setChatById(id, newChat) // put it in localstorage
+      setChatList((state) => { // update the id list
+        return [id, ...state]
       })
 
-      onChangeChat(newChat)
+      setCurrentChatId(id) // change the currentChat
       onClosePersonaPanel()
     },
-    [setChatList, onChangeChat, onClosePersonaPanel]
+    [setChatList, setChatById, onClosePersonaPanel]
   )
+
+
+  
 
   const onToggleSidebar = useCallback(() => {
     setToggleSidebar((state) => !state)
   }, [])
 
-  const onDeleteChat = (chat: Chat) => {
-    const index = chatList.findIndex((item) => item.id === chat.id)
-    chatList.splice(index, 1)
-    setChatList([...chatList])
-    if (currentChat?.id === chat.id) {
-      setCurrentChat(chatList[0])
-    }
-    if (chatList.length === 0) {
-      onOpenPersonaPanel('chat')
-    }
+  const onDeleteChat = (id: string) => {
+    deleteChatById(id)
   }
 
-  const saveChatName = (name: string) => {
-    const updatedChatList = chatList.map((chat) => {
-      if (chat.id === currentChat?.id) {
-        chat.name = name
-        // chat.persona.name = name;
-      }
-      return chat
-    })
-    setChatList(updatedChatList)
-    localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(updatedChatList))
-  }
 
-  const saveMessages = (messages: ChatMessage[]) => {
-    if (messages.length > 0) {
-      localStorage.setItem(`ms_${currentChat?.id}`, JSON.stringify(messages))
-    } else {
-      localStorage.removeItem(`ms_${currentChat?.id}`)
-    }
-  }
 
+  // LOAD CHATS FROM LOCALSTORAGE ON PAGE LOAD
   useEffect(() => {
-    if (currentChat?.id) {
-      localStorage.setItem(StorageKeys.Chat_Current_ID, currentChat.id)
-    }
-  }, [currentChat?.id])
+    let stateKeys = Object.keys(state?.chats)
+    
+    // Sort the stateKeys based on the date of each chat
+    stateKeys.sort((a:string, b:string) => {
+      const dateA = state.chats[a].date;
+      const dateB = state.chats[b].date;
+      return dateB - dateA
+    });
 
+    setChatList(stateKeys)
+    if (stateKeys.length === 0 && state.appState.loaded === true) {
+      // Create a new chat using the first persona from DefaultPersonas
+      onCreateChat(DefaultPersonas[0]);
+    }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [state]);
+
+
+  // ALWAYS SELECT A CHAT ON PAGE LOAD OR IF CURRENT CHAT IS DELETED
   useEffect(() => {
-    const chatList = JSON.parse(localStorage.getItem(StorageKeys.Chat_List) || '[]') as Chat[]
-    const currentChatId = localStorage.getItem(StorageKeys.Chat_Current_ID)
-    if (chatList.length > 0) {
-      const currentChat = chatList.find((chat) => chat.id === currentChatId)
-      setChatList(chatList)
-
-      chatList.forEach((chat) => {
-        const messages = JSON.parse(localStorage.getItem(`ms_${chat?.id}`) || '[]') as ChatMessage[]
-        messagesMap.current.set(chat.id!, messages)
-      })
-
-      onChangeChat(currentChat || chatList[0])
-    } else {
-      onCreateChat(DefaultPersonas[0])
+    // Check if there is no currentChatId set or if the current chat is not in the chatList
+    if ((!currentChatId || !chatList.includes(currentChatId)) && chatList.length > 0) {
+      // Set the first chat in the chatList as the currentChatId
+      setCurrentChatId(chatList[0]);
     }
+  }, [currentChatId, chatList, setCurrentChatId]);
 
-    return () => {
-      document.body.removeAttribute('style')
-      localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList))
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
-
-  useEffect(() => {
-    if (currentChat?.id) {
-      localStorage.setItem(StorageKeys.Chat_Current_ID, currentChat.id)
-    }
-  }, [currentChat?.id])
-
-  useEffect(() => {
-    localStorage.setItem(StorageKeys.Chat_List, JSON.stringify(chatList))
-  }, [chatList])
 
   useEffect(() => {
     const loadedPersonas = JSON.parse(localStorage.getItem('Personas') || '[]') as Persona[]
@@ -206,48 +165,55 @@ export const useChatContext = () => {
     setPersonas(updatedPersonas)
   }, [setPersonas])
 
-  useEffect(() => {
-    localStorage.setItem('Personas', JSON.stringify(personas))
-  }, [personas])
-
-  useEffect(() => {
-    if (isInit && !openPersonaPanel && chatList.length === 0) {
-      onCreateChat(DefaultPersonas[0])
-    }
-    isInit = true
-  }, [chatList.length, openPersonaPanel, onCreateChat, DefaultPersonas])
-
+ 
   return {
     debug,
-    DefaultPersonas,
-    chatRef,
-    currentChat,
-    chatList,
-    personas,
-    editPersona,
-    isOpenPersonaModal,
-    personaModalLoading,
-    openPersonaPanel,
-    personaPanelType,
-    toggleSidebar,
-    onOpenPersonaModal,
-    onClosePersonaModal,
-    setCurrentChat,
+
+    // Current Chat Context
     onCreateChat,
     onDeleteChat,
     onChangeChat,
-    onCreatePersona,
-    onDeletePersona,
-    onEditPersona,
-    saveMessages,
-    onOpenPersonaPanel,
-    onClosePersonaPanel,
+    // --- static
+      chatRef,
+      currentChatId,
+      chatList,
+      setCurrentChatId,
+
+    // Sidebar
     onToggleSidebar,
-    saveChatName,
+    toggleSidebar,
+
     setCurrentTool,
     currentTool,
     toolList,
-    setToolList
+    setToolList,
+
+    // Persona Model
+    onOpenPersonaModal,
+    onClosePersonaModal,
+    onCreatePersona,
+    onDeletePersona,
+    onOpenPersonaPanel,
+    onClosePersonaPanel,
+    onEditPersona,
+    // --- static
+      DefaultPersonas,
+      personas,
+      editPersona,
+      isOpenPersonaModal,
+      personaModalLoading,
+      openPersonaPanel,
+      personaPanelType,
+
+    // LocalStorage
+    // getStorageState,
+    setStorageState,
+    appendMessageById,
+    setMessagesById,
+    getChatById,
+    setChatById,
+    setChatNameById,
+    deleteChatById, // Add the deleteChat function to the returned object
   }
 }
 
@@ -255,9 +221,9 @@ export const ChatContext = createContext<{
   debug?: boolean
   personaPanelType: string
   DefaultPersonas: Persona[]
-  currentChat?: Chat
-  chatList: Chat[]
+  chatList: string[]
   personas: Persona[]
+  currentChatId?: string
   isOpenPersonaModal?: boolean
   editPersona?: Persona
   personaModalLoading?: boolean
@@ -267,21 +233,42 @@ export const ChatContext = createContext<{
   toolList?: Tool[]
   onOpenPersonaModal?: () => void
   onClosePersonaModal?: () => void
-  setCurrentChat?: (chat: Chat) => void
+  setCurrentChatId?: (id:string) => void
   onCreatePersona?: (persona: Persona) => void
-  onDeleteChat?: (chat: Chat) => void
+  onDeleteChat?: (id:string) => void
   onDeletePersona?: (persona: Persona) => void
   onEditPersona?: (persona: Persona) => void
   onCreateChat?: (persona: Persona) => void
-  onChangeChat?: (chat: Chat) => void
-  saveMessages?: (messages: ChatMessage[]) => void
+  onChangeChat?: (id: string) => void
   onOpenPersonaPanel?: (type?: string) => void
   onClosePersonaPanel?: () => void
   onToggleSidebar?: () => void
-  saveChatName?: (name: string) => void
+
   setCurrentTool?: (tool: string) => void
   setToolList?: (toolList: Tool[]) => void
+
+
+  // LocalStorage
+  // getStorageState: () => any
+  setStorageState: (state:any)=>void
+  appendMessageById: (id:string)=>void
+  setChatById: (id:string)=>void
+  setChatNameById: (id:string, name:string)=>void
+  deleteChatById: (id:string)=>void 
+  getChatById: (id:string)=>Chat
+  setMessagesById: (id:string, messages: ChatMessage[])=>void 
 }>({
+
+  // LocalStorage
+  // getStorageState: ()=>{},
+  setStorageState: ()=>{},
+  appendMessageById: ()=>{},
+  setMessagesById: ()=>{},
+  getChatById: ()=>({} as Chat),
+  setChatById: ()=>{},
+  setChatNameById: ()=>{},
+  deleteChatById: ()=>{},
+
   personaPanelType: 'chat',
   DefaultPersonas: [],
   chatList: [],

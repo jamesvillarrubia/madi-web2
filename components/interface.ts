@@ -55,9 +55,10 @@ export interface Tool {
 
 export interface Chat {
   id: string
-  persona?: Persona
-  messages?: ChatMessage[]
-  name?: string
+  persona: Persona
+  messages: ChatMessage[]
+  name: string
+  date: number
 }
 
 export type ChatRole = 'assistant' | 'user' | 'system' | 'tool'

@@ -7,7 +7,7 @@ import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
 import { useToast } from '@/components'
-import { ChatMessage } from '../interface'
+import { ChatMessage, Chat } from '../interface'
 import { ChatContext } from './chat.context'
 import Message from './Message.component'
 import EditableText from './EditableText'
@@ -16,6 +16,7 @@ import { FaCheck } from 'react-icons/fa6'
 import { FaXmark } from 'react-icons/fa6'
 import { ToolSelect } from '../Tools/ToolSelect'
 import './index.scss'
+
 
 export interface ChatProps {}
 
@@ -28,9 +29,10 @@ export interface ChatGPTInstance {
 const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
   const toastRef = useRef<any>(null)
-  const { currentChat, currentTool, toolList, saveMessages, saveChatName, onToggleSidebar } =
+  const { currentChatId, getChatById, currentTool, toolList, setMessagesById, setChatNameById, onToggleSidebar } =
     useContext(ChatContext)
 
+  const [idAtStart, setStartId] = useState<string>(currentChatId || '')
   const [isLoading, setIsLoading] = useState(false)
 
   const conversationRef = useRef<ChatMessage[]>()
@@ -61,10 +63,16 @@ const ChatBox = (props: ChatProps, ref: any) => {
     }
     setMessage('')
     setIsLoading(true)
-    setConversation?.([...conversation!, { content: input, role: 'user' }])
+    let localIdAtStart = currentChatId || ''
+    setStartId(localIdAtStart)
 
-    let systemPrompt = currentChat?.persona?.prompt || ''
+    let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
+    setConversation?.(updatedConversation)
+    localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation): undefined
 
+    let systemPrompt = getChatById?.(currentChatId || '')?.persona?.prompt || ''
+
+    // sets the id when the messages start streaming
     try {
       const { currentStream, additionalMessages } = await postRunner(
         systemPrompt,
@@ -72,35 +80,41 @@ const ChatBox = (props: ChatProps, ref: any) => {
         input,
         currentTool,
         toolList
-      )
+      );
 
-      setConversation?.([...conversation!, { content: input, role: 'user' }, ...additionalMessages])
+      updatedConversation = [...conversation!, { content: input, role: 'user' }, ...additionalMessages] as ChatMessage[]
+      setConversation?.(updatedConversation);
+      localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation): undefined
 
-      let resultContent = ''
+      let resultContent = '';
       for await (const chunk of currentStream as any) {
-        const decoder = new TextDecoder('utf-8')
-        console.log('sendMessage Chunks', decoder.decode(chunk))
-        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
+        const decoder = new TextDecoder('utf-8');
+        console.log('sendMessage Chunks', decoder.decode(chunk));
+        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || [];
         const char = decoded.reduce(
           (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
           ''
-        )
+        );
         if (char) {
-          setCurrentMessage((state) => {
-            resultContent = state + char
-            return resultContent
-          })
+          resultContent += char;
+          setCurrentMessage(resultContent);
         }
       }
+
       setTimeout(() => {
-        setConversation?.([
-          ...conversation!,
-          { content: input, role: 'user' },
-          ...additionalMessages,
-          { content: resultContent, role: 'assistant' }
-        ])
-        setCurrentMessage('')
-      }, 1)
+        if (localIdAtStart){
+          updatedConversation = [
+            ...conversation!,
+            { content: input, role: 'user' },
+            ...additionalMessages,
+            { content: resultContent, role: 'assistant' }
+          ];
+          setMessagesById?.(localIdAtStart, updatedConversation);
+          setCurrentMessage('');
+          setConversation?.(updatedConversation);
+        }
+
+      }, 1);
 
       setIsLoading(false)
     } catch (error: any) {
@@ -124,12 +138,15 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setConversation([])
   }
 
+
+
   useEffect(() => {
     if (textAreaRef.current) {
       textAreaRef.current.style.height = '50px'
       textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 2}px`
     }
   }, [message, textAreaRef])
+
 
   useEffect(() => {
     if (bottomOfChatRef.current) {
@@ -138,11 +155,13 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }, [conversation, currentMessage])
 
   useEffect(() => {
-    conversationRef.current = conversation
-    if (currentChat?.id) {
-      saveMessages?.(conversation)
+    if (currentChatId) {
+      let chat = getChatById?.(currentChatId)
+      if(chat?.messages)
+        setConversation(chat.messages)
     }
-  }, [conversation, currentChat?.id, saveMessages])
+  }, [currentChatId, conversation])
+
 
   useEffect(() => {
     if (!isLoading) {
@@ -167,7 +186,9 @@ const ChatBox = (props: ChatProps, ref: any) => {
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
-  // console.log('conversation',conversation)
+  
+  console.log('id matches',currentChatId, idAtStart)
+
   return (
     <Flex
       direction="column"
@@ -185,7 +206,13 @@ const ChatBox = (props: ChatProps, ref: any) => {
       >
         <EditableText
           viewProps={{
-            className: 'rt-Heading rt-r-weight-bold'
+            className: "w-[24rem] sm:w-[32rem] md:w-[30rem] lg:w-[42rem] xl:w-[56rem] 2xl:w-[72rem] rt-Heading rt-r-weight-bold",
+            style: {
+              whiteSpace: 'nowrap',
+              textOverflow: 'ellipsis',
+              // width: '400px',
+              overflow: 'hidden',
+            },
           }}
           submitOnEnter={true}
           validation={(value: string) => value.trim().length > 0}
@@ -194,12 +221,14 @@ const ChatBox = (props: ChatProps, ref: any) => {
           editButtonContent={FaRegEdit()}
           cancelButtonContent={FaXmark()}
           saveButtonContent={FaCheck()}
-          value={currentChat?.name || currentChat?.persona?.name}
+          value={getChatById?.(currentChatId||'')?.name || getChatById?.(currentChatId||'')?.persona?.name}
           type="text"
-          onSave={saveChatName}
+          onSave={(value:string)=>{
+            setChatNameById(currentChatId || '', value)
+          }}
         />
         <div className="text-xs italic" style={{ color: 'var(--accent-11)' }}>
-          {currentChat?.persona?.name}
+          {getChatById?.(currentChatId||'')?.persona?.name}
         </div>
       </Flex>
       <ScrollArea
@@ -209,19 +238,15 @@ const ChatBox = (props: ChatProps, ref: any) => {
         style={{ height: '100%' }}
       >
         {conversation?.map((item, index) => <Message key={index} message={item} />)}
-        {currentMessage && <Message message={{ content: currentMessage, role: 'assistant' }} />}
+        {currentMessage && idAtStart === currentChatId && (
+          <Message message={{ content: currentMessage, role: 'assistant' }} />
+        )}       
         <div ref={bottomOfChatRef}></div>
       </ScrollArea>
       <Flex className="px-4 pb-3" gap="3" direction={'column'}>
         <Flex shrink="1">
           <ToolSelect />
         </Flex>
-
-        {/* <Button
-          
-          >
-            hello
-          </Button> */}
         <Flex align="end" justify="between" gap="3" className="relative">
           <TextArea
             ref={textAreaRef}
@@ -251,8 +276,19 @@ const ChatBox = (props: ChatProps, ref: any) => {
                 style={{ color: 'var(--accent-11)' }}
               >
                 <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
+                {/* <IconButton
+                  variant="soft"
+                  disabled={isLoading}
+                  color="gray"
+                  size="2"
+                  className="rounded-xl"
+                  onClick={sendMessage}
+                >
+                  <FaXmark className="h-4 w-4" />
+                </IconButton> */}
               </Flex>
             )}
+
             <IconButton
               variant="soft"
               disabled={isLoading}
