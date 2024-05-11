@@ -153,6 +153,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }
 
   const clearMessages = () => {
+    if(currentChatId) setMessagesById(currentChatId, [])
     setConversation([])
   }
 
@@ -285,27 +286,29 @@ const ChatBox = (props: ChatProps, ref: any) => {
           />
           <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">
             {isLoading && (
-              <Flex
-                width="6"
-                height="6"
-                align="center"
-                justify="center"
-                style={{ color: 'var(--accent-11)' }}
-              >
-                <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
+              <>
+                <Flex
+                  width="6"
+                  height="6"
+                  align="center"
+                  justify="center"
+                  style={{ color: 'var(--accent-11)' }}
+                >
+                  <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
 
-              </Flex>
-            {/* )} */}
-            <Button
-              variant="surface"
-              // disabled={!isLoading}
-              color="crimson"
-              size="2"
-              className="rounded-xl"
-              onClick={cancelSend}
-            >
-              Cancel <FaXmark className="h-4 w-4" />
-            </Button>
+                </Flex>
+                <Button
+                  variant="surface"
+                  // disabled={!isLoading}
+                  color="crimson"
+                  size="2"
+                  className="rounded-xl"
+                  onClick={cancelSend}
+                >
+                  Cancel <FaXmark className="h-4 w-4" />
+                </Button>
+              </>
+            )}
             <IconButton
               variant="soft"
               disabled={isLoading}
