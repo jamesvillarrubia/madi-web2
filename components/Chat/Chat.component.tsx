@@ -152,7 +152,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }
 
   const clearMessages = () => {
-    if(currentChatId) setMessagesById(currentChatId, [])
+    if (currentChatId) setMessagesById(currentChatId, [])
     setConversation([])
   }
 
