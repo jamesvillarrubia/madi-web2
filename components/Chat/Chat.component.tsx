@@ -152,6 +152,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }
 
   const clearMessages = () => {
+    if(currentChatId) setMessagesById(currentChatId, [])
     setConversation([])
   }
 
@@ -294,7 +295,6 @@ const ChatBox = (props: ChatProps, ref: any) => {
                 >
                   <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
                 </Flex>
-
                 <Button
                   variant="surface"
                   // disabled={!isLoading}
