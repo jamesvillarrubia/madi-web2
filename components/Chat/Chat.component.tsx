@@ -47,9 +47,22 @@ const ChatBox = (props: ChatProps, ref: any) => {
 
   const bottomOfChatRef = useRef<HTMLDivElement>(null)
 
+  const cancelledRef = useRef<boolean>(false)
+
+  const cancelSend = ()=>{
+    cancelledRef.current = true
+    let updatedConversation = [
+      ...conversation!,
+      { content: currentMessage, role: 'assistant' }
+    ] as ChatMessage[]
+    setMessagesById?.(idAtStart, updatedConversation)
+    setIsLoading(false)
+    setCurrentMessage('')
+  }
+
   const sendMessage = async (e: any) => {
-    // const encoder = new TextEncoder()
-    // const decoder = new TextDecoder()
+    
+    cancelledRef.current = false // reset the cancelled status before sending a new message
 
     e.preventDefault()
     const input = textAreaRef.current?.value || ''
@@ -101,12 +114,14 @@ const ChatBox = (props: ChatProps, ref: any) => {
         )
         if (char) {
           resultContent += char
-          setCurrentMessage(resultContent)
+          if(!cancelledRef.current){
+            setCurrentMessage(resultContent)
+          }
         }
       }
 
       setTimeout(() => {
-        if (localIdAtStart) {
+        if (localIdAtStart && !cancelledRef.current) {
           updatedConversation = [
             ...conversation!,
             { content: input, role: 'user' },
@@ -278,19 +293,19 @@ const ChatBox = (props: ChatProps, ref: any) => {
                 style={{ color: 'var(--accent-11)' }}
               >
                 <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
-                {/* <IconButton
-                  variant="soft"
-                  disabled={isLoading}
-                  color="gray"
-                  size="2"
-                  className="rounded-xl"
-                  onClick={sendMessage}
-                >
-                  <FaXmark className="h-4 w-4" />
-                </IconButton> */}
-              </Flex>
-            )}
 
+              </Flex>
+            {/* )} */}
+            <Button
+              variant="surface"
+              // disabled={!isLoading}
+              color="crimson"
+              size="2"
+              className="rounded-xl"
+              onClick={cancelSend}
+            >
+              Cancel <FaXmark className="h-4 w-4" />
+            </Button>
             <IconButton
               variant="soft"
               disabled={isLoading}
