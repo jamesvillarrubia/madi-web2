@@ -176,26 +176,6 @@ function EditableText(props: any) {
           </IconButton>
         </TextField.Slot>
       </TextField.Root>
-      // <Flex direction="row" gap="3" align="center" className="group" {...props.viewContainerProps}>
-      //     <div
-      //       tabIndex={props.tabIndex}
-      //       {...props.viewProps}
-      //       onKeyDown={handleKeyDownForView}
-      //       onFocus={handleViewFocus}
-      //       onClick={viewClickHandler}
-      //     >
-      //       {_value}
-      //     </div>
-      //     <div className={'invisible group-hover:visible'}>
-      //         <IconButton size="2" variant="ghost"
-      //             // type="button"
-      //             // {...props.editButtonProps}
-      //             onClick={handleActivateEditMode}
-      //         >
-      //             {props.editButtonContent}
-      //         </IconButton>
-      //     </div>
-      // </Flex>
     )
   }
 

@@ -55,9 +55,15 @@ export interface Tool {
 
 export interface Chat {
   id: string
-  persona?: Persona
-  messages?: ChatMessage[]
-  name?: string
+  persona: Persona
+  messages: ChatMessage[]
+  name: string
+  date: number
+}
+export interface ChatGPTInstance {
+  setConversation: (messages: ChatMessage[]) => void
+  getConversation: () => ChatMessage[]
+  focus: () => void
 }
 
 export type ChatRole = 'assistant' | 'user' | 'system' | 'tool'
