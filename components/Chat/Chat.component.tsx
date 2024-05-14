@@ -79,10 +79,10 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setStartId(localIdAtStart)
 
     let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
-    setConversation?.(updatedConversation)
-    localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation) : undefined
+    setConversation(updatedConversation)
+    localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
-    let systemPrompt = getChatById?.(currentChatId || '')?.persona?.prompt || ''
+    let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 
     // sets the id when the messages start streaming
     try {
@@ -99,8 +99,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
         { content: input, role: 'user' },
         ...additionalMessages
       ] as ChatMessage[]
-      setConversation?.(updatedConversation)
-      localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation) : undefined
+      setConversation(updatedConversation)
+      localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
       let resultContent = ''
       for await (const chunk of currentStream as any) {
@@ -127,9 +127,9 @@ const ChatBox = (props: ChatProps, ref: any) => {
             ...additionalMessages,
             { content: resultContent, role: 'assistant' }
           ]
-          setMessagesById?.(localIdAtStart, updatedConversation)
+          setMessagesById(localIdAtStart, updatedConversation)
           setCurrentMessage('')
-          setConversation?.(updatedConversation)
+          setConversation(updatedConversation)
         }
       }, 1)
 
@@ -152,6 +152,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }
 
   const clearMessages = () => {
+    if (currentChatId) setMessagesById(currentChatId, [])
     setConversation([])
   }
 
@@ -170,7 +171,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
 
   useEffect(() => {
     if (currentChatId) {
-      let chat = getChatById?.(currentChatId)
+      let chat = getChatById(currentChatId)
       if (chat?.messages) setConversation(chat.messages)
     }
   }, [currentChatId, conversation, getChatById])
@@ -294,7 +295,6 @@ const ChatBox = (props: ChatProps, ref: any) => {
                 >
                   <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
                 </Flex>
-
                 <Button
                   variant="surface"
                   // disabled={!isLoading}
