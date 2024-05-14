@@ -23,7 +23,7 @@ export const SideBar = () => {
     onCreateChat,
     getChatById
   } = useContext(ChatContext)
-  
+
   const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
