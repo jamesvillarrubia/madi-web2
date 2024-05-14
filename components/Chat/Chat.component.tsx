@@ -47,9 +47,21 @@ const ChatBox = (props: ChatProps, ref: any) => {
 
   const bottomOfChatRef = useRef<HTMLDivElement>(null)
 
+  const cancelledRef = useRef<boolean>(false)
+
+  const cancelSend = () => {
+    cancelledRef.current = true
+    let updatedConversation = [
+      ...conversation!,
+      { content: currentMessage, role: 'assistant' }
+    ] as ChatMessage[]
+    setMessagesById?.(idAtStart, updatedConversation)
+    setIsLoading(false)
+    setCurrentMessage('')
+  }
+
   const sendMessage = async (e: any) => {
-    // const encoder = new TextEncoder()
-    // const decoder = new TextDecoder()
+    cancelledRef.current = false // reset the cancelled status before sending a new message
 
     e.preventDefault()
     const input = textAreaRef.current?.value || ''
@@ -67,10 +79,10 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setStartId(localIdAtStart)
 
     let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
-    setConversation?.(updatedConversation)
-    localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation) : undefined
+    setConversation(updatedConversation)
+    localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
-    let systemPrompt = getChatById?.(currentChatId || '')?.persona?.prompt || ''
+    let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 
     // sets the id when the messages start streaming
     try {
@@ -87,8 +99,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
         { content: input, role: 'user' },
         ...additionalMessages
       ] as ChatMessage[]
-      setConversation?.(updatedConversation)
-      localIdAtStart ? setMessagesById?.(localIdAtStart, updatedConversation) : undefined
+      setConversation(updatedConversation)
+      localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
       let resultContent = ''
       for await (const chunk of currentStream as any) {
@@ -101,21 +113,23 @@ const ChatBox = (props: ChatProps, ref: any) => {
         )
         if (char) {
           resultContent += char
-          setCurrentMessage(resultContent)
+          if (!cancelledRef.current) {
+            setCurrentMessage(resultContent)
+          }
         }
       }
 
       setTimeout(() => {
-        if (localIdAtStart) {
+        if (localIdAtStart && !cancelledRef.current) {
           updatedConversation = [
             ...conversation!,
             { content: input, role: 'user' },
             ...additionalMessages,
             { content: resultContent, role: 'assistant' }
           ]
-          setMessagesById?.(localIdAtStart, updatedConversation)
+          setMessagesById(localIdAtStart, updatedConversation)
           setCurrentMessage('')
-          setConversation?.(updatedConversation)
+          setConversation(updatedConversation)
         }
       }, 1)
 
@@ -138,6 +152,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
   }
 
   const clearMessages = () => {
+    if (currentChatId) setMessagesById(currentChatId, [])
     setConversation([])
   }
 
@@ -156,7 +171,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
 
   useEffect(() => {
     if (currentChatId) {
-      let chat = getChatById?.(currentChatId)
+      let chat = getChatById(currentChatId)
       if (chat?.messages) setConversation(chat.messages)
     }
   }, [currentChatId, conversation, getChatById])
@@ -270,27 +285,28 @@ const ChatBox = (props: ChatProps, ref: any) => {
           />
           <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">
             {isLoading && (
-              <Flex
-                width="6"
-                height="6"
-                align="center"
-                justify="center"
-                style={{ color: 'var(--accent-11)' }}
-              >
-                <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
-                {/* <IconButton
-                  variant="soft"
-                  disabled={isLoading}
-                  color="gray"
+              <>
+                <Flex
+                  width="6"
+                  height="6"
+                  align="center"
+                  justify="center"
+                  style={{ color: 'var(--accent-11)' }}
+                >
+                  <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
+                </Flex>
+                <Button
+                  variant="surface"
+                  // disabled={!isLoading}
+                  color="crimson"
                   size="2"
                   className="rounded-xl"
-                  onClick={sendMessage}
+                  onClick={cancelSend}
                 >
-                  <FaXmark className="h-4 w-4" />
-                </IconButton> */}
-              </Flex>
+                  Cancel <FaXmark className="h-4 w-4" />
+                </Button>
+              </>
             )}
-
             <IconButton
               variant="soft"
               disabled={isLoading}

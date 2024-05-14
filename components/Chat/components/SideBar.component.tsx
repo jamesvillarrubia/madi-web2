@@ -31,7 +31,7 @@ export const SideBar = () => {
         <Box
           width="auto"
           onClick={() => onCreateChat?.(DefaultPersonas[0])}
-          className="bg-token-surface-primary active:scale-95 "
+          className="bg-token-surface-primary active:scale-95 cursor-pointer"
         >
           <FaPlus />
           <Text>New Chat</Text>
@@ -47,7 +47,7 @@ export const SideBar = () => {
                 <Box
                   key={id}
                   width="auto"
-                  className={cs('bg-token-surface active:scale-95 truncate', {
+                  className={cs('bg-token-surface active:scale-95 truncate cursor-pointer', {
                     active: currentChatId === id
                   })}
                   display="block"
