@@ -14,7 +14,6 @@ import '../index.scss'
 import { PersonaContext } from '@/components/Persona'
 
 export const SideBar = () => {
-  const extra = useContext(ChatContext)
   const {
     currentChatId,
     chatList,
@@ -23,12 +22,9 @@ export const SideBar = () => {
     onChangeChat,
     onCreateChat,
     getChatById
-  } = extra
-  console.log(extra)
-
+  } = useContext(ChatContext)
+  
   const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
-
-
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
       <Flex className="p-2 h-full overflow-hidden w-64" direction="column" gap="3">
