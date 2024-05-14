@@ -28,9 +28,6 @@ export const SideBar = () => {
 
   const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
 
-  const { DefaultPersonas, onOpenPersonaPanel} = useContext(PersonaContext)
-
-
 
   return (
     <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
