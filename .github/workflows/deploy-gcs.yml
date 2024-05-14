@@ -50,5 +50,5 @@ jobs:
           path: './dist'
           destination: ${{ vars.BUCKET }}
           headers: |-
-            Cache-Control: public, max-age=0 
+            cache-control: public, max-age=0 
           ## TODO:  Set max-age back up to 3600 when stack stabilizes.
