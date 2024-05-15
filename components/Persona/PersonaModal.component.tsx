@@ -6,7 +6,7 @@ import { Persona } from '../interface'
 
 import { PersonaContext } from '@/components'
 
-const PersonaModal = () => {
+export const PersonaModal = () => {
   const {
     isOpenPersonaModal: open,
     // personaModalLoading: isLoading,

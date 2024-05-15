@@ -25,7 +25,7 @@ import { ChatContext } from '../Chat'
 
 export interface PersonaPanelProps {}
 
-const PersonaPanel = (props: PersonaPanelProps) => {
+export const PersonaPanel = (props: PersonaPanelProps) => {
   const {
     personaPanelType,
     DefaultPersonas,

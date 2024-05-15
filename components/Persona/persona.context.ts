@@ -7,7 +7,7 @@ import { Persona } from '../interface'
 import { useToast } from '..'
 import { uploadFiles, defaultError } from '../helpers'
 
-type PersonaContextType = {
+export type PersonaContextType = {
   DefaultPersonas: Persona[]
   personas: Persona[]
   editPersona: Persona | undefined
@@ -24,8 +24,6 @@ type PersonaContextType = {
   onClosePersonaPanel: () => void
   setPersonas: React.Dispatch<React.SetStateAction<Persona[]>>
 }
-
-export type { PersonaContextType }
 
 export const DefaultPersonas: Persona[] = [
   {

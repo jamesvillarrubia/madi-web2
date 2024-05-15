@@ -1,2 +1,3 @@
-export { default as PersonaPanel } from './PersonaPanel.component'
-export { PersonaContext, usePersonaContext } from './persona.context'
+export * from './PersonaPanel.component'
+export * from './persona.context'
+export * from './PersonaModal.component'
