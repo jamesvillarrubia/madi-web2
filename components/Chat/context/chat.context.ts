@@ -3,18 +3,20 @@ import { createContext } from 'react'
 import { v4 as uuid } from 'uuid'
 import { useSearchParams } from 'next/navigation'
 import { ChatMessage, Chat, Persona, Tool, ChatGPTInstance } from '../../interface'
-import { usePersonaContext } from '../../Persona/persona.context'
 import { DefaultTools } from '../../Tools/default_tools'
 import { useLocalStorageContext } from '../../localStorage'
 
-export const useChatContext = () => {
-  const {
-    // personas,
-    onClosePersonaPanel,
-    setPersonas,
-    DefaultPersonas
-  } = usePersonaContext()
+export const DefaultPersonas: Persona[] = [
+  {
+    id: 'chatgpt',
+    role: 'system',
+    name: 'ChatGPT',
+    prompt: 'You are an AI assistant that helps people find information.',
+    isDefault: true
+  }
+]
 
+export const useChatContext = () => {
   const {
     state,
     setStorageState,
@@ -55,9 +57,8 @@ export const useChatContext = () => {
         return [id, ...state]
       })
       setCurrentChatId(id)
-      onClosePersonaPanel()
     },
-    [setChatList, setChatById, onClosePersonaPanel]
+    [setChatList, setChatById]
   )
 
   const onToggleSidebar = useCallback(() => {
@@ -87,17 +88,6 @@ export const useChatContext = () => {
       setCurrentChatId(chatList[0])
     }
   }, [currentChatId, chatList, setCurrentChatId])
-
-  useEffect(() => {
-    const loadedPersonas = JSON.parse(localStorage.getItem('Personas') || '[]') as Persona[]
-    const updatedPersonas = loadedPersonas.map((persona) => {
-      if (!persona.id) {
-        persona.id = uuid()
-      }
-      return persona
-    })
-    setPersonas(updatedPersonas)
-  }, [setPersonas])
 
   return {
     debug,
