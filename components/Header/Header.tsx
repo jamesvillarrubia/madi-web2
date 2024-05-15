@@ -15,6 +15,7 @@ import { HeaderUser } from './HeaderUser'
 import { useTheme } from '../Themes'
 import { useCallback, useState, useContext } from 'react'
 import { ChatContext } from '../Chat/context'
+import { useRouter } from 'next/navigation'
 
 export interface HeaderProps {
   children?: React.ReactNode
@@ -29,6 +30,8 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
 
   const { onToggleSidebar } = useContext(ChatContext)
 
+  const router = useRouter()
+
   return (
     <header
       className={cs('block shadow-sm sticky top-0 dark:shadow-gray-500 py-3 px-4 z-20')}
@@ -38,7 +41,8 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
         <NextLink href="/">
           <div className="flex items-center">
             <Logo fill="currentColor" width={45} height={35} />
-            <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	">
+            <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	"
+              onClick={() => router.push('/')}>
               MADI
             </Heading>
             <span className="ml-3 text-sm mt-1 italic" style={{ color: 'var(--accent-a10)' }}>

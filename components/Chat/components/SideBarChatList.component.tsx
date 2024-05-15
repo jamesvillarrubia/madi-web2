@@ -13,7 +13,7 @@ import { ChatContextType } from '../context/index'
 import '../index.scss'
 import { PersonaContext } from '@/components/Persona'
 
-export const SideBar = () => {
+export const SideBarChatList = () => {
   const {
     currentChatId,
     chatList,
@@ -26,8 +26,7 @@ export const SideBar = () => {
 
   const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
   return (
-    <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
-      <Flex className="p-2 h-full overflow-hidden w-64" direction="column" gap="3">
+    <>
         <Box
           width="auto"
           onClick={() => onCreateChat?.(DefaultPersonas[0])}
@@ -76,19 +75,8 @@ export const SideBar = () => {
             })}
           </Flex>
         </ScrollArea>
-        <Box
-          width="auto"
-          onClick={() => onOpenPersonaPanel?.('chat')}
-          className="bg-token-surface-primary active:scale-95 "
-        >
-          <Flex align="center" gap="3">
-            <FaTheaterMasks className="inline" />
-            <Text>System Personas</Text>
-          </Flex>
-        </Box>
-      </Flex>
-    </Flex>
+    </>
   )
 }
 
-export default SideBar
+export default SideBarChatList

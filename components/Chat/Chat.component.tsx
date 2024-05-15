@@ -1,5 +1,5 @@
 'use client'
-import { postRunner, convertChunktoJsonArray } from '../../app/getResponse'
+import { postRunner, convertChunktoJsonArray } from '@/components/getResponse'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select } from '@radix-ui/themes'
