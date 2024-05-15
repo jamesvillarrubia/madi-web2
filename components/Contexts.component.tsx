@@ -1,25 +1,22 @@
 'use client'
-import React, { ReactNode } from 'react';
+import React, { ReactNode } from 'react'
 
 import { ChatContext, useChatContext } from '@/components'
 
 import { Authentication, useAuthContext, AuthContextType } from './authenticate'
 import { ChatContextType } from '@/components/Chat/context'
 
-
 interface Props {
-  children: ReactNode;
+  children: ReactNode
 }
 
-const Contexts = ({children}:Props)=>{
+const Contexts = ({ children }: Props) => {
   const chatProvider: ChatContextType = useChatContext()
   const authProvider: AuthContextType = useAuthContext()
 
   return (
     <Authentication.Provider value={authProvider}>
-      <ChatContext.Provider value={chatProvider}>
-         {children}
-      </ChatContext.Provider>
+      <ChatContext.Provider value={chatProvider}>{children}</ChatContext.Provider>
     </Authentication.Provider>
   )
 }

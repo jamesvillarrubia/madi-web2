@@ -6,7 +6,6 @@ import { ChatContextType } from '@/components/Chat/context'
 import Wrapper from '@/components/Wrapper.component'
 import Contexts from '@/components/Contexts.component'
 
-
 const ChatPage = () => {
   const chatProvider: ChatContextType = useChatContext()
 

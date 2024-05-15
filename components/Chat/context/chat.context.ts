@@ -17,7 +17,6 @@ export const DefaultPersonas: Persona[] = [
 ]
 
 export const useChatContext = () => {
-
   const {
     state,
     setStorageState,

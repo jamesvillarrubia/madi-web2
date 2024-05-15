@@ -41,8 +41,11 @@ export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
         <NextLink href="/">
           <div className="flex items-center">
             <Logo fill="currentColor" width={45} height={35} />
-            <Heading as="h1" className="ml-4 text-4xl	font-mono tracking-wider	"
-              onClick={() => router.push('/')}>
+            <Heading
+              as="h1"
+              className="ml-4 text-4xl	font-mono tracking-wider	"
+              onClick={() => router.push('/')}
+            >
               MADI
             </Heading>
             <span className="ml-3 text-sm mt-1 italic" style={{ color: 'var(--accent-a10)' }}>
