@@ -3,11 +3,11 @@ import { Box, Table, Flex, Tabs, Text, Heading, IconButton, Container, ScrollAre
 import { AiOutlineClose } from 'react-icons/ai'
 import { AdminContext } from './admin.context'
 import { ToolPermissionsPanel } from './ToolPermissions'
+import { useRouter } from 'next/navigation'
 
 export const AdminPanel = () => {
-  const {
-    onCloseAdminPanel
-  } = useContext(AdminContext)
+
+  const router = useRouter()
 
 
   return (
@@ -39,8 +39,7 @@ export const AdminPanel = () => {
                         variant="ghost"
                         color="gray"
                         radius="full"
-                        onClick={onCloseAdminPanel}
-                        >
+                        onClick={() => router.push('/')}>
                         <AiOutlineClose className="w-4 h-4" />
                     </IconButton>
                 </Flex>  

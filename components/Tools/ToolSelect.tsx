@@ -10,8 +10,8 @@ import {
 } from 'react'
 import { ChatMessage, Tool } from '../interface'
 import { ChatContext } from '../Chat/context'
-import { getTools } from '@/app/getResponse'
-import { useAuthContext } from '@/app/authenticate'
+import { getTools } from '@/components/getResponse'
+import { useAuthContext } from '@/components/authenticate'
 
 export const ToolSelect = () => {
   let { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
