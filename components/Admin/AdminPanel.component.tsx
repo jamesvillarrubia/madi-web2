@@ -4,7 +4,7 @@ import { AiOutlineClose } from 'react-icons/ai'
 import { AdminContext } from './admin.context'
 import { ToolPermissionsPanel } from './ToolPermissions'
 import { useRouter } from 'next/navigation'
-
+import { UserRolesPanel } from './Roles/RolesPanel.component'
 export const AdminPanel = () => {
 
   const router = useRouter()
@@ -30,6 +30,7 @@ export const AdminPanel = () => {
             <Tabs.Root defaultValue="user_tool" className='w-full'>
                 <Flex direction={"row"} justify={'between'}>
                     <Tabs.List>
+                        <Tabs.Trigger value="roles">Roles</Tabs.Trigger>
                         <Tabs.Trigger value="user_tool">User/Tool Permissions</Tabs.Trigger>
                         <Tabs.Trigger value="tools">Tool Enablement</Tabs.Trigger>
                         <Tabs.Trigger value="user_api">User/API Permissions</Tabs.Trigger>
@@ -49,6 +50,10 @@ export const AdminPanel = () => {
 
                             <Tabs.Content value="user_tool">
                                 <ToolPermissionsPanel/>
+                            </Tabs.Content>
+
+                            <Tabs.Content value="roles">
+                                <UserRolesPanel/>
                             </Tabs.Content>
 
                             <Tabs.Content value="tools">
