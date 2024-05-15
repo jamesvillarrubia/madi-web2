@@ -18,7 +18,7 @@ const Contexts = ({children}:Props)=>{
   return (
     <Authentication.Provider value={authProvider}>
       <ChatContext.Provider value={chatProvider}>
-\         {children}
+         {children}
       </ChatContext.Provider>
     </Authentication.Provider>
   )
