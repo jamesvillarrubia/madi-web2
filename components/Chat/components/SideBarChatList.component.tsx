@@ -4,14 +4,13 @@ import { Box, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { ChatContext } from '../context/index'
+import { ChatContext, DefaultPersonas  } from '../context/index'
 import { FaPlus } from 'react-icons/fa6'
 import { FaTheaterMasks } from 'react-icons/fa'
 import { Chat } from '../../interface'
 import { ChatContextType } from '../context/index'
 
 import '../index.scss'
-import { PersonaContext } from '@/components/Persona'
 
 export const SideBarChatList = () => {
   const {
@@ -24,12 +23,11 @@ export const SideBarChatList = () => {
     getChatById
   } = useContext(ChatContext)
 
-  const { DefaultPersonas, onOpenPersonaPanel } = useContext(PersonaContext)
   return (
     <>
         <Box
           width="auto"
-          onClick={() => onCreateChat?.(DefaultPersonas[0])}
+          onClick={() => onCreateChat(DefaultPersonas[0])}
           className="bg-token-surface-primary active:scale-95 cursor-pointer"
         >
           <FaPlus />

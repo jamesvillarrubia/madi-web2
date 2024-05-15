@@ -1,7 +1,7 @@
 import { createContext, Ref } from 'react'
 import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
 
-export { useChatContext } from './chat.context'
+export * from './chat.context'
 
 export type ChatContextType = {
   debug: boolean
