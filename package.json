@@ -11,6 +11,7 @@
     "lint:strict": "eslint --max-warnings=0 .",
     "format": "prettier --write '**/*.{ts,tsx,js,html,css,md}'",
     "format:check": "prettier --check '**/*.{ts,tsx,js,html,css,md}'"
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
@@ -46,6 +47,7 @@
     "uuid": "9.0.0"
   },
   "devDependencies": {
+    "@playwright/test": "^1.44.0",
     "@tailwindcss/typography": "^0.5.10",
     "@types/lodash-es": "^4.17.11",
     "@types/node": "^20.11.0",
