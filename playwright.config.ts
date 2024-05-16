@@ -1,4 +1,4 @@
-import { defineConfig, devices } from '@playwright/test';
+import { defineConfig, devices } from '@playwright/test'
 
 export default defineConfig({
   testDir: './__tests__',
@@ -10,13 +10,13 @@ export default defineConfig({
     viewport: { width: 1280, height: 720 },
     actionTimeout: 0,
     ignoreHTTPSErrors: true,
-    video: 'retain-on-failure',
+    video: 'retain-on-failure'
   },
   projects: [
     {
       name: 'Desktop Chrome',
-      use: { ...devices['Desktop Chrome'] },
-    },
+      use: { ...devices['Desktop Chrome'] }
+    }
     // {
     //   name: 'Desktop Firefox',
     //   use: { ...devices['Desktop Firefox'] },
@@ -38,6 +38,6 @@ export default defineConfig({
     command: 'npm run dev',
     port: 3000,
     timeout: 120 * 1000,
-    reuseExistingServer: !process.env.CI,
-  },
-});
+    reuseExistingServer: !process.env.CI
+  }
+})
