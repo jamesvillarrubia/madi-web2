@@ -9,6 +9,7 @@ import { ChatMessage } from '../../interface'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { FaAngleDown } from 'react-icons/fa'
 import { FaAngleUp } from 'react-icons/fa'
+import { ActionBubble } from './ActionBubble'
 
 export interface MessageProps {
   message: ChatMessage
@@ -67,6 +68,7 @@ const Message = (props: MessageProps) => {
           // style={{backgroundColor:`var(--gray-a2)`}}
         >
           <Markdown>{content}</Markdown>
+          <ActionBubble message={content}/>
         </Flex>
       </Flex>
     )
