@@ -36,6 +36,7 @@ test('test', async ({ page }) => {
   await page
     .locator('div')
     .filter({ hasText: /^New Chat$/ })
+    .first()
     .click()
   await page
     .locator('div')
