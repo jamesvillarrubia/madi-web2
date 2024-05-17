@@ -27,14 +27,12 @@ export const ToolSelect = () => {
       return acc
     }, {})
   }
-  const splitTools = splitByPlugin(toolList || [])
 
   useEffect(() => {
     if (currentUser) {
-      ;(async () => {
+      (async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
-        console.log('fetchTools', fetchTools)
       })()
     }
   }, [currentUser, setToolList])
@@ -42,6 +40,23 @@ export const ToolSelect = () => {
   if (!toolList || toolList.length === 0) {
     return null
   }
+
+  const splitTools = splitByPlugin(toolList || [])
+
+  // useEffect(() => {
+  //   console.log('toolcheck currentUser', currentUser)
+  //   if (currentUser) {
+  //     ;(async () => {
+  //       const fetchTools = await getTools()
+  //       if (setToolList) setToolList(fetchTools)
+  //       console.log('fetchTools', fetchTools)
+  //     })()
+  //   }
+  // }, [currentUser, setToolList])
+
+  // if (!toolList || toolList.length === 0) {
+  //   return null
+  // 
 
   return (
     <Select.Root defaultValue={currentTool} size="2" onValueChange={setCurrentTool}>
