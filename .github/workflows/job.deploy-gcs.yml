@@ -3,7 +3,8 @@ name: Build and Deploy to Google Cloud Storage
 on:
   push:
     branches: [ "main", "develop", "test" ]
-
+  workflow_call:
+    
 jobs:
   build_and_push_image:
 

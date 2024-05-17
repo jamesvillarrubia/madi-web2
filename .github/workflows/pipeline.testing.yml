@@ -1,0 +1,21 @@
+name: Test
+
+on:
+  push: 
+    branches: 
+      - '*'
+      - '**'
+      - '*/*'
+      - '!develop'
+      - '!test'
+      - '!production'
+      - '!main'
+  workflow_call:
+    
+jobs:
+  lint:
+    secrets: inherit
+    uses: ./.github/workflows/job.lint.yml
+  smoke-tests:
+    secrets: inherit
+    uses: ./.github/workflows/job.smoke.yml
