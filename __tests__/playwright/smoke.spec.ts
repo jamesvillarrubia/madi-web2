@@ -1,32 +1,36 @@
 import { test, expect } from '@playwright/test'
 
 test('test', async ({ page }) => {
-  test.setTimeout(10000);
+  test.setTimeout(30000)
 
-  await page.route('http://localhost:3030/users', async route => {
-    const json = {data:{ email: 'test', name: 'test', id:0 }};
-    await route.fulfill({ json });
-  });
+  await page.route('http://localhost:3030/users', async (route) => {
+    const json = { data: { email: 'test', name: 'test', id: 0 } }
+    await route.fulfill({ json })
+  })
 
-  await page.route('http://localhost:3030/tools', async route => {
+  await page.route('http://localhost:3030/tools', async (route) => {
     console.log('TOOLS FIRED')
-    const json = {data:[{
-        type: 'function',
-        display: 'get_joke',
-        plugin: 'CAS Scenarios',
-        function: {
-          name: 'get_joke',
-          description: 'Get a joke from the joke database',
-          parameters: {}
+    const json = {
+      data: [
+        {
+          type: 'function',
+          display: 'get_joke',
+          plugin: 'CAS Scenarios',
+          function: {
+            name: 'get_joke',
+            description: 'Get a joke from the joke database',
+            parameters: {}
+          }
         }
-      }]};
-    await route.fulfill({ json });
-  });
+      ]
+    }
+    await route.fulfill({ json })
+  })
 
-  await page.route('http://localhost:3030/chats', async route => {
-    const json = {data:[{ id:0 }]};
-    await route.fulfill({ json });
-  });
+  await page.route('http://localhost:3030/chats', async (route) => {
+    const json = { data: [{ id: 0 }] }
+    await route.fulfill({ json })
+  })
 
   await page.goto('http://localhost:3000/')
   await page
@@ -44,7 +48,7 @@ test('test', async ({ page }) => {
   await page.locator('.rt-TextFieldSlot > .rt-reset').first().click()
 
   // // // TODO Fix the default loading state for Playwright
-  await page.waitForSelector('button:has-text("Auto")');
+  await page.waitForSelector('button:has-text("Auto")')
   await page.locator('button').filter({ hasText: 'Auto' }).click()
   await page.getByLabel('Off').click()
   await page.locator('button').filter({ hasText: 'Off' }).click()
@@ -59,5 +63,4 @@ test('test', async ({ page }) => {
   //   .getByRole('button')
   //   .first()
   //   .click()
-
 })

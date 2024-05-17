@@ -30,7 +30,7 @@ export const ToolSelect = () => {
 
   useEffect(() => {
     if (currentUser) {
-      (async () => {
+      ;(async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
       })()
@@ -56,7 +56,7 @@ export const ToolSelect = () => {
 
   // if (!toolList || toolList.length === 0) {
   //   return null
-  // 
+  //
 
   return (
     <Select.Root defaultValue={currentTool} size="2" onValueChange={setCurrentTool}>

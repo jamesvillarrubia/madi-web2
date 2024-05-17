@@ -37,3 +37,4 @@ next-env.d.ts
 # JetBrains
 .idea/
 trace.zip
+.last-run.json
