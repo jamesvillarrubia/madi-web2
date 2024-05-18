@@ -70,7 +70,9 @@ const Message = (props: MessageProps) => {
           // style={{backgroundColor:`var(--gray-a2)`}}
         >
           <Markdown>{content}</Markdown>
-          {role === 'assistant' ? <ActionBubble message={content} index={messageIndex} /> : undefined}
+          {role === 'assistant' ? (
+            <ActionBubble message={content} index={messageIndex} />
+          ) : undefined}
         </Flex>
       </Flex>
     )

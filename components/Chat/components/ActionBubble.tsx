@@ -51,8 +51,12 @@ export const ActionBubble = (props: MessageProps) => {
         </IconButton>
       </ActionTooltip>
       <ActionTooltip content="Regenerate - Coming Soon">
-        <IconButton className="mr-2 w-5 h-5" radius="large" variant="ghost" size="1"
-          onClick={()=>regenerateMessage(messageIndex)}
+        <IconButton
+          className="mr-2 w-5 h-5"
+          radius="large"
+          variant="ghost"
+          size="1"
+          onClick={() => regenerateMessage(messageIndex)}
         >
           <SymbolIcon />
         </IconButton>
