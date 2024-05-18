@@ -21,23 +21,33 @@ export interface ActionBubbleProps {
 }
 
 export const ActionBubble = (props: MessageProps) => {
+
+    const copyToClipboard = () => {
+        navigator.clipboard.writeText(props.message).then(() => {
+            console.log('Message copied to clipboard');
+        }).catch(err => {
+            console.error('Failed to copy message: ', err);
+        });
+    };
+
     return (
-    //   <Flex gap="4" className="mb-5">
-        <Box 
-        width="max-content"
-        >
+        <Box width="max-content">
             <ActionTooltip content="Copy">
-                <IconButton className="mr-2 w-5 h-5" radius='large' variant='ghost' size='1' ><CopyIcon /></IconButton>
+                <IconButton 
+                    className="mr-2 w-5 h-5" 
+                    radius='large' 
+                    variant='ghost' 
+                    size='1' 
+                    onClick={copyToClipboard}
+                ><CopyIcon /></IconButton>
             </ActionTooltip>
-            <ActionTooltip content="Regenerate">
+            <ActionTooltip content="Regenerate - Coming Soon">
                 <IconButton className="mr-2 w-5 h-5" radius='large' variant='ghost' size='1' ><SymbolIcon/></IconButton>
             </ActionTooltip>
-            <ActionTooltip content="Bad Reponse">
+            <ActionTooltip content="Bad Reponse - Coming Soon">
                 <IconButton className="mr-2 w-5 h-5" radius='large' variant='ghost' size='1' ><TiThumbsDown /></IconButton>
             </ActionTooltip>
         </Box>  
-        
-    //   </Flex>
     )
 }
 
