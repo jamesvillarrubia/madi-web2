@@ -3,6 +3,7 @@
 import { useContext, useState } from 'react'
 import { Avatar, Flex, Box, IconButton, Card } from '@radix-ui/themes'
 import * as Tooltip from '@radix-ui/react-tooltip'
+import { ChatContext } from '@/components/Chat'
 
 import { FaceIcon, ImageIcon, SunIcon, CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
 import { FaRegThumbsDown } from 'react-icons/fa'
@@ -18,9 +19,11 @@ import { FaAngleUp } from 'react-icons/fa'
 
 export interface ActionBubbleProps {
   message: string
+  index: number
 }
 
 export const ActionBubble = (props: MessageProps) => {
+  let messageIndex = props.index
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(props.message)
@@ -31,6 +34,8 @@ export const ActionBubble = (props: MessageProps) => {
         console.error('Failed to copy message: ', err)
       })
   }
+
+  const { regenerateMessage } = useContext(ChatContext)
 
   return (
     <Box width="max-content">
@@ -46,7 +51,9 @@ export const ActionBubble = (props: MessageProps) => {
         </IconButton>
       </ActionTooltip>
       <ActionTooltip content="Regenerate - Coming Soon">
-        <IconButton className="mr-2 w-5 h-5" radius="large" variant="ghost" size="1">
+        <IconButton className="mr-2 w-5 h-5" radius="large" variant="ghost" size="1"
+          onClick={()=>regenerateMessage(messageIndex)}
+        >
           <SymbolIcon />
         </IconButton>
       </ActionTooltip>
