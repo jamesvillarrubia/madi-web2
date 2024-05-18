@@ -53,7 +53,6 @@ const Message = (props: MessageProps) => {
       )
     }
     return (
-      <Container size="3" className='max-w-1000px'>
       <Flex gap="4" className={`mb-5 ${isUser ? 'justify-end' : ''}`}>
         {!isUser ?
           <Avatar
@@ -78,7 +77,6 @@ const Message = (props: MessageProps) => {
             <Markdown>{content}</Markdown>
           </Flex>   
       </Flex>
-      </Container>
     )
   }
 }
