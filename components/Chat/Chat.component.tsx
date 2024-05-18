@@ -2,7 +2,16 @@
 import { postRunner, convertChunktoJsonArray } from '@/components/getResponse'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
-import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select, Container } from '@radix-ui/themes'
+import {
+  Flex,
+  Heading,
+  IconButton,
+  ScrollArea,
+  TextArea,
+  Button,
+  Select,
+  Container
+} from '@radix-ui/themes'
 import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
@@ -254,8 +263,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
         scrollbars="vertical"
         style={{ height: '100%' }}
       >
-        <Container size="3" className='max-w-1000px'>
-
+        <Container size="3" className="max-w-1000px">
           {conversation?.map((item, index) => <Message key={index} message={item} />)}
           {currentMessage && idAtStart === currentChatId && (
             <Message message={{ content: currentMessage, role: 'assistant' }} />
@@ -264,9 +272,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
         <div ref={bottomOfChatRef}></div>
       </ScrollArea>
       <Flex className="px-4 pb-3" gap="3" direction={'column'}>
-        <Container size="3" className='max-w-1000px'>
-
-          <Flex shrink="1" className='pb-2'>
+        <Container size="3" className="max-w-1000px">
+          <Flex shrink="1" className="pb-2">
             <ToolSelect />
           </Flex>
           <Flex align="end" justify="between" gap="3" className="relative">

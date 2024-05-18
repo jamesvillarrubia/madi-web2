@@ -54,28 +54,28 @@ const Message = (props: MessageProps) => {
     }
     return (
       <Flex gap="4" className={`mb-5 ${isUser ? 'justify-end' : ''}`}>
-        {!isUser ?
+        {!isUser ? (
           <Avatar
             fallback={isUser ? <HiUser className="h-4 w-4" /> : <SiOpenai className="h-4 w-4" />}
             color={isUser ? undefined : 'green'}
             size="3"
             radius="full"
           />
-          : null}
-          <Flex
-            direction="column"
-            gap="2"
-            className={`py-1 px-3 flex-1 break-word rounded-lg role-${role}`}
-            style={{
-              backgroundColor: isUser ? 'var(--gray-a4)' : '',
-              maxWidth: '90%',
-              alignSelf: 'flex-end',
-              textAlign: 'left',
-              flex: 'none'
-            }}
-          >
-            <Markdown>{content}</Markdown>
-          </Flex>   
+        ) : null}
+        <Flex
+          direction="column"
+          gap="2"
+          className={`py-1 px-3 flex-1 break-word rounded-lg role-${role}`}
+          style={{
+            backgroundColor: isUser ? 'var(--gray-a4)' : '',
+            maxWidth: '90%',
+            alignSelf: 'flex-end',
+            textAlign: 'left',
+            flex: 'none'
+          }}
+        >
+          <Markdown>{content}</Markdown>
+        </Flex>
       </Flex>
     )
   }
