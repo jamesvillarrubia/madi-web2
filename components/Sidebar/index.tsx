@@ -2,7 +2,7 @@
 
 import { Box, Flex, Text } from '@radix-ui/themes'
 import { QuestionMarkIcon } from '@radix-ui/react-icons'
-import { SlSupport } from "react-icons/sl";
+import { SlSupport } from 'react-icons/sl'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 
@@ -51,10 +51,7 @@ export const SupportButton = () => {
  */
 export const FAQButton = () => {
   return (
-    <Box
-      width="auto"
-      className="bg-token-surface-primary active:scale-95 cursor-pointer"
-    >
+    <Box width="auto" className="bg-token-surface-primary active:scale-95 cursor-pointer">
       <QuestionMarkIcon />
       <Text>FAQs</Text>
     </Box>
