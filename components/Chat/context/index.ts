@@ -35,22 +35,22 @@ export type ChatContextType = {
   setMessagesById: (id: string, messages: ChatMessage[]) => void
 
   // New fields
-  sendMessage: (e: any) => void;
-  regenerateMessage: (e: any) => void;
-  setConversation: (messages: ChatMessage[]) => void;
-  conversationRef: RefObject<ChatMessage[]>;
-  textAreaRef: RefObject<HTMLTextAreaElement>;
+  sendMessage: (e: any) => void
+  regenerateMessage: (e: any) => void
+  setConversation: (messages: ChatMessage[]) => void
+  conversationRef: RefObject<ChatMessage[]>
+  textAreaRef: RefObject<HTMLTextAreaElement>
 
   // Additional fields
-  conversation: ChatMessage[];
-  bottomOfChatRef: RefObject<HTMLDivElement>;
-  currentMessage: string;
-  idAtStart: string;  
-  isLoading: boolean;
-  message: string;
-  setMessage: (message: string) => void;
-  cancelSend: () => void;
-  clearMessages: () => void;
+  conversation: ChatMessage[]
+  bottomOfChatRef: RefObject<HTMLDivElement>
+  currentMessage: string
+  idAtStart: string
+  isLoading: boolean
+  message: string
+  setMessage: (message: string) => void
+  cancelSend: () => void
+  clearMessages: () => void
 }
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)

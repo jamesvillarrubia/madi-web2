@@ -1,7 +1,15 @@
 'use client'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
-import { Flex, Heading, IconButton, ScrollArea, TextArea as RtTextArea, Button, Select } from '@radix-ui/themes'
+import {
+  Flex,
+  Heading,
+  IconButton,
+  ScrollArea,
+  TextArea as RtTextArea,
+  Button,
+  Select
+} from '@radix-ui/themes'
 import { FiSend } from 'react-icons/fi'
 import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import clipboard from 'clipboard'
@@ -19,10 +27,9 @@ import './index.scss'
 export interface ChatProps {}
 
 const TextArea = forwardRef((props: any, ref: any) => {
-    return <RtTextArea ref={ref} {...props} />;
+  return <RtTextArea ref={ref} {...props} />
 })
-TextArea.displayName = 'TextArea';
-
+TextArea.displayName = 'TextArea'
 
 const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
@@ -35,7 +42,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
     setMessagesById,
     setChatNameById,
     onToggleSidebar,
-    
+
     sendMessage,
     regenerateMessage,
     setConversation,
@@ -50,10 +57,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
     message,
     setMessage,
     cancelSend,
-    clearMessages,
-
+    clearMessages
   } = useContext(ChatContext)
-
 
   const handleKeypress = (e: any) => {
     if (e.keyCode == 13 && !e.shiftKey) {
@@ -61,7 +66,6 @@ const ChatBox = (props: ChatProps, ref: any) => {
       e.preventDefault()
     }
   }
-
 
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
@@ -90,7 +94,6 @@ const ChatBox = (props: ChatProps, ref: any) => {
       }
     }
   })
-
 
   return (
     <Flex
@@ -146,10 +149,13 @@ const ChatBox = (props: ChatProps, ref: any) => {
       >
         {conversation?.map((item, index) => <Message key={index} index={index} message={item} />)}
         {currentMessage && idAtStart === currentChatId && (
-          <Message message={{ content: currentMessage, role: 'assistant' }} index={conversation?.length} />
+          <Message
+            message={{ content: currentMessage, role: 'assistant' }}
+            index={conversation?.length}
+          />
         )}
         <div ref={bottomOfChatRef}></div>
-        <div className='h-24'></div>
+        <div className="h-24"></div>
       </ScrollArea>
       <Flex className="px-4 pb-3" gap="3" direction={'column'}>
         <Flex shrink="1">
@@ -171,7 +177,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
             tabIndex={0}
             value={message}
             disabled={isLoading}
-            onChange={(e:any) => setMessage(e.target.value)}
+            onChange={(e: any) => setMessage(e.target.value)}
             onKeyDown={handleKeypress}
           />
           <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">

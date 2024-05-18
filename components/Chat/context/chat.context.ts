@@ -8,7 +8,6 @@ import { useLocalStorageContext } from '../../localStorage'
 import { useToast } from '@/components'
 import { postRunner, convertChunktoJsonArray } from '@/components/getResponse'
 
-
 export const DefaultPersonas: Persona[] = [
   {
     id: 'chatgpt',
@@ -39,16 +38,16 @@ export const useChatContext = () => {
   // Tools
   const [currentTool, setCurrentTool] = useState<string>('auto')
   const [toolList, setToolList] = useState<Tool[]>(DefaultTools || [])
-  
+
   // Chats
   const [chatList, setChatList] = useState<string[]>([])
   const [currentChatId, setCurrentChatId] = useState<string | undefined>(undefined)
   const [idAtStart, setStartId] = useState<string>(currentChatId || '')
-  
+
   // Array of Chats
-  const conversationRef = useRef<ChatMessage[]>([]);
+  const conversationRef = useRef<ChatMessage[]>([])
   const [conversation, setConversation] = useState<ChatMessage[]>([])
-  
+
   // CurrentMessage
   const [message, setMessage] = useState('')
   const [currentMessage, setCurrentMessage] = useState<string>('')
@@ -56,13 +55,12 @@ export const useChatContext = () => {
   //Visual States
   const [toggleSidebar, setToggleSidebar] = useState<boolean>(false)
   const [isLoading, setIsLoading] = useState(false)
-  
+
   //HTML Refs
   const chatRef = useRef<ChatGPTInstance>(null)
   const textAreaRef = useRef<HTMLTextAreaElement>(null)
   const bottomOfChatRef = useRef<HTMLDivElement>(null)
   const cancelledRef = useRef<boolean>(false)
-
 
   const onChangeChat = useCallback((id: string) => {
     console.log('onChangeChat', id)
@@ -96,130 +94,130 @@ export const useChatContext = () => {
     deleteChatById(id)
   }
 
-const coreSendMessage = async (
-  input: string,
-  conversation: ChatMessage[],
-  systemPrompt: string,
-  localIdAtStart: string,
-  currentTool: any,
-  toolList: any,
-  setConversation: (conv: ChatMessage[]) => void,
-  setMessagesById: (id: string, messages: ChatMessage[]) => void,
-  setCurrentMessage: (msg: string) => void,
-  setIsLoading: (loading: boolean) => void,
-  cancelledRef: React.MutableRefObject<boolean>,
-  toast: (options: { title: string; description: string }) => void
-) => {
-  try {
-    const { currentStream, additionalMessages } = await postRunner(
-      systemPrompt,
-      conversation,
-      input,
-      currentTool,
-      toolList
-    );
+  const coreSendMessage = async (
+    input: string,
+    conversation: ChatMessage[],
+    systemPrompt: string,
+    localIdAtStart: string,
+    currentTool: any,
+    toolList: any,
+    setConversation: (conv: ChatMessage[]) => void,
+    setMessagesById: (id: string, messages: ChatMessage[]) => void,
+    setCurrentMessage: (msg: string) => void,
+    setIsLoading: (loading: boolean) => void,
+    cancelledRef: React.MutableRefObject<boolean>,
+    toast: (options: { title: string; description: string }) => void
+  ) => {
+    try {
+      const { currentStream, additionalMessages } = await postRunner(
+        systemPrompt,
+        conversation,
+        input,
+        currentTool,
+        toolList
+      )
 
-    let updatedConversation = [
-      ...conversation,
-      { content: input, role: 'user' },
-      ...additionalMessages
-    ] as ChatMessage[];
-    setConversation(updatedConversation);
-    localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined;
+      let updatedConversation = [
+        ...conversation,
+        { content: input, role: 'user' },
+        ...additionalMessages
+      ] as ChatMessage[]
+      setConversation(updatedConversation)
+      localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
-    let resultContent = '';
-    for await (const chunk of currentStream as any) {
-      const decoder = new TextDecoder('utf-8');
-      console.log('sendMessage Chunks', decoder.decode(chunk));
-      const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || [];
-      const char = decoded.reduce(
-        (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
-        ''
-      );
-      if (char) {
-        resultContent += char;
-        if (!cancelledRef.current) {
-          setCurrentMessage(resultContent);
+      let resultContent = ''
+      for await (const chunk of currentStream as any) {
+        const decoder = new TextDecoder('utf-8')
+        console.log('sendMessage Chunks', decoder.decode(chunk))
+        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
+        const char = decoded.reduce(
+          (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
+          ''
+        )
+        if (char) {
+          resultContent += char
+          if (!cancelledRef.current) {
+            setCurrentMessage(resultContent)
+          }
         }
       }
+
+      setTimeout(() => {
+        if (localIdAtStart && !cancelledRef.current) {
+          updatedConversation = [
+            ...conversation,
+            { content: input, role: 'user' },
+            ...additionalMessages,
+            { content: resultContent, role: 'assistant' }
+          ]
+          setMessagesById(localIdAtStart, updatedConversation)
+          setCurrentMessage('')
+          setConversation(updatedConversation)
+        }
+      }, 1)
+
+      setIsLoading(false)
+    } catch (error: any) {
+      console.error(error)
+      toast({
+        title: 'Error',
+        description: error.message
+      })
+      setIsLoading(false)
     }
-
-    setTimeout(() => {
-      if (localIdAtStart && !cancelledRef.current) {
-        updatedConversation = [
-          ...conversation,
-          { content: input, role: 'user' },
-          ...additionalMessages,
-          { content: resultContent, role: 'assistant' }
-        ];
-        setMessagesById(localIdAtStart, updatedConversation);
-        setCurrentMessage('');
-        setConversation(updatedConversation);
-      }
-    }, 1);
-
-    setIsLoading(false);
-  } catch (error: any) {
-    console.error(error);
-    toast({
-      title: 'Error',
-      description: error.message
-    });
-    setIsLoading(false);
   }
-};
 
-const sendMessage = async (e: any) => {
-  cancelledRef.current = false; // reset the cancelled status before sending a new message
+  const sendMessage = async (e: any) => {
+    cancelledRef.current = false // reset the cancelled status before sending a new message
 
-  e.preventDefault();
-  const input = textAreaRef.current?.value || '';
+    e.preventDefault()
+    const input = textAreaRef.current?.value || ''
 
-  if (input.length < 1) {
-    toast({
-      title: 'Error',
-      description: 'Please enter a message.'
-    });
-    return;
+    if (input.length < 1) {
+      toast({
+        title: 'Error',
+        description: 'Please enter a message.'
+      })
+      return
+    }
+    setMessage('')
+    setIsLoading(true)
+    let localIdAtStart = currentChatId || ''
+    setStartId(localIdAtStart)
+
+    let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
+    setConversation(updatedConversation)
+    localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
+
+    let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
+
+    await coreSendMessage(
+      input,
+      conversation!,
+      systemPrompt,
+      localIdAtStart,
+      currentTool,
+      toolList,
+      setConversation,
+      setMessagesById,
+      setCurrentMessage,
+      setIsLoading,
+      cancelledRef,
+      toast
+    )
   }
-  setMessage('');
-  setIsLoading(true);
-  let localIdAtStart = currentChatId || '';
-  setStartId(localIdAtStart);
 
-  let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[];
-  setConversation(updatedConversation);
-  localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined;
+  const regenerateMessage = async (cutoffIndex: number) => {
+    const id = currentChatId || ''
+    const conversation = conversationRef.current
+    if (conversation) {
+      const updatedConversation = conversation.slice(0, cutoffIndex)
+      setMessagesById(id, updatedConversation)
+      setConversation(updatedConversation)
+      setIsLoading(true)
 
-  let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || '';
+      let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 
-  await coreSendMessage(
-    input,
-    conversation!,
-    systemPrompt,
-    localIdAtStart,
-    currentTool,
-    toolList,
-    setConversation,
-    setMessagesById,
-    setCurrentMessage,
-    setIsLoading,
-    cancelledRef,
-    toast
-  );
-};
-
-const regenerateMessage = async (cutoffIndex:number) => {
-  const id = currentChatId || '';
-  const conversation = conversationRef.current;
-  if (conversation) {
-      const updatedConversation = conversation.slice(0, cutoffIndex);
-      setMessagesById(id, updatedConversation);
-      setConversation(updatedConversation);
-      setIsLoading(true);
-      
-      let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || '';
-    
       await coreSendMessage(
         '',
         updatedConversation,
@@ -233,13 +231,9 @@ const regenerateMessage = async (cutoffIndex:number) => {
         setIsLoading,
         cancelledRef,
         toast
-      );
+      )
     }
-};
-
-
-
-
+  }
 
   const cancelSend = () => {
     cancelledRef.current = true
@@ -251,7 +245,6 @@ const regenerateMessage = async (cutoffIndex:number) => {
     setIsLoading(false)
     setCurrentMessage('')
   }
-
 
   const clearMessages = () => {
     if (currentChatId) setMessagesById(currentChatId, [])
@@ -288,7 +281,6 @@ const regenerateMessage = async (cutoffIndex:number) => {
     }
   }, [isLoading])
 
-
   useEffect(() => {
     let stateKeys = Object.keys(state?.chats)
     stateKeys.sort((a: string, b: string) => {
@@ -324,26 +316,33 @@ const regenerateMessage = async (cutoffIndex:number) => {
     setToolList,
 
     // Chats
-    chatList, setChatList,
-    currentChatId, setCurrentChatId,
-    idAtStart, setStartId,
+    chatList,
+    setChatList,
+    currentChatId,
+    setCurrentChatId,
+    idAtStart,
+    setStartId,
     onCreateChat,
     onDeleteChat,
     onChangeChat,
 
     // Chats
     conversationRef,
-    conversation, setConversation,
+    conversation,
+    setConversation,
 
     // CurrentMessage
-    message, setMessage,
-    currentMessage, setCurrentMessage,
+    message,
+    setMessage,
+    currentMessage,
+    setCurrentMessage,
 
     // Visual States
     onToggleSidebar,
-    toggleSidebar, setToggleSidebar,
-    isLoading, setIsLoading,
-
+    toggleSidebar,
+    setToggleSidebar,
+    isLoading,
+    setIsLoading,
 
     // State
     state,
@@ -354,12 +353,11 @@ const regenerateMessage = async (cutoffIndex:number) => {
     setChatById,
     setChatNameById,
     deleteChatById,
-    
+
     // New Functions
     sendMessage,
     regenerateMessage,
     cancelSend,
-    clearMessages,
-    
+    clearMessages
   }
 }
