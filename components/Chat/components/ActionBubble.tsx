@@ -22,7 +22,7 @@ export interface ActionBubbleProps {
   index: number
 }
 
-export const ActionBubble = (props: MessageProps) => {
+export const ActionBubble = (props: ActionBubbleProps) => {
   let messageIndex = props.index
   const copyToClipboard = () => {
     navigator.clipboard
