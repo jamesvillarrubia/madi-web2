@@ -21,3 +21,26 @@ jobs:
       - smoke-tests
     secrets: inherit
     uses: ./.github/workflows/job.deploy-gcs.yml
+  merge-staging:
+    if: github.ref == 'refs/heads/test'
+    needs: 
+      - deploy
+    secrets: inherit
+    uses: ./.github/workflows/job.merge.yml
+    with:
+      base-branch: 'test'
+      target-branch: 'develop'
+  merge-production:
+    if: github.ref == 'refs/heads/main'
+    needs: 
+      - deploy
+    secrets: inherit
+    uses: ./.github/workflows/job.merge.yml
+    with:
+      base-branch: 'main'
+      target-branch: 'test'
+  release:
+    needs: 
+      - merge-production
+    secrets: inherit
+    uses: ./.github/workflows/job.release.yml
