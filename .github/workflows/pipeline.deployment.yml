@@ -33,7 +33,7 @@ jobs:
   merge-production:
     if: github.ref == 'refs/heads/main'
     needs: 
-      - deploy
+      - merge-staging
     secrets: inherit
     uses: ./.github/workflows/job.merge.yml
     with:
