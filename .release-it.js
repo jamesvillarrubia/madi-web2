@@ -5,7 +5,8 @@ module.exports = {
       "pushArgs": ["--tags"]
     },
     "github": {
-      "release": true
+      "release": true,
+      "autoGenerate": true
     },
     "npm": {
       "ignoreVersion": true,
