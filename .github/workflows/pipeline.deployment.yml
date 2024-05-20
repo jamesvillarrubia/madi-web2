@@ -22,7 +22,7 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/job.deploy-gcs.yml
   merge-staging:
-    if: github.ref == 'refs/heads/test'
+    if: github.ref == 'refs/heads/develop'
     needs: 
       - deploy
     secrets: inherit
@@ -31,7 +31,7 @@ jobs:
       base-branch: 'test'
       target-branch: 'develop'
   merge-production:
-    if: github.ref == 'refs/heads/main'
+    if: github.ref == 'refs/heads/test'
     needs: 
       - merge-staging
     secrets: inherit

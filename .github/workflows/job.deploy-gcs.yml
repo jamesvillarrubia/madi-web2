@@ -15,7 +15,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Authenticate with Google
         uses: 'google-github-actions/auth@v2'
@@ -23,21 +23,21 @@ jobs:
           project_id: ${{ vars.PROJECT_ID }}
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Setup Node.js environment
-        uses: actions/setup-node@v1
+      - name: Setup node
+        uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: 20
 
       - name: Cache dependencies
-        uses: actions/cache@v2
+        uses: actions/cache@v4
         with:
           path: ~/.npm
           key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
           restore-keys: |
             ${{ runner.os }}-node-
-
+  
       - name: Install dependencies
-        run: npm ci
+        run: npm ci 
 
       - name: Build the distribution
         run: npm run build; ls -la; pwd;
