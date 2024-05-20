@@ -27,12 +27,12 @@ jobs:
     - name: Fetch all branches
       run: git fetch --all
 
-    - name: Fast-forward merge test into ${{ inputs.target-branch }}
+    - name: Fast-forward merge ${{ inputs.base-branch }} into ${{ inputs.target-branch }}
       run: |
         git checkout ${{ inputs.base-branch }}
         git merge --ff-only origin/${{ inputs.target-branch }}
 
-    - name: Push changes to ${{ inputs.target-branch }}
+    - name: Push changes to ${{ inputs.base-branch }}
       if: success()
       run: |
         git push origin ${{ inputs.base-branch }}
