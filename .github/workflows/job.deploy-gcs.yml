@@ -52,7 +52,7 @@ jobs:
             ${{ runner.os }}-nextjs-${{ hashFiles('**/package-lock.json') }}-
       
       - name: Build the distribution
-        run: npm run build; ls -la; pwd;
+        run: npm run build;
 
       - id: 'upload-folder'
         uses: 'google-github-actions/upload-cloud-storage@v2'
