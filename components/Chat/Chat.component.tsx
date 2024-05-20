@@ -149,9 +149,9 @@ const ChatBox = (props: ChatProps, ref: any) => {
         style={{ height: '100%' }}
       >
         <Container size="3" className="max-w-1000px">
-          {conversation?.map((item, index) => <Message key={index} message={item} />)}
+          {conversation?.map((item, index) => <Message key={index} message={item} index={index} />)}
           {currentMessage && idAtStart === currentChatId && (
-            <Message message={{ content: currentMessage, role: 'assistant' }} />
+            <Message message={{ content: currentMessage, role: 'assistant' }} index={conversation.length}  />
           )}
         </Container>
         <div ref={bottomOfChatRef}></div>
@@ -178,7 +178,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
               tabIndex={0}
               value={message}
               disabled={isLoading}
-              onChange={(e) => setMessage(e.target.value)}
+              onChange={(e:any) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
             <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">
