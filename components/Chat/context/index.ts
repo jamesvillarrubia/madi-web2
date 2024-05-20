@@ -1,4 +1,4 @@
-import { createContext, Ref } from 'react'
+import { createContext, RefObject, Ref } from 'react'
 import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
 
 export * from './chat.context'
@@ -33,6 +33,24 @@ export type ChatContextType = {
   deleteChatById: (id: string) => void
   getChatById: (id: string) => Chat
   setMessagesById: (id: string, messages: ChatMessage[]) => void
+
+  // New fields
+  sendMessage: (e: any) => void
+  regenerateMessage: (e: any) => void
+  setConversation: (messages: ChatMessage[]) => void
+  conversationRef: RefObject<ChatMessage[]>
+  textAreaRef: RefObject<HTMLTextAreaElement>
+
+  // Additional fields
+  conversation: ChatMessage[]
+  bottomOfChatRef: RefObject<HTMLDivElement>
+  currentMessage: string
+  idAtStart: string
+  isLoading: boolean
+  message: string
+  setMessage: (message: string) => void
+  cancelSend: () => void
+  clearMessages: () => void
 }
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)

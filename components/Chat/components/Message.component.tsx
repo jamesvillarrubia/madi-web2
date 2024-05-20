@@ -9,9 +9,11 @@ import { ChatMessage } from '../../interface'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { FaAngleDown } from 'react-icons/fa'
 import { FaAngleUp } from 'react-icons/fa'
+import { ActionBubble } from './ActionBubble'
 
 export interface MessageProps {
   message: ChatMessage
+  index: number
 }
 function isJsonString(str: string) {
   try {
@@ -26,6 +28,7 @@ const Message = (props: MessageProps) => {
   const { role, content, name } = props.message
   const isUser = role === 'user'
   const [open, setOpen] = useState(false)
+  const messageIndex = props.index
 
   if (content) {
     if (role === 'tool' && isJsonString(content)) {
@@ -75,6 +78,9 @@ const Message = (props: MessageProps) => {
           }}
         >
           <Markdown>{content}</Markdown>
+          {role === 'assistant' ? (
+            <ActionBubble message={content} index={messageIndex} />
+          ) : undefined}
         </Flex>
       </Flex>
     )

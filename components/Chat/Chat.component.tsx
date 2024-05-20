@@ -1,5 +1,4 @@
 'use client'
-import { postRunner, convertChunktoJsonArray } from '@/components/getResponse'
 import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
 
 import {
@@ -7,7 +6,7 @@ import {
   Heading,
   IconButton,
   ScrollArea,
-  TextArea,
+  TextArea as RtTextArea,
   Button,
   Select,
   Container
@@ -28,6 +27,11 @@ import './index.scss'
 
 export interface ChatProps {}
 
+const TextArea = forwardRef((props: any, ref: any) => {
+  return <RtTextArea ref={ref} {...props} />
+})
+TextArea.displayName = 'TextArea'
+
 const ChatBox = (props: ChatProps, ref: any) => {
   const { toast } = useToast()
   // const toastRef = useRef<any>(null)
@@ -38,120 +42,24 @@ const ChatBox = (props: ChatProps, ref: any) => {
     toolList,
     setMessagesById,
     setChatNameById,
-    onToggleSidebar
+    onToggleSidebar,
+
+    sendMessage,
+    regenerateMessage,
+    setConversation,
+    conversationRef,
+    textAreaRef,
+
+    conversation,
+    bottomOfChatRef,
+    currentMessage,
+    idAtStart,
+    isLoading,
+    message,
+    setMessage,
+    cancelSend,
+    clearMessages
   } = useContext(ChatContext)
-
-  const [idAtStart, setStartId] = useState<string>(currentChatId || '')
-  const [isLoading, setIsLoading] = useState(false)
-
-  const conversationRef = useRef<ChatMessage[]>()
-
-  const [conversation, setConversation] = useState<ChatMessage[]>([])
-
-  const [message, setMessage] = useState('')
-
-  const [currentMessage, setCurrentMessage] = useState<string>('')
-
-  const textAreaRef = useRef<HTMLTextAreaElement>(null)
-
-  const bottomOfChatRef = useRef<HTMLDivElement>(null)
-
-  const cancelledRef = useRef<boolean>(false)
-
-  const cancelSend = () => {
-    cancelledRef.current = true
-    let updatedConversation = [
-      ...conversation!,
-      { content: currentMessage, role: 'assistant' }
-    ] as ChatMessage[]
-    setMessagesById?.(idAtStart, updatedConversation)
-    setIsLoading(false)
-    setCurrentMessage('')
-  }
-
-  const sendMessage = async (e: any) => {
-    cancelledRef.current = false // reset the cancelled status before sending a new message
-
-    e.preventDefault()
-    const input = textAreaRef.current?.value || ''
-
-    if (input.length < 1) {
-      toast({
-        title: 'Error',
-        description: 'Please enter a message.'
-      })
-      return
-    }
-    setMessage('')
-    setIsLoading(true)
-    let localIdAtStart = currentChatId || ''
-    setStartId(localIdAtStart)
-
-    let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
-    setConversation(updatedConversation)
-    localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
-
-    let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
-
-    // sets the id when the messages start streaming
-    try {
-      const { currentStream, additionalMessages } = await postRunner(
-        systemPrompt,
-        conversation,
-        input,
-        currentTool,
-        toolList
-      )
-
-      updatedConversation = [
-        ...conversation!,
-        { content: input, role: 'user' },
-        ...additionalMessages
-      ] as ChatMessage[]
-      setConversation(updatedConversation)
-      localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
-
-      let resultContent = ''
-      for await (const chunk of currentStream as any) {
-        const decoder = new TextDecoder('utf-8')
-        console.log('sendMessage Chunks', decoder.decode(chunk))
-        const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
-        const char = decoded.reduce(
-          (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
-          ''
-        )
-        if (char) {
-          resultContent += char
-          if (!cancelledRef.current) {
-            setCurrentMessage(resultContent)
-          }
-        }
-      }
-
-      setTimeout(() => {
-        if (localIdAtStart && !cancelledRef.current) {
-          updatedConversation = [
-            ...conversation!,
-            { content: input, role: 'user' },
-            ...additionalMessages,
-            { content: resultContent, role: 'assistant' }
-          ]
-          setMessagesById(localIdAtStart, updatedConversation)
-          setCurrentMessage('')
-          setConversation(updatedConversation)
-        }
-      }, 1)
-
-      setIsLoading(false)
-    } catch (error: any) {
-      console.error(error)
-      toast({
-        title: 'Error',
-        description: error.message
-      })
-      setIsLoading(false)
-    }
-  }
 
   const handleKeypress = (e: any) => {
     if (e.keyCode == 13 && !e.shiftKey) {
@@ -160,36 +68,19 @@ const ChatBox = (props: ChatProps, ref: any) => {
     }
   }
 
-  const clearMessages = () => {
-    if (currentChatId) setMessagesById(currentChatId, [])
-    setConversation([])
-  }
+  useEffect(() => {
+    new clipboard('.copy-btn').on('success', () => {})
+  }, [])
+
+  // console.log('id matches', currentChatId, idAtStart)
 
   useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = '50px'
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 2}px`
+    if (textAreaRef?.current) {
+      console.log('textAreaRef is set:', textAreaRef.current)
+    } else {
+      console.log('textAreaRef is null')
     }
-  }, [message, textAreaRef])
-
-  useEffect(() => {
-    if (bottomOfChatRef.current) {
-      bottomOfChatRef.current.scrollIntoView({ behavior: 'smooth' })
-    }
-  }, [conversation, currentMessage])
-
-  useEffect(() => {
-    if (currentChatId) {
-      let chat = getChatById(currentChatId)
-      if (chat?.messages) setConversation(chat.messages)
-    }
-  }, [currentChatId, conversation, getChatById])
-
-  useEffect(() => {
-    if (!isLoading) {
-      textAreaRef.current?.focus()
-    }
-  }, [isLoading])
+  }, [textAreaRef])
 
   useImperativeHandle(ref, () => {
     return {
@@ -197,19 +88,13 @@ const ChatBox = (props: ChatProps, ref: any) => {
         setConversation(messages)
       },
       getConversation() {
-        return conversationRef.current
+        return conversationRef?.current
       },
       focus: () => {
         textAreaRef.current?.focus()
       }
     }
   })
-
-  useEffect(() => {
-    new clipboard('.copy-btn').on('success', () => {})
-  }, [])
-
-  console.log('id matches', currentChatId, idAtStart)
 
   return (
     <Flex
@@ -270,6 +155,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
           )}
         </Container>
         <div ref={bottomOfChatRef}></div>
+        <div className="h-24"></div>
       </ScrollArea>
       <Flex className="px-4 pb-3" gap="3" direction={'column'}>
         <Container size="3" className="max-w-1000px">
