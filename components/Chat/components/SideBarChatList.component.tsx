@@ -36,9 +36,10 @@ export const SideBarChatList = () => {
       <ScrollArea type="auto" scrollbars="vertical">
         <Flex direction="column" gap="3">
           {chatList.map((id: string) => {
+            // console.log(chatList, id)
             let chat = getChatById(id) || ({} as Chat)
-            if (currentChatId === id) {
-              console.log('current Id', currentChatId)
+            if (!chat.name) {
+              return null
             }
             return (
               <Box
