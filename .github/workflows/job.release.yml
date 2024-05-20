@@ -2,6 +2,7 @@ name: Tag and Release
 
 on:
   workflow_call:
+  workflow_dispatch:
 
 jobs:
   release:
