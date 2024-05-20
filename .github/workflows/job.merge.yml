@@ -16,6 +16,8 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
 
     - name: Configure Git
       run: |
@@ -28,7 +30,7 @@ jobs:
     - name: Fast-forward merge test into ${{ inputs.target-branch }}
       run: |
         git checkout ${{ inputs.base-branch }}
-        git merge --allow-unrelated-histories --no-edit --ff-only origin/${{ inputs.target-branch }}
+        git merge --ff-only origin/${{ inputs.target-branch }}
 
     - name: Push changes to ${{ inputs.target-branch }}
       if: success()
