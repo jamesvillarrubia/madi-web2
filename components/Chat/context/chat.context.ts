@@ -38,7 +38,6 @@ export const useChatContext = () => {
   const [currentChatId, setCurrentChatId] = useState<string | undefined>(undefined)
 
   const onChangeChat = useCallback((id: string) => {
-    console.log('onChangeChat', id)
     setCurrentChatId(id)
   }, [])
 
@@ -53,61 +52,61 @@ export const useChatContext = () => {
         date: Date.now()
       }
       setChatById(id, newChat)
-      setChatList((state) => {
-        return [id, ...state]
-      })
+      setChatList((state) => [id, ...state])
       setCurrentChatId(id)
     },
-    [setChatList, setChatById]
+    [setChatById]
   )
 
   const onToggleSidebar = useCallback(() => {
     setToggleSidebar((state) => !state)
   }, [])
 
-  const onDeleteChat = (id: string) => {
-    deleteChatById(id)
-  }
+  const onDeleteChat = useCallback(
+    (id: string) => {
+      deleteChatById(id)
+      setChatList((prevChatList) => prevChatList.filter((chatId) => chatId !== id))
+    },
+    [deleteChatById]
+  )
 
   useEffect(() => {
-    let stateKeys = Object.keys(state?.chats)
-    stateKeys.sort((a: string, b: string) => {
-      const dateA = state.chats[a].date
-      const dateB = state.chats[b].date
-      return dateB - dateA
-    })
-    setChatList(stateKeys)
-    if (stateKeys.length === 0 && state.appState.loaded === true) {
-      onCreateChat(DefaultPersonas[0])
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [DefaultPersonas, state])
-
-  useEffect(() => {
+    // Set default chat when no chat is selected
     if ((!currentChatId || !chatList.includes(currentChatId)) && chatList.length > 0) {
       setCurrentChatId(chatList[0])
     }
-  }, [currentChatId, chatList, setCurrentChatId])
+  }, [currentChatId, chatList])
+
+  useEffect(() => {
+    // Order chat list by date when changed
+    const stateKeys = Object.keys(state.chats).sort(
+      (a, b) => state.chats[b].date - state.chats[a].date
+    )
+    setChatList(stateKeys)
+  }, [state.chats])
+
+  useEffect(() => {
+    // When chatList is empty and appState is loaded, create default chat
+    if (chatList.length === 0 && state.appState.loaded && Object.keys(state.chats).length === 0) {
+      onCreateChat(DefaultPersonas[0])
+    }
+  }, [chatList.length, state.appState.loaded, onCreateChat, state.chats])
 
   return {
     debug,
     chatRef,
-
     onCreateChat,
     onDeleteChat,
     onChangeChat,
     currentChatId,
     chatList,
     setCurrentChatId,
-
     onToggleSidebar,
     toggleSidebar,
-
     setCurrentTool,
     currentTool,
     toolList,
     setToolList,
-
     setStorageState,
     appendMessageById,
     setMessagesById,
