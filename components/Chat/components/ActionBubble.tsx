@@ -50,7 +50,7 @@ export const ActionBubble = (props: MessageProps) => {
           <CopyIcon />
         </IconButton>
       </ActionTooltip>
-      <ActionTooltip content="Regenerate - Coming Soon">
+      <ActionTooltip content="Regenerate">
         <IconButton
           className="mr-2 w-5 h-5"
           radius="large"
