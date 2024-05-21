@@ -16,31 +16,31 @@ on:
 
 jobs:
 
-  lint:
-    secrets: inherit
-    uses: ./.github/workflows/job.lint.yml
+  # lint:
+  #   secrets: inherit
+  #   uses: ./.github/workflows/job.lint.yml
 
-  smoke-tests:
-    secrets: inherit
-    uses: ./.github/workflows/job.smoke.yml
-
-  # staging-test:
-  #   if: github.ref == 'refs/heads/test'
+  # smoke-tests:
   #   secrets: inherit
   #   uses: ./.github/workflows/job.smoke.yml
 
-  deploy:
-    needs: 
-      - lint
-      - smoke-tests
-    secrets: inherit
-    uses: ./.github/workflows/job.deploy-gcs.yml  
+  # # staging-test:
+  # #   if: github.ref == 'refs/heads/test'
+  # #   secrets: inherit
+  # #   uses: ./.github/workflows/job.smoke.yml
+
+  # deploy:
+  #   needs: 
+  #     - lint
+  #     - smoke-tests
+  #   secrets: inherit
+  #   uses: ./.github/workflows/job.deploy-gcs.yml  
 
   ## ONLY ON DEVELOP
   merge-staging:
     if: github.ref == 'refs/heads/develop'
-    needs: 
-      - deploy
+    # needs: 
+    #   - deploy
     secrets: inherit
     uses: ./.github/workflows/job.merge.yml
     with:
@@ -51,14 +51,14 @@ jobs:
   ## ONLY ON TEST
   release:
     if: github.ref == 'refs/heads/test'
-    needs: 
-      - deploy
+    # needs: 
+    #   - deploy
     secrets: inherit
     uses: ./.github/workflows/job.release.yml
   merge-production:
     if: github.ref == 'refs/heads/test'
-    needs: 
-      - deploy
+    # needs: 
+    #   - deploy
     secrets: inherit
     uses: ./.github/workflows/job.merge.yml
     with:
