@@ -50,7 +50,7 @@ const VersionBox = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await fetch('/public/sha.json')
+        const response = await fetch('/sha.json')
         const data = await response.json()
         const { owner, repo, branch } = data
 
