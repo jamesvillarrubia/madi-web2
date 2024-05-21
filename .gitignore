@@ -36,6 +36,9 @@ next-env.d.ts
 
 # JetBrains
 .idea/
+
+/test-results
+/playwright-report
 trace.zip
 .last-run.json
 createrelease.sh
