@@ -1,4 +1,4 @@
-name: Merge and Tag
+name: Merge
 
 on:
   workflow_call:
@@ -37,6 +37,8 @@ jobs:
         git merge --ff-only origin/${{ inputs.target-branch }}
 
     - name: Push changes to ${{ inputs.base-branch }}
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       if: success()
       run: |
         git push origin ${{ inputs.base-branch }}
