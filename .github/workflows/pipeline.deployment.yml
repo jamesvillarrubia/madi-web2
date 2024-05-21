@@ -6,6 +6,12 @@ on:
       - 'develop'
       - 'test'
       - 'main'
+  workflow_call:
+    inputs:
+      branch:
+        required: true
+        type: string
+        default: 'develop'
       
 # WORKFLOW:
 # -------------------------------------------------
@@ -48,6 +54,14 @@ jobs:
       base-branch: 'test'
       target-branch: 'develop'
   
+  trigger-staging:
+    if: github.ref == 'refs/heads/develop'
+    needs: 
+      - merge-staging
+    secrets: inherit
+    uses: ./.github/workflows/pipeline.deployment.yml
+    with:
+      branch: 'test'
 
   ## ONLY ON TEST
   release:
@@ -65,3 +79,11 @@ jobs:
     with:
       base-branch: 'main'
       target-branch: 'test'
+  trigger-production:
+    if: github.ref == 'refs/heads/test'
+    needs: 
+      - merge-production
+    secrets: inherit
+    uses: ./.github/workflows/pipeline.deployment.yml
+    with:
+      branch: 'main'
