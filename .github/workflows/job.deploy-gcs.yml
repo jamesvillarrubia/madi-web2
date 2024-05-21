@@ -53,11 +53,16 @@ jobs:
       
       - name: Build the distribution
         run: npm run build;
-
+      
       - name: Store release SHA in JSON file
         run: |
           mkdir -p ./dist
-          echo '{"sha":"${{ github.sha }}"}' > ./dist/sha.json
+          echo '{
+            "sha": "${{ github.sha }}",
+            "owner": ${{ github.repository_owner }},
+            "repo": ${{github.repository}},
+            "branch": ${{ github.ref_name }}
+          }' > ./dist/sha.json
 
       - id: 'upload-folder'
         uses: 'google-github-actions/upload-cloud-storage@v2'

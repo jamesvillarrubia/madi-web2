@@ -18,6 +18,7 @@ import { useToast } from '@/components'
 import { ChatMessage, Chat, ChatGPTInstance } from '../interface'
 import { ChatContext } from './context'
 import Message from './components/Message.component'
+import { VersionBox } from '@/components/VersionBox'
 import EditableText from './components/EditableText'
 import { FaRegEdit } from 'react-icons/fa'
 import { FaCheck } from 'react-icons/fa6'
@@ -160,7 +161,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
         <div ref={bottomOfChatRef}></div>
         <div className="h-24"></div>
       </ScrollArea>
-      <Flex className="px-4 pb-3" gap="3" direction={'column'}>
+      <Flex className="px-4 pb-1" gap="0" direction={'column'}>
         <Container size="3" className="max-w-1000px">
           <Flex shrink="1" className="pb-2">
             <ToolSelect />
@@ -242,6 +243,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
             </Flex>
           </Flex>
         </Container>
+        <VersionBox />
       </Flex>
     </Flex>
   )
