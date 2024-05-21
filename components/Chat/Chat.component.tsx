@@ -243,7 +243,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
             </Flex>
           </Flex>
         </Container>
-        <VersionBox/>
+        <VersionBox />
       </Flex>
     </Flex>
   )
