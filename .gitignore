@@ -42,3 +42,4 @@ next-env.d.ts
 trace.zip
 .last-run.json
 createrelease.sh
+/public/sha.json

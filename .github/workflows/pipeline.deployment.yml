@@ -31,13 +31,17 @@ jobs:
     secrets: inherit
     uses: ./.github/workflows/job.smoke.yml
 
+  # staging-test:
+  #   if: github.ref == 'refs/heads/test'
+  #   secrets: inherit
+  #   uses: ./.github/workflows/job.smoke.yml
+
   deploy:
     needs: 
       - lint
       - smoke-tests
     secrets: inherit
     uses: ./.github/workflows/job.deploy-gcs.yml  
-
 
   ## ONLY ON DEVELOP
   merge-staging:
@@ -49,7 +53,6 @@ jobs:
     with:
       base-branch: 'test'
       target-branch: 'develop'
-
 
   ## ONLY ON TEST
   release:
