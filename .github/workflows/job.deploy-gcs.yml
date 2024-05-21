@@ -53,15 +53,17 @@ jobs:
       
       - name: Build the distribution
         run: npm run build;
-      
+
+        
       - name: Store release SHA in JSON file
         run: |
           mkdir -p ./dist
+          REPO_NAME=$(echo "${{ github.repository }}" | cut -d'/' -f2)
           echo '{
             "sha": "${{ github.sha }}",
-            "owner": ${{ github.repository_owner }},
-            "repo": ${{github.repository}},
-            "branch": ${{ github.ref_name }}
+            "owner": "${{ github.repository_owner }}",
+            "repo": "'$REPO_NAME'",
+            "branch": "${{ github.ref_name }}"
           }' > ./dist/sha.json
 
       - id: 'upload-folder'
