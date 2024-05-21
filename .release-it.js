@@ -62,6 +62,7 @@ module.exports = {
         }
       },
       preset: {
+        // used in the whatBump function above to override defaults
         name: 'conventionalcommits',
         types: [
           {
