@@ -159,8 +159,8 @@ export const postChat = async (
     body: JSON.stringify({
       stream: true,
       messages: [{ role: 'system', content: systemPrompt }, ...messageArray!],
-      tools: tools ? tools : undefined,
-      tool_choice: tools ? tool_choice : undefined
+      tools: tools?.length ? tools : undefined,
+      tool_choice: tools?.length ? tool_choice : undefined
     })
   })
 
