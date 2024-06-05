@@ -1,52 +1,57 @@
 'use client'
-import { forwardRef, useContext, useEffect, useImperativeHandle, useRef, useState } from 'react'
+import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
 
-import {
-  Flex,
-  Heading,
-  IconButton,
-  ScrollArea,
-  TextArea as RtTextArea,
-  Button,
-  Select,
-  Container
-} from '@radix-ui/themes'
-import { FiSend } from 'react-icons/fi'
-import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
-import clipboard from 'clipboard'
-import { useToast } from '@/components'
-import { ChatMessage, Chat, ChatGPTInstance } from '../interface'
-import { ChatContext } from './context'
-import Message from './components/Message.component'
+// import { useToast } from '@/components'
+import type { TextAreaProps } from '../../node_modules/@radix-ui/themes/dist/esm/components/text-area.d.ts'
 import { VersionBox } from '@/components/VersionBox'
-import EditableText from './components/EditableText'
+import {
+  Button,
+  Container,
+  Flex,
+  IconButton,
+  TextArea as RtTextArea,
+  ScrollArea
+} from '@radix-ui/themes'
+import clipboard from 'clipboard'
+import { AiOutlineClear, AiOutlineLoading3Quarters, AiOutlineUnorderedList } from 'react-icons/ai'
 import { FaRegEdit } from 'react-icons/fa'
-import { FaCheck } from 'react-icons/fa6'
-import { FaXmark } from 'react-icons/fa6'
+import { FaCheck, FaXmark } from 'react-icons/fa6'
+import { FiSend } from 'react-icons/fi'
 import { ToolSelect } from '../Tools/ToolSelect'
+import { ChatMessage } from '../interface'
+import EditableText from './components/EditableText'
+import Message from './components/Message.component'
+import { ChatContext } from './context'
 import './index.scss'
+
 
 export interface ChatProps {}
 
-const TextArea = forwardRef((props: any, ref: any) => {
+interface CustomRef {
+  setConversation(messages: ChatMessage[]): void;
+  getConversation(): ChatMessage[] | null;
+  focus(): void;
+}
+
+const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
   return <RtTextArea ref={ref} {...props} />
 })
 TextArea.displayName = 'TextArea'
 
-const ChatBox = (props: ChatProps, ref: any) => {
-  const { toast } = useToast()
+const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
+  // const { toast } = useToast()
   // const toastRef = useRef<any>(null)
   const {
     currentChatId,
     getChatById,
-    currentTool,
-    toolList,
-    setMessagesById,
+    // currentTool,
+    // toolList,
+    // setMessagesById,
     setChatNameById,
     onToggleSidebar,
 
     sendMessage,
-    regenerateMessage,
+    // regenerateMessage,
     setConversation,
     conversationRef,
     textAreaRef,
@@ -62,8 +67,8 @@ const ChatBox = (props: ChatProps, ref: any) => {
     clearMessages
   } = useContext(ChatContext)
 
-  const handleKeypress = (e: any) => {
-    if (e.keyCode == 13 && !e.shiftKey) {
+  const handleKeypress = (e: React.KeyboardEvent) => {
+    if (e.keyCode === 13 && !e.shiftKey) {
       sendMessage(e)
       e.preventDefault()
     }
@@ -182,7 +187,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
               tabIndex={0}
               value={message}
               disabled={isLoading}
-              onChange={(e: any) => setMessage(e.target.value)}
+              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
             <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">
@@ -247,6 +252,7 @@ const ChatBox = (props: ChatProps, ref: any) => {
       </Flex>
     </Flex>
   )
-}
+})
 
-export default forwardRef<ChatGPTInstance, ChatProps>(ChatBox)
+ChatBox.displayName = 'ChatBox';
+export default ChatBox;

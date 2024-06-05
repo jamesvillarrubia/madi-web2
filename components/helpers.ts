@@ -3,7 +3,7 @@
 import axios from 'axios'
 
 export const uploadFiles = async (files: File[]) => {
-  let formData = new FormData()
+  const formData = new FormData()
 
   files.forEach((file) => {
     formData.append('files', file)

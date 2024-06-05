@@ -1,21 +1,12 @@
 'use client'
 
-import { useContext, useState } from 'react'
-import { Avatar, Flex, Box, IconButton, Card } from '@radix-ui/themes'
+import { useContext } from 'react'
+import {  Box, IconButton } from '@radix-ui/themes'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ChatContext } from '@/components/Chat'
-
-import { FaceIcon, ImageIcon, SunIcon, CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
-import { FaRegThumbsDown } from 'react-icons/fa'
+import { CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
 import { TiThumbsDown } from 'react-icons/ti'
 
-import { SiOpenai } from 'react-icons/si'
-import { HiUser } from 'react-icons/hi'
-import { Markdown } from './Markdown'
-import { ChatMessage } from '../../interface'
-import * as Collapsible from '@radix-ui/react-collapsible'
-import { FaAngleDown } from 'react-icons/fa'
-import { FaAngleUp } from 'react-icons/fa'
 
 export interface ActionBubbleProps {
   message: string
@@ -23,7 +14,7 @@ export interface ActionBubbleProps {
 }
 
 export const ActionBubble = (props: ActionBubbleProps) => {
-  let messageIndex = props.index
+  const messageIndex = props.index
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(props.message)

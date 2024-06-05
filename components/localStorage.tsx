@@ -1,10 +1,9 @@
 'use client'
 
-import React from 'react'
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useEffect } from 'react'
 import useLocalStorageState from 'use-local-storage-state'
-import { ChatMessage, Chat } from './interface'
 import { v4 as uuid } from 'uuid'
+import { Chat, ChatMessage } from './interface'
 
 interface AppState {
   loaded: boolean
@@ -19,7 +18,7 @@ interface LocalStorageState {
   }
 }
 
-export const useLocalStorageContext = (userId: string = 'shared') => {
+export const useLocalStorageContext = () => {
   let sessionId
   if (typeof window !== 'undefined') {
     sessionId = window.sessionStorage.getItem('sessionId') || uuid()
@@ -147,13 +146,14 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
 
   const deleteChatById = (uuid: string) => {
     setState((prevState: LocalStorageState) => {
-      const { [uuid]: deletedChat, ...updatedChats } = prevState.chats
+      const updatedChats = { ...prevState.chats };
+      delete updatedChats[uuid];
       return {
         ...prevState,
         chats: updatedChats
-      }
-    })
-  }
+      };
+    });
+  };
 
   return {
     state,

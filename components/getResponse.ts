@@ -1,17 +1,12 @@
-import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
-import { createParser, ParsedEvent, ReconnectInterval } from 'eventsource-parser'
 import {
   ChatMessage,
-  Chat,
-  Persona,
-  Tool,
-  ToolCall,
   ResponseSet,
-  ToolObject
+  Tool,
+  ToolCall
 } from '../components/interface'
-import { EventSourceParserStream } from 'eventsource-parser/stream'
+import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 
-//@ts-ignore
+// @ts-expect-error - This is a polyfill for ReadableStream
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
   const reader = this.getReader()
   try {
@@ -25,8 +20,25 @@ ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
   }
 }
 
-export function messageReducer(previous = {}, item: any) {
-  const reduce = (acc: any, delta: any) => {
+type DeltaValue = string | number | Delta | Delta[];
+type Delta = {
+  [key: string]: DeltaValue; // Define a more specific type if possible
+};
+
+type Item = {
+  choices?: {
+    delta?: Delta;
+  }[];
+};
+
+
+type Accumulator = {
+  [key: string]: DeltaValue; // Define a more specific type if possible
+};
+
+
+export function messageReducer(previous: ChatMessage, item: Item): ChatMessage{
+  const reduce = (acc: Accumulator, delta: Delta | undefined): Accumulator => {
     if (!delta) return acc // Return accumulated value if delta is not provided
 
     acc = { ...acc }
@@ -34,7 +46,7 @@ export function messageReducer(previous = {}, item: any) {
       if (acc[key] === undefined || acc[key] === null) {
         acc[key] = value
         if (Array.isArray(acc[key])) {
-          for (const arr of acc[key]) {
+          for (const arr of acc[key] as Delta[]) {
             delete arr.index
           }
         }
@@ -43,9 +55,9 @@ export function messageReducer(previous = {}, item: any) {
       } else if (typeof acc[key] === 'number' && typeof value === 'number') {
         acc[key] = value
       } else if (Array.isArray(acc[key]) && Array.isArray(value)) {
-        const accArray = acc[key]
+        const accArray = acc[key] as Delta[]
         for (let i = 0; i < value.length; i++) {
-          const { index, ...chunkTool } = value[i]
+          const { index, ...chunkTool } = value[i] as Delta & { index: number };
           if (index - accArray.length > 1) {
             throw new Error(
               `Error: An array has an empty value when tool_calls are constructed. tool_calls: ${accArray}; tool: ${value}`
@@ -54,12 +66,12 @@ export function messageReducer(previous = {}, item: any) {
           accArray[index] = reduce(accArray[index], chunkTool)
         }
       } else if (typeof acc[key] === 'object' && typeof value === 'object') {
-        acc[key] = reduce(acc[key], value)
+        acc[key] = reduce(acc[key] as Delta, value as Delta);
       }
     }
     return acc
   }
-  return reduce(previous, item?.choices?.[0]?.delta)
+  return reduce(previous as unknown as Accumulator, item?.choices?.[0]?.delta) as unknown as ChatMessage
 }
 
 // message:
@@ -95,7 +107,7 @@ export function messageReducer(previous = {}, item: any) {
 //   }
 // }
 
-export const getTools = async (): Promise<any> => {
+export const getTools = async (): Promise<Tool[]> => {
   const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
@@ -114,7 +126,7 @@ export const getTools = async (): Promise<any> => {
     method: 'GET'
   })
 
-  let json = await res.json()
+  const json = await res.json()
   return json.data
 }
 
@@ -129,7 +141,7 @@ export const getTools = async (): Promise<any> => {
  */
 export const postChat = async (
   systemPrompt: string,
-  messageArray: any[],
+  messageArray: ChatMessage[],
   newMessage?: string | null,
   currentTool?: string,
   tools?: Tool[]
@@ -140,7 +152,7 @@ export const postChat = async (
     messageArray = [...messageArray, { role: 'user', content: newMessage }]
   }
 
-  let tool_choice = 'auto' as any
+  let tool_choice = 'auto' as string | undefined | { type: string; function: { name: string } }
   if (tools && currentTool && currentTool !== 'auto') {
     tool_choice = { type: 'function', function: { name: currentTool } }
   }
@@ -205,10 +217,10 @@ export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> 
 }
 
 export const convertChunktoJsonArray = (string: string) => {
-  let a = string.replace('data: [DONE]', '')
-  let b = a.split('data: ').map((c) => c.replace(/\n/g, ''))
-  let c = b.filter((c) => c.length)
-  let d = c.map((c) => {
+  const a = string.replace('data: [DONE]', '')
+  const b = a.split('data: ').map((c) => c.replace(/\n/g, ''))
+  const c = b.filter((c) => c.length)
+  const d = c.map((c) => {
     try {
       return JSON.parse(c)
     } catch (e) {
@@ -229,13 +241,15 @@ const convertStreamtoJsonArray = async (stream: ReadableStream) => {
 
 export const postRunner = async (
   systemPrompt: string,
-  messageArray: any[],
+  messageArray: ChatMessage[],
   newMessage?: string,
   currentTool?: string,
   tools?: Tool[]
 ): Promise<ResponseSet> => {
   // send message to postChat
-  let { currentStream, additionalMessages } = await postChat(
+  const { currentStream, 
+    // additionalMessages 
+  } = await postChat(
     systemPrompt,
     messageArray,
     newMessage,
@@ -244,30 +258,31 @@ export const postRunner = async (
   )
 
   if (currentStream instanceof ReadableStream) {
-    let [checkStream, textStream] = currentStream.tee()
+    const [checkStream, textStream] = currentStream.tee()
 
     // Determine if there are any tool calls
-    let checkChunks = await convertStreamtoJsonArray(checkStream)
-    let first = (checkChunks || [])[0]
+    const checkChunks = await convertStreamtoJsonArray(checkStream)
+    const first = (checkChunks || [])[0]
     if (
       first?.choices?.[0]?.delta?.role === 'assistant' &&
       first.choices[0].delta.content === null
     ) {
       // Process the textStream for the remaining data
       let toolCallMessage = {} as ChatMessage
-      //@ts-ignore
+
+      //@ts-expect-error - This is a polyfill for ReadableStream
       for await (const textChunk of textStream) {
         const decoder = new TextDecoder('utf-8')
-        let textArray = convertChunktoJsonArray(decoder.decode(textChunk)) || []
+        const textArray = convertChunktoJsonArray(decoder.decode(textChunk)) || []
         for (const bit of textArray) {
           toolCallMessage = messageReducer(toolCallMessage, bit)
         }
       }
 
       // Iterate through the tool calls
-      let toolResponses = [] as ChatMessage[]
+      const toolResponses = [] as ChatMessage[]
       if (toolCallMessage.tool_calls) {
-        let toolResponse = await postTools(toolCallMessage.tool_calls)
+        const toolResponse = await postTools(toolCallMessage.tool_calls)
         toolResponses.push(...toolResponse) // extend conversation with function response
         // console.log('Messages with Tool Responses', toolResponses)
       }
@@ -285,7 +300,7 @@ export const postRunner = async (
       }
       // console.log('Final messageArray before Post',messageArray)
 
-      let { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
+      const { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
 
       return {
         // returns the final stream after tool calls

@@ -1,7 +1,6 @@
 /* eslint-disable react/prop-types */
+import { Heading, IconButton, TextField } from '@radix-ui/themes'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react'
-import { Flex, Heading, IconButton, ScrollArea, TextArea, TextField } from '@radix-ui/themes'
-import Head from 'next/head'
 
 function EditableText(props: any) {
   // state
@@ -11,8 +10,8 @@ function EditableText(props: any) {
   const [savedValue, setSavedValue] = useState<string | undefined>(undefined)
   const [viewFocused, setViewFocused] = useState<boolean>(false)
   // refs
-  const saveButton = React.createRef<HTMLButtonElement>()
-  const editingContainer = React.createRef<HTMLDivElement>()
+  // const saveButton = React.createRef<HTMLButtonElement>()
+  // const editingContainer = React.createRef<HTMLDivElement>()
   const editingButtons = React.createRef<any>()
 
   useEffect(() => {
@@ -115,6 +114,7 @@ function EditableText(props: any) {
         onKeyDown={handleKeyDown}
         onBlur={handleOnBlur}
         onChange={handleInputChange}
+        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={editingInternal}
       />
     )

@@ -1,11 +1,11 @@
 'use client'
-
+import React from 'react'
 import { useEffect, useState } from 'react'
 import { ToastAction, type ToastProps } from '@radix-ui/react-toast'
 
 type ToastActionElement = React.ReactElement<typeof ToastAction>
 
-const TOAST_LIMIT = 1
+// const TOAST_LIMIT = 1
 const TOAST_REMOVE_DELAY = 1000000
 
 type ToasterToast = ToastProps & {
@@ -124,6 +124,7 @@ export const reducer = (state: State, action: Action): State => {
   }
 }
 
+// eslint-disable-next-line no-unused-vars
 const listeners: Array<(state: State) => void> = []
 
 let memoryState: State = { toasts: [] }

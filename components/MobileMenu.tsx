@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { PropsWithChildren, useEffect, useState } from 'react'
 
 import { createContext } from '@radix-ui/react-context'

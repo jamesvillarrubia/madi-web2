@@ -1,21 +1,19 @@
 'use client'
 
-import { usePathname } from 'next/navigation'
 import NextLink from 'next/link'
 import Logo from './Logo'
 
-import { Flex, Heading, IconButton, Select, Tooltip } from '@radix-ui/themes'
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
+import { Flex, Heading, IconButton, Select, Tooltip } from '@radix-ui/themes'
 import cs from 'classnames'
-import { Link } from '../Link'
-import { FaAdjust, FaMoon, FaRegSun } from 'react-icons/fa'
+import { FaAdjust, FaMoon } from 'react-icons/fa'
 import { IoSunny } from 'react-icons/io5'
 
-import { HeaderUser } from './HeaderUser'
-import { useTheme } from '../Themes'
-import { useCallback, useState, useContext } from 'react'
-import { ChatContext } from '../Chat/context'
 import { useRouter } from 'next/navigation'
+import { useContext } from 'react'
+import { ChatContext } from '../Chat/context'
+import { useTheme } from '../Themes'
+import { HeaderUser } from './HeaderUser'
 
 export interface HeaderProps {
   children?: React.ReactNode
@@ -23,10 +21,12 @@ export interface HeaderProps {
   ghost?: boolean
 }
 
-export const Header = ({ children, gitHubLink, ghost }: HeaderProps) => {
-  const pathname = usePathname()
+export const Header = (
+  /*{ children, gitHubLink, ghost }: HeaderProps*/
+) => {
+  // const pathname = usePathname()
   const { theme, setTheme } = useTheme()
-  const [show, setShow] = useState(false)
+  // const [show, setShow] = useState(false)
 
   const { onToggleSidebar } = useContext(ChatContext)
 

@@ -1,7 +1,6 @@
 import { Inter } from 'next/font/google'
+import { ReactNode } from 'react'
 import ThemesProvider from '@/providers/ThemesProvider'
-import { Toaster, Banner } from '@/components'
-import { Header } from '@/components/Header/Header'
 
 import '@/styles/globals.scss'
 import '@/styles/theme-config.css'
@@ -21,7 +20,7 @@ export const metadata = {
 
 const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
-export default function RootLayout({ children }: { children: React.ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
