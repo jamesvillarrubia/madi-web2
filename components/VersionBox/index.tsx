@@ -2,15 +2,20 @@ import { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
 
 async function getLastVersionTag(owner: string, repo: string, branch: string) {
+  if (!(owner && repo && branch)) {
+    return null
+  }
   try {
     const tagsResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/tags`)
     const tags = await tagsResponse.json()
-    const tagSHAs = tags.map((tag: any) => tag.commit.sha)
+    const tagSHAs = Array.isArray(tags) ? tags.map((tag: any) => tag.commit.sha) : []
     const commitsResponse = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}`
     )
     const commits = await commitsResponse.json()
-    const taggedCommits = commits.filter((commit: any) => tagSHAs.includes(commit.sha))
+    const taggedCommits = Array.isArray(tags)
+      ? commits.filter((commit: any) => tagSHAs.includes(commit.sha))
+      : []
 
     for (let i = taggedCommits.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1))
