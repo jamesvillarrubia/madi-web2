@@ -1,6 +1,11 @@
 import { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
 
+type Commit = { sha: string; commit: { committer: { date: string } } }
+
+type Tag = { tag: string; commit: Commit }
+
+
 async function getLastVersionTag(owner: string, repo: string, branch: string) {
   if (!(owner && repo && branch)) {
     return null
@@ -8,13 +13,13 @@ async function getLastVersionTag(owner: string, repo: string, branch: string) {
   try {
     const tagsResponse = await fetch(`https://api.github.com/repos/${owner}/${repo}/tags`)
     const tags = await tagsResponse.json()
-    const tagSHAs = Array.isArray(tags) ? tags.map((tag: any) => tag.commit.sha) : []
+    const tagSHAs = Array.isArray(tags) ? tags.map((tag: Tag) => tag.commit.sha) : []
     const commitsResponse = await fetch(
       `https://api.github.com/repos/${owner}/${repo}/commits?sha=${branch}`
     )
-    const commits = await commitsResponse.json()
+    const commits: Commit[] = await commitsResponse.json()
     const taggedCommits = Array.isArray(tags)
-      ? commits.filter((commit: any) => tagSHAs.includes(commit.sha))
+      ? commits.filter((commit: Commit) => tagSHAs.includes(commit.sha))
       : []
 
     for (let i = taggedCommits.length - 1; i > 0; i--) {
@@ -22,7 +27,7 @@ async function getLastVersionTag(owner: string, repo: string, branch: string) {
       ;[taggedCommits[i], taggedCommits[j]] = [taggedCommits[j], taggedCommits[i]]
     }
 
-    const sortedCommits = taggedCommits.sort((a: any, b: any) => {
+    const sortedCommits = taggedCommits.sort((a: Commit, b: Commit) => {
       const dateA = new Date(a.commit.committer.date)
       const dateB = new Date(b.commit.committer.date)
       return dateB.getTime() - dateA.getTime()
@@ -31,7 +36,7 @@ async function getLastVersionTag(owner: string, repo: string, branch: string) {
     const lastTaggedCommit = sortedCommits[0]
 
     if (lastTaggedCommit) {
-      const lastTag = tags.find((tag: any) => tag.commit.sha === lastTaggedCommit.sha)
+      const lastTag = tags.find((tag: Tag) => tag.commit.sha === lastTaggedCommit.sha)
       if (lastTag) {
         return {
           tag: lastTag.name,
@@ -43,9 +48,11 @@ async function getLastVersionTag(owner: string, repo: string, branch: string) {
     } else {
       throw new Error('No tagged commits found in the specified branch history.')
     }
-  } catch (error: any) {
-    console.error('Error:', error.message)
-    return null
+  } catch (error: unknown) {
+    if(error instanceof Error) {
+      console.error('Error:', error.message)
+      return null
+    }
   }
 }
 

@@ -1,6 +1,6 @@
-import React, { PropsWithChildren } from 'react'
 import { ThemeProvider } from '@/components/Themes'
-import { Theme, ThemePanel } from '@radix-ui/themes'
+import { Theme } from '@radix-ui/themes'
+import { PropsWithChildren } from 'react'
 
 export const ThemesProvider = ({ children }: PropsWithChildren) => {
   return (

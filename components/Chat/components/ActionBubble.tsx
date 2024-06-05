@@ -61,14 +61,14 @@ export const ActionBubble = (props: ActionBubbleProps) => {
   )
 }
 
-const ActionTooltip = (props: any) => {
+const ActionTooltip = ({children, content}: {children: React.ReactNode, content: string}) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root delayDuration={300}>
-        <Tooltip.Trigger asChild>{props.children}</Tooltip.Trigger>
+        <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content className="TooltipContent" side="bottom" sideOffset={5}>
-            <Box className="text-white bg-black py-2 px-3 text-sm rounded-lg">{props.content}</Box>
+            <Box className="text-white bg-black py-2 px-3 text-sm rounded-lg">{content}</Box>
             <Tooltip.Arrow className="TooltipArrow" />
           </Tooltip.Content>
         </Tooltip.Portal>

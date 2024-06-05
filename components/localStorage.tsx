@@ -5,13 +5,13 @@ import useLocalStorageState from 'use-local-storage-state'
 import { v4 as uuid } from 'uuid'
 import { Chat, ChatMessage } from './interface'
 
-interface AppState {
+export interface AppState {
   loaded: boolean
   sessionId: string // Add sessionId to the AppState interface
   // Define the shape of your application state
 }
 
-interface LocalStorageState {
+export interface LocalStorageState {
   appState: AppState
   chats: {
     [uuid: string]: Chat

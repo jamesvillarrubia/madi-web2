@@ -14,7 +14,7 @@ export const ToolSelect = () => {
   const { currentUser } = useAuthContext()
 
   const splitByPlugin = (toolList: Tool[]) => {
-    return toolList.reduce((acc: any, tool: Tool) => {
+    return toolList.reduce((acc: Record<string, Tool[]>, tool: Tool) => {
       const pluginName = tool.plugin || 'Common'
       if (!acc[pluginName]) {
         acc[pluginName] = []
