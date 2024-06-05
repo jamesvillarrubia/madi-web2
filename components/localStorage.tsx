@@ -8,6 +8,7 @@ import { v4 as uuid } from 'uuid'
 
 interface AppState {
   loaded: boolean
+  sessionId: string // Add sessionId to the AppState interface
   // Define the shape of your application state
 }
 
@@ -30,7 +31,8 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
   const [state, setState] = useLocalStorageState<LocalStorageState>('v1.0.0', {
     defaultValue: {
       appState: {
-        loaded: false
+        loaded: false,
+        sessionId: sessionId // Initialize sessionId in the default state
       },
       chats: {}
     }
@@ -45,7 +47,8 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
         ...prevState,
         appState: {
           ...prevState.appState,
-          loaded: false
+          loaded: false,
+          sessionId: sessionId // Update sessionId in the state
         }
       }))
     } else {

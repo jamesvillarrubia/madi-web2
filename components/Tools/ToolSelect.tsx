@@ -30,7 +30,7 @@ export const ToolSelect = () => {
 
   useEffect(() => {
     if (currentUser) {
-      ;(async () => {
+      (async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
       })()

@@ -22,7 +22,6 @@
   },
   "contributors": [],
   "license": "MIT",
-
   "dependencies": {
     "@radix-ui/react-collapsible": "^1.0.3",
     "@radix-ui/react-icons": "^1.3.0",
@@ -69,8 +68,9 @@
     "autoprefixer": "^10.0.1",
     "babel": "^6.23.0",
     "conventional-changelog-conventionalcommits": "^8.0.0",
-    "eslint": "^8",
+    "eslint": "^8.57.0",
     "eslint-config-next": "14.0.1",
+    "eslint-plugin-jsx-a11y": "^6.8.0",
     "postcss": "^8.4.33",
     "postcss-import": "^15.1.0",
     "prettier": "^3",
