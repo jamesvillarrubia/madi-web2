@@ -1,3 +1,5 @@
+'use client'
+
 import React from 'react'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import useLocalStorageState from 'use-local-storage-state'
@@ -17,6 +19,14 @@ interface LocalStorageState {
 }
 
 export const useLocalStorageContext = (userId: string = 'shared') => {
+  let sessionId
+  if (typeof window !== 'undefined') {
+    sessionId = window.sessionStorage.getItem('sessionId') || uuid()
+    window.sessionStorage.setItem('sessionId', sessionId)
+  } else {
+    sessionId = uuid()
+  }
+
   const [state, setState] = useLocalStorageState<LocalStorageState>('v1.0.0', {
     defaultValue: {
       appState: {
@@ -28,24 +38,37 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
 
   // Allows us to run know if localStorate has been loaded.
   useEffect(() => {
-    setState((prevState) => ({
-      ...prevState,
-      appState: {
-        ...prevState.appState,
-        loaded: true
-      }
-    }))
-  }, [setState])
+    const storedSessionId = state.appState.sessionId
+    if (storedSessionId !== sessionId) {
+      // New session started, set loaded to false
+      setState((prevState: LocalStorageState) => ({
+        ...prevState,
+        appState: {
+          ...prevState.appState,
+          loaded: false
+        }
+      }))
+    } else {
+      // Same session, set loaded to true
+      setState((prevState: LocalStorageState) => ({
+        ...prevState,
+        appState: {
+          ...prevState.appState,
+          loaded: true
+        }
+      }))
+    }
+  }, [setState, sessionId, state.appState.sessionId])
 
   const setStorageState = (appState: AppState) => {
-    setState((prevState) => ({
+    setState((prevState: LocalStorageState) => ({
       ...prevState,
       appState
     }))
   }
 
   const setChatById = (uuid: string, chat: Chat) => {
-    setState((prevState) => {
+    setState((prevState: LocalStorageState) => {
       return {
         ...prevState,
         chats: {
@@ -57,7 +80,7 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
   }
 
   const setChatNameById = (uuid: string, name: string) => {
-    setState((prevState) => {
+    setState((prevState: LocalStorageState) => {
       const conversation = prevState.chats[uuid]
       if (conversation) {
         return {
@@ -76,7 +99,7 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
   }
 
   const setMessagesById = (uuid: string, messages: ChatMessage[]) => {
-    setState((prevState) => {
+    setState((prevState: LocalStorageState) => {
       const conversation = prevState.chats[uuid]
 
       if (conversation) {
@@ -96,7 +119,7 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
   }
 
   const appendMessageById = (uuid: string, message: ChatMessage) => {
-    setState((prevState) => {
+    setState((prevState: LocalStorageState) => {
       const conversation = prevState.chats[uuid]
 
       if (conversation) {
@@ -120,7 +143,7 @@ export const useLocalStorageContext = (userId: string = 'shared') => {
   }
 
   const deleteChatById = (uuid: string) => {
-    setState((prevState) => {
+    setState((prevState: LocalStorageState) => {
       const { [uuid]: deletedChat, ...updatedChats } = prevState.chats
       return {
         ...prevState,
