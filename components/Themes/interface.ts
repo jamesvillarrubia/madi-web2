@@ -1,3 +1,17 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines TypeScript interfaces related to theme management in a React application, facilitating theme switching and system theme preferences.
+
+   Key Components:
+   - `ValueObject`: Interface representing a mapping of theme names to string values.
+   - `UseThemeProps`: Interface detailing the properties required for a custom hook to manage themes in React.
+   - `ThemeProviderProps`: Interface for properties accepted by a ThemeProvider component, which manages theme settings across the application.
+
+   Functional Overview: The interfaces in this file are used to type-check the props and configurations related to theme management, including system theme detection, theme switching, and storing theme preferences. They ensure that components such as theme providers and hooks receive and utilize the correct types and structures of data.
+
+   Dependencies and Integrations: These interfaces are likely used in conjunction with React components and hooks that handle theming within the application. They integrate with React's ecosystem, particularly with state management and context providers.
+
+   Additional Context: The detailed comments in the interfaces help developers understand the expected behavior of theme management, such as handling system preferences and disabling transitions when themes change. This setup is crucial for maintaining a consistent and accessible user interface across the application.
+*** END-SUMMARY **/
 interface ValueObject {
   [themeName: string]: string
 }

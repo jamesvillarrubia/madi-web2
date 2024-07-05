@@ -1,3 +1,28 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a custom React hook, `useChatContext`, which manages the chat functionalities within a chat application, including message handling, chat session management, and UI state controls.
+
+   Key Components:
+   - `useChatContext`: A custom React hook that encapsulates all chat-related logic.
+   - `DefaultPersonas`: An array containing default persona settings for the chat.
+   - `coreSendMessage`: A function to handle the core logic of sending messages within a chat.
+   - `sendMessage`, `regenerateMessage`, `cancelSend`, `clearMessages`: Functions to manage chat interactions like sending messages, regenerating messages, cancelling message sending, and clearing messages.
+
+   Functional Overview: 
+   - Manages chat sessions, including creating, deleting, and switching between chats.
+   - Handles sending and receiving messages, updating the UI based on chat interactions, and managing visual states like loading indicators and sidebar toggling.
+   - Utilizes local storage context for persisting chat data and persona settings.
+   - Provides UI references to manage focus and scrolling behaviors dynamically.
+
+   Dependencies and Integrations:
+   - Integrates with `useToast` for displaying notifications.
+   - Uses `useSearchParams` from `next/navigation` for debugging purposes.
+   - Relies on `useLocalStorageContext` for managing chat data in local storage.
+   - Utilizes external utility functions like `postRunner` and `convertChunktoJsonArray` for processing chat messages.
+
+   Additional Context:
+   - The hook is designed to be used within React components that require chat functionalities, making it a central part of the chat application's frontend logic.
+   - It handles both the logical operations of a chat system and the UI state updates, ensuring a responsive and interactive chat experience.
+*** END-SUMMARY **/
 import { useToast } from '@/components'
 import { convertChunktoJsonArray, postRunner } from '@/components/getResponse'
 import { useSearchParams } from 'next/navigation'

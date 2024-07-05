@@ -1,3 +1,18 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component named `EditableText`, which provides a customizable text input field with features for editing, validation, and event handling.
+
+   Key Components:
+   - `EditableTextProps`: TypeScript interface defining the props for the `EditableText` component.
+   - `EditableText`: Main React functional component that handles the editable text input logic.
+   - Internal state management functions: `handleKeyDown`, `handleOnBlur`, `handleViewFocus`, `handleKeyDownForView`, `handleInputChange`, `handleCancel`, `handleActivateEditMode`, `handleSave`.
+   - Rendering functions: `_renderInput`, `_renderEditingMode`, `_renderViewMode`.
+
+   Functional Overview: The component allows users to interact with a text field that can switch between view and edit modes based on various triggers (e.g., focus, key presses). It supports validation, custom rendering, and event handling for saving or canceling edits. The component also provides visual feedback and additional UI elements like buttons depending on the state and props.
+
+   Dependencies and Integrations: The component uses `@radix-ui/themes` for UI elements such as `Heading`, `IconButton`, and `TextField`. It integrates with React's state and effect hooks for managing component state and lifecycle.
+
+   Additional Context: The component is highly customizable with numerous props to control its behavior, making it suitable for various use cases where inline editing of text is required. It also handles accessibility concerns with proper use of ARIA attributes and keyboard event handling.
+*** END-SUMMARY **/
 /* eslint-disable react/prop-types */
 import { Heading, IconButton, TextField } from '@radix-ui/themes';
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react';

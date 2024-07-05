@@ -1,3 +1,20 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component named `ActionBubble` used in a chat application to provide interactive actions for messages.
+
+   Key Components:
+   - `ActionBubble`: A React component that displays interactive icons for actions like copying text to clipboard and regenerating messages.
+   - `ActionTooltip`: A helper component that wraps icons in tooltips to provide additional information on hover.
+   - `ChatContext`: A context imported from the chat components to access chat functionalities like message regeneration.
+
+   Functional Overview: The `ActionBubble` component provides users with interactive options for each chat message, such as copying the message to the clipboard and regenerating the message. It uses tooltips to enhance user experience by displaying helpful information about each action.
+
+   Dependencies and Integrations: 
+   - Uses `ChatContext` for accessing chat functionalities.
+   - Relies on `@radix-ui/themes`, `@radix-ui/react-tooltip`, and `react-icons` for UI components and icons.
+   - Integrates with the clipboard API for copying text.
+
+   Additional Context: The component is designed to enhance interactivity within the chat interface of the application, making it more user-friendly and functional. The use of tooltips and icons from external libraries helps maintain a clean and modern UI design.
+*** END-SUMMARY **/
 'use client'
 
 import { useContext } from 'react'

@@ -1,3 +1,21 @@
+/** AUTO-SUMMARY **
+   Purpose: This file implements a toast notification system using React, managing the creation, update, dismissal, and removal of toast messages within a React application.
+
+   Key Components:
+   - `ToasterToast` type: Defines the structure for individual toast notifications.
+   - `actionTypes`: Enum-like object for defining possible actions on toasts.
+   - `reducer`: A reducer function for managing the state transitions based on actions.
+   - `toast`: Function to create a new toast notification.
+   - `useToast`: Custom React hook that provides access to the toast state and functions within React components.
+
+   Functional Overview: The file provides functionalities to manage toast notifications including adding new toasts, updating existing toasts, dismissing (either individually or all), and removing toasts after a delay. It uses a reducer pattern for state management and a custom hook to expose toast functionalities.
+
+   Dependencies and Integrations: 
+   - Uses React's `useState` and `useEffect` hooks for state management and side effects.
+   - Integrates with `@radix-ui/react-toast` for toast UI components.
+
+   Additional Context: The system includes a mechanism to automatically remove toasts after a defined delay (`TOAST_REMOVE_DELAY`). The state management is handled locally within the file using a memory state and listeners pattern, which allows for reactive updates across components that use the `useToast` hook.
+*** END-SUMMARY **/
 'use client'
 import React from 'react'
 import { useEffect, useState } from 'react'

@@ -1,3 +1,22 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component for rendering individual messages in a chat interface.
+
+   Key Components:
+   - `Message`: A React component that displays chat messages.
+   - `isJsonString`: A utility function to check if a string is valid JSON.
+   - `MessageProps`: TypeScript interface defining the props for the `Message` component.
+
+   Functional Overview: The `Message` component handles the display of chat messages with different roles (user, tool, assistant). It supports collapsible JSON content for messages from tools and integrates markdown rendering for text content. The component also conditionally renders an `ActionBubble` for messages from the assistant.
+
+   Dependencies and Integrations: 
+   - Uses `@radix-ui/react-collapsible` for collapsible functionality.
+   - Integrates with `Avatar` from `@radix-ui/themes` for user icons.
+   - Utilizes `FaAngleDown`, `FaAngleUp` from `react-icons/fa` and `HiUser`, `SiOpenai` from `react-icons/hi` for icons.
+   - Relies on the `Markdown` and `ActionBubble` components for content formatting and additional interactive elements.
+   - Imports `ChatMessage` interface from a higher-level directory for type consistency.
+
+   Additional Context: The component is designed to be flexible, supporting different message types and content formats, enhancing the user experience in chat applications by providing visually distinct and interactive message displays.
+*** END-SUMMARY **/
 'use client'
 
 import * as Collapsible from '@radix-ui/react-collapsible'

@@ -1,3 +1,24 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component `VersionBox` that fetches and displays the latest version tag of a GitHub repository.
+
+   Key Components:
+   - `getLastVersionTag`: An asynchronous function that fetches the latest version tag from a GitHub repository.
+   - `VersionBox`: A React functional component that displays the latest version tag.
+   - `Commit` and `Tag`: TypeScript type definitions for handling commit and tag data structures.
+
+   Functional Overview: 
+   - `getLastVersionTag` fetches all tags and commits from a specified GitHub repository and branch, filters for tagged commits, and returns the most recent tag based on the commit date.
+   - `VersionBox` uses the `getLastVersionTag` function to fetch the latest version tag when the component mounts and displays this version in the UI.
+
+   Dependencies and Integrations:
+   - Uses React's `useState` and `useEffect` for state management and side effects.
+   - Fetches data from an external GitHub API and a local JSON file (`/sha.json`).
+   - Integrates with `@radix-ui/themes` for styled components.
+
+   Additional Context:
+   - The component handles errors gracefully by logging them and continues to display a default version if no tag is found or an error occurs.
+   - The file includes error handling for both network requests and logical errors, such as missing tags or commits.
+*** END-SUMMARY **/
 import { useEffect, useState } from 'react'
 import { Box } from '@radix-ui/themes'
 

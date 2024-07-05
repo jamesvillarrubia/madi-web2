@@ -1,3 +1,21 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines the Header component used across the project for consistent navigation and theme management.
+
+   Key Components:
+   - `Header`: Main React component for the header.
+   - `HeaderProps`: TypeScript interface for the Header component's props.
+   - `HeaderUser`: Sub-component displayed within the header for user-related functionalities.
+
+   Functional Overview: The Header component includes the project logo, navigation links, a theme selector (light, dark, system), and a user component. It also has a hamburger menu for mobile views, which toggles the sidebar navigation.
+
+   Dependencies and Integrations: 
+   - Uses `NextLink` from 'next/link' for internal navigation.
+   - Integrates with `ChatContext` for sidebar toggling.
+   - Utilizes `useTheme` for theme management.
+   - Relies on various components and icons from `@radix-ui/react-icons`, `@radix-ui/themes`, and `react-icons`.
+
+   Additional Context: The header's appearance and functionality adjust based on the current theme and user interactions. It is designed to be responsive and accessible, with tooltips and interactive elements for a better user experience.
+*** END-SUMMARY **/
 'use client'
 
 import NextLink from 'next/link'

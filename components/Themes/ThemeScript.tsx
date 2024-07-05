@@ -1,3 +1,26 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component `ThemeScript` that dynamically sets the theme of the application based on user preferences or system settings.
+
+   Key Components:
+   - `ThemeScript`: A React component that injects a script into the HTML to manage theme settings.
+   - `ThemeProviderProps`: Imported type that defines the props for the `ThemeScript` component.
+   - `ColorSchemes`, `MEDIA`: Constants imported from utils that help determine valid color schemes and media queries for system preferences.
+
+   Functional Overview: 
+   - The component generates a script that is injected into the HTML document to manage the theme.
+   - It handles different scenarios such as forced themes, system preferences, and user-saved themes in local storage.
+   - The script optimizes DOM updates for setting themes to minimize re-rendering and improve performance.
+   - It supports both class-based and attribute-based theme applications.
+
+   Dependencies and Integrations:
+   - Uses React's `memo` for performance optimization.
+   - Depends on `ColorSchemes` and `MEDIA` from utils for determining valid themes and media queries.
+   - Integrates with local storage to retrieve user preferences.
+
+   Additional Context:
+   - The component uses several immediately invoked function expressions (IIFEs) to encapsulate and execute theme logic conditionally based on the presence of themes in local storage or system settings.
+   - It is designed to be efficient in updating the DOM by reducing the number of style recalculations needed when changing themes.
+*** END-SUMMARY **/
 import { memo } from 'react'
 import { ThemeProviderProps } from './interface'
 import { ColorSchemes, MEDIA } from './utils'

@@ -1,3 +1,21 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component named `SpinComponent` which provides a loading spinner with customizable features for the project's UI.
+
+   Key Components:
+   - `Spin`: The main functional component that handles the spinner's behavior and appearance.
+   - `isEmptyReactNode`: A utility function to check if a React node is empty.
+   - `SpinProps`: TypeScript interface imported to type-check the props of the `Spin` component.
+   - `DotLoading`: A component used for dot-style loading animation.
+
+   Functional Overview: The `Spin` component displays a loading spinner which can be customized with different icons, sizes, and additional text (tip). It supports delayed loading and can be used either as a block or inline element. The component also handles children elements by overlaying the spinner or replacing the content with the spinner based on the content's presence.
+
+   Dependencies and Integrations:
+   - Uses `lodash-es` for debouncing state updates.
+   - Integrates with `@radix-ui/themes` and `react-icons` for styling and icons.
+   - Relies on CSS classes defined in `index.scss` for styling.
+
+   Additional Context: The component is designed to be flexible, allowing for various customization options through props. It uses React hooks like `useState`, `useEffect`, and `useCallback` for managing state and side effects, ensuring optimal performance and reusability.
+*** END-SUMMARY **/
 'use client'
 
 import { Text } from '@radix-ui/themes'
