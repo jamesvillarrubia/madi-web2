@@ -171,7 +171,7 @@ export const useChatContext = () => {
     }
   }
 
-  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>) => {
+  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>|React.KeyboardEvent) => {
     cancelledRef.current = false // reset the cancelled status before sending a new message
 
     e.preventDefault()

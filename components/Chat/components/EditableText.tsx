@@ -27,6 +27,7 @@ interface EditableTextProps {
   viewProps?: React.HTMLAttributes<HTMLDivElement>;
   containerProps?: React.HTMLAttributes<HTMLDivElement>;
   tabIndex?: number;
+  showButtonsOnHover?: boolean;
 }
 
 function EditableText(props: EditableTextProps) {
@@ -147,7 +148,7 @@ function EditableText(props: EditableTextProps) {
               {props.saveButtonContent}
             </IconButton>
           </TextField.Slot>
-          <TextField.Slot>
+          <TextField.Slot className='pr-4'>
             <IconButton size="3" variant="ghost" onClick={handleCancel}>
               {props.cancelButtonContent}
             </IconButton>
@@ -177,7 +178,7 @@ function EditableText(props: EditableTextProps) {
         >
           {_value}
         </Heading>
-        <TextField.Slot className={'invisible group-hover:visible'}>
+        <TextField.Slot className={props.showButtonsOnHover ? 'invisible group-hover:visible' : 'invisible'}>
           <IconButton
             size="3"
             variant="ghost"
