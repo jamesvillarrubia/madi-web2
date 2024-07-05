@@ -1,3 +1,23 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React component for rendering Markdown content with support for various plugins and syntax highlighting.
+
+   Key Components:
+   - `MarkdownProps`: TypeScript interface for the component's props.
+   - `Markdown`: React component that uses `ReactMarkdown` for rendering Markdown content.
+   - `remarkPlugins`: Array of plugins for parsing and transforming Markdown.
+   - `rehypePlugins`: Array of plugins for transforming HTML generated from Markdown.
+   - `components`: Custom React components for specific Markdown elements, particularly for code blocks with syntax highlighting and copy functionality.
+
+   Functional Overview: The `Markdown` component renders Markdown content with additional features like GitHub Flavored Markdown (GFM), mathematical expressions, and syntax highlighting for code blocks. It also includes a copy button for code snippets.
+
+   Dependencies and Integrations: 
+   - Uses `react-markdown` for the base Markdown rendering.
+   - Integrates with `remark` and `rehype` libraries for Markdown processing and HTML transformation.
+   - Utilizes `react-syntax-highlighter` for syntax highlighting and `react-icons` for the copy button icon.
+   - Depends on `@radix-ui/themes` for UI components like `IconButton`.
+
+   Additional Context: The component enhances the readability and functionality of Markdown content in the project, making it suitable for technical documentation or content-rich applications. The syntax highlighting theme used is `vscDarkPlus`, which is based on Visual Studio Code's dark theme.
+*** END-SUMMARY **/
 import ReactMarkdown from 'react-markdown'
 
 import remarkGfm from 'remark-gfm'

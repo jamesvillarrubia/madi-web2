@@ -1,3 +1,24 @@
+/** AUTO-SUMMARY **
+   Purpose: This file implements the ChatBox component, which is a key part of the chat functionality in the project, providing an interface for users to interact with chat messages.
+
+   Key Components:
+   - `ChatBox`: The main React component that provides the chat interface.
+   - `TextArea`: A custom text area component for inputting messages.
+   - `Message`: A component to display individual messages.
+   - `ToolSelect`: A component allowing selection of tools within the chat.
+   - `EditableText`: A component for editable text fields, used for chat names.
+   - `VersionBox`: A component displaying the version information.
+
+   Functional Overview: The ChatBox component handles the display and interaction of chat messages, including sending new messages, editing the chat name, and managing the conversation state. It uses a context (`ChatContext`) to manage chat-related data and provides functionalities like message sending, message cancellation, and sidebar toggling.
+
+   Dependencies and Integrations: 
+   - Uses `ChatContext` for managing chat state.
+   - Integrates with `@radix-ui/themes` for UI components like buttons and containers.
+   - Utilizes `react-icons` for various UI icons.
+   - Depends on `clipboard` for clipboard interactions.
+
+   Additional Context: The component is styled using SCSS and makes use of React's `forwardRef` for managing focus. It also handles keyboard interactions for message sending and uses various hooks for lifecycle management and ref handling.
+*** END-SUMMARY **/
 'use client'
 import { forwardRef, useContext, useEffect, useImperativeHandle } from 'react'
 

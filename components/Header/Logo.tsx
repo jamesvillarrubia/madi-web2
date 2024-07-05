@@ -1,3 +1,16 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a React functional component for rendering the SVG logo of the project, named MADILogo.
+
+   Key Components:
+   - `MADILogo`: A React functional component.
+   - `MADILogoProps`: TypeScript interface extending `React.SVGProps<SVGSVGElement>` to type the props of the MADILogo component.
+
+   Functional Overview: The component `MADILogo` renders an SVG element designed to represent the logo of the project. It accepts all standard SVG properties through its props due to the extension of `React.SVGProps<SVGSVGElement>`.
+
+   Dependencies and Integrations: The file imports React from the 'react' library, indicating a dependency on the React framework. The component is likely used across various parts of the project where the logo is required.
+
+   Additional Context: The SVG logo is styled directly within the component and is scalable, as indicated by the use of `width="1em"` and `height="1em"`, making it adaptable to different sizes based on its container's font size.
+*** END-SUMMARY **/
 import * as React from 'react'
 
 interface MADILogoProps extends React.SVGProps<SVGSVGElement> {}

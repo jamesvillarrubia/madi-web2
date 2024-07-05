@@ -1,3 +1,25 @@
+/** AUTO-SUMMARY **
+   Purpose: This file defines a ThemeProvider component that manages theme settings for a React application, handling theme changes and system preferences integration.
+
+   Key Components:
+   - `ThemeProvider`: A component that either passes through its children if a theme context already exists or renders the `Theme` component.
+   - `Theme`: A component that manages the application's theme state, including system theme detection and theme application to the document.
+   - `ThemeContext`: Context used to provide and consume theme-related values throughout the component tree.
+   - `ThemeScript`: A script component included to handle theme-related operations.
+
+   Functional Overview: The file provides functionality to:
+   - Detect and apply user-selected or system-preferred themes.
+   - Persist theme preferences across sessions using local storage.
+   - React to system theme changes and synchronize the application's theme accordingly.
+   - Manage theme-related attributes on the document's root element, supporting both class and attribute-based theming.
+
+   Dependencies and Integrations: 
+   - Utilizes utility functions from `./utils` for theme detection and animation control.
+   - Integrates with `ThemeContext` for context-based theme management across the application.
+   - Relies on React hooks like `useState`, `useEffect`, `useCallback`, and `useMemo` for managing state and side effects.
+
+   Additional Context: The component supports optional features such as disabling transitions on theme change and handling forced themes, providing robust theming capabilities tailored to user and system preferences.
+*** END-SUMMARY **/
 'use client'
 
 import React from 'react'
