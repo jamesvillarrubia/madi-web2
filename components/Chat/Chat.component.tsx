@@ -139,7 +139,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
             getChatById?.(currentChatId || '')?.name ||
             getChatById?.(currentChatId || '')?.persona?.name
           }
-          type="text"
+          // type="text"
           onSave={(value: string) => {
             setChatNameById(currentChatId || '', value)
           }}

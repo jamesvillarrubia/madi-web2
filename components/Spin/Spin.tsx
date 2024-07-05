@@ -3,7 +3,7 @@
 import { Text } from '@radix-ui/themes'
 import cs from 'classnames'
 import { debounce } from 'lodash-es'
-import React, { ReactElement, useCallback, useEffect, useState, Ref } from 'react'
+import React, { ReactElement, useCallback, useEffect, useState, ForwardedRef } from 'react'
 import { SpinProps } from './interface'
 
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
@@ -15,7 +15,7 @@ export function isEmptyReactNode(node: unknown): boolean {
 
 import './index.scss'
 
-const Spin = (props: SpinProps, ref: Ref<HTMLDivElement>) => {
+const Spin = (props: SpinProps, ref: ForwardedRef<HTMLDivElement>) => {
   const {
     style,
     className,
@@ -115,7 +115,7 @@ const Spin = (props: SpinProps, ref: Ref<HTMLDivElement>) => {
   )
 }
 
-const SpinComponent = React.forwardRef<unknown, SpinProps>(Spin)
+const SpinComponent = React.forwardRef<HTMLDivElement, SpinProps>(Spin)
 
 SpinComponent.displayName = 'Spin'
 
