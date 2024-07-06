@@ -1,4 +1,3 @@
-
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   // output: 'standalone', // swapped out for deployment as static assets.

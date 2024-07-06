@@ -160,7 +160,7 @@ export const useChatContext = () => {
 
       setIsLoading(false)
     } catch (error: unknown) {
-      if(error instanceof Error) {
+      if (error instanceof Error) {
         console.error(error)
         toast({
           title: 'Error',
@@ -171,7 +171,7 @@ export const useChatContext = () => {
     }
   }
 
-  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement>|React.KeyboardEvent) => {
+  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent) => {
     cancelledRef.current = false // reset the cancelled status before sending a new message
 
     e.preventDefault()
@@ -189,7 +189,10 @@ export const useChatContext = () => {
     const localIdAtStart = currentChatId || ''
     setStartId(localIdAtStart)
 
-    const updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
+    const updatedConversation = [
+      ...conversation!,
+      { content: input, role: 'user' }
+    ] as ChatMessage[]
     setConversation(updatedConversation)
     localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 

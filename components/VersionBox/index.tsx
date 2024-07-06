@@ -5,7 +5,6 @@ type Commit = { sha: string; commit: { committer: { date: string } } }
 
 type Tag = { tag: string; commit: Commit }
 
-
 async function getLastVersionTag(owner: string, repo: string, branch: string) {
   if (!(owner && repo && branch)) {
     return null
@@ -49,7 +48,7 @@ async function getLastVersionTag(owner: string, repo: string, branch: string) {
       throw new Error('No tagged commits found in the specified branch history.')
     }
   } catch (error: unknown) {
-    if(error instanceof Error) {
+    if (error instanceof Error) {
       console.error('Error:', error.message)
       return null
     }

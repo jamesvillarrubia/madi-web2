@@ -1,11 +1,7 @@
 import { useAuthContext } from '@/components/authenticate'
 import { getTools } from '@/components/getResponse'
 import { Select } from '@radix-ui/themes'
-import {
-  Fragment,
-  useContext,
-  useEffect
-} from 'react'
+import { Fragment, useContext, useEffect } from 'react'
 import { ChatContext } from '../Chat/context'
 import { Tool } from '../interface'
 
@@ -26,7 +22,7 @@ export const ToolSelect = () => {
 
   useEffect(() => {
     if (currentUser) {
-      (async () => {
+      ;(async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
       })()

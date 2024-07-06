@@ -1,12 +1,11 @@
 'use client'
 
 import { useContext } from 'react'
-import {  Box, IconButton } from '@radix-ui/themes'
+import { Box, IconButton } from '@radix-ui/themes'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ChatContext } from '@/components/Chat'
 import { CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
 import { TiThumbsDown } from 'react-icons/ti'
-
 
 export interface ActionBubbleProps {
   message: string
@@ -61,7 +60,7 @@ export const ActionBubble = (props: ActionBubbleProps) => {
   )
 }
 
-const ActionTooltip = ({children, content}: {children: React.ReactNode, content: string}) => {
+const ActionTooltip = ({ children, content }: { children: React.ReactNode; content: string }) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root delayDuration={300}>

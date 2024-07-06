@@ -146,14 +146,14 @@ export const useLocalStorageContext = () => {
 
   const deleteChatById = (uuid: string) => {
     setState((prevState: LocalStorageState) => {
-      const updatedChats = { ...prevState.chats };
-      delete updatedChats[uuid];
+      const updatedChats = { ...prevState.chats }
+      delete updatedChats[uuid]
       return {
         ...prevState,
         chats: updatedChats
-      };
-    });
-  };
+      }
+    })
+  }
 
   return {
     state,
