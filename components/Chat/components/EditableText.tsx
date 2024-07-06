@@ -17,7 +17,6 @@
 import { Heading, IconButton, TextField } from '@radix-ui/themes'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react'
 
-
 interface EditableTextProps {
   value?: string
   editing?: boolean

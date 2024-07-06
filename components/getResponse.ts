@@ -54,24 +54,7 @@ type Item = {
 type Accumulator = {
   [key: string]: DeltaValue // Define a more specific type if possible
 }
-
 export function messageReducer(previous: ChatMessage, item: Item): ChatMessage {
-  type DeltaValue = string | number | Delta | Delta[];
-  type Delta = {
-    [key: string]: DeltaValue; // Define a more specific type if possible
-  };
-
-  type Item = {
-    choices?: {
-      delta?: Delta;
-    }[];
-  };
-
-
-  type Accumulator = {
-    [key: string]: DeltaValue; // Define a more specific type if possible
-  };
-
   const reduce = (acc: Accumulator, delta: Delta | undefined): Accumulator => {
     if (!delta) return acc // Return accumulated value if delta is not provided
 
