@@ -28,14 +28,8 @@ import { ChatContext, DefaultPersonas } from '../context/index'
 import '../index.scss'
 
 export const SideBarChatList = () => {
-  const {
-    currentChatId,
-    chatList,
-    onDeleteChat,
-    onChangeChat,
-    onCreateChat,
-    getChatById
-  } = useContext(ChatContext)
+  const { currentChatId, chatList, onDeleteChat, onChangeChat, onCreateChat, getChatById } =
+    useContext(ChatContext)
 
   return (
     <>

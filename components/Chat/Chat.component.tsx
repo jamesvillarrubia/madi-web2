@@ -45,13 +45,12 @@ import Message from './components/Message.component'
 import { ChatContext } from './context'
 import './index.scss'
 
-
 export interface ChatProps {}
 
 interface CustomRef {
-  setConversation(messages: ChatMessage[]): void;
-  getConversation(): ChatMessage[] | null;
-  focus(): void;
+  setConversation(messages: ChatMessage[]): void
+  getConversation(): ChatMessage[] | null
+  focus(): void
 }
 
 const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => {
@@ -275,5 +274,5 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   )
 })
 
-ChatBox.displayName = 'ChatBox';
-export default ChatBox;
+ChatBox.displayName = 'ChatBox'
+export default ChatBox

@@ -23,12 +23,7 @@
    - Handles various data types and structures to robustly process and respond to complex interactions in a chat-based application.
    - The file is heavily asynchronous, utilizing modern JavaScript features like async/await and for-await-of loops to handle streams and promises.
 *** END-SUMMARY **/
-import {
-  ChatMessage,
-  ResponseSet,
-  Tool,
-  ToolCall
-} from '../components/interface'
+import { ChatMessage, ResponseSet, Tool, ToolCall } from '../components/interface'
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 
 // @ts-expect-error - This is a polyfill for ReadableStream
@@ -45,24 +40,22 @@ ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
   }
 }
 
-type DeltaValue = string | number | Delta | Delta[];
+type DeltaValue = string | number | Delta | Delta[]
 type Delta = {
-  [key: string]: DeltaValue; // Define a more specific type if possible
-};
+  [key: string]: DeltaValue // Define a more specific type if possible
+}
 
 type Item = {
   choices?: {
-    delta?: Delta;
-  }[];
-};
-
+    delta?: Delta
+  }[]
+}
 
 type Accumulator = {
-  [key: string]: DeltaValue; // Define a more specific type if possible
-};
+  [key: string]: DeltaValue // Define a more specific type if possible
+}
 
-
-export function messageReducer(previous: ChatMessage, item: Item): ChatMessage{
+export function messageReducer(previous: ChatMessage, item: Item): ChatMessage {
   const reduce = (acc: Accumulator, delta: Delta | undefined): Accumulator => {
     if (!delta) return acc // Return accumulated value if delta is not provided
 
@@ -82,7 +75,7 @@ export function messageReducer(previous: ChatMessage, item: Item): ChatMessage{
       } else if (Array.isArray(acc[key]) && Array.isArray(value)) {
         const accArray = acc[key] as Delta[]
         for (let i = 0; i < value.length; i++) {
-          const { index, ...chunkTool } = value[i] as Delta & { index: number };
+          const { index, ...chunkTool } = value[i] as Delta & { index: number }
           if (index - accArray.length > 1) {
             throw new Error(
               `Error: An array has an empty value when tool_calls are constructed. tool_calls: ${accArray}; tool: ${value}`
@@ -91,12 +84,15 @@ export function messageReducer(previous: ChatMessage, item: Item): ChatMessage{
           accArray[index] = reduce(accArray[index], chunkTool)
         }
       } else if (typeof acc[key] === 'object' && typeof value === 'object') {
-        acc[key] = reduce(acc[key] as Delta, value as Delta);
+        acc[key] = reduce(acc[key] as Delta, value as Delta)
       }
     }
     return acc
   }
-  return reduce(previous as unknown as Accumulator, item?.choices?.[0]?.delta) as unknown as ChatMessage
+  return reduce(
+    previous as unknown as Accumulator,
+    item?.choices?.[0]?.delta
+  ) as unknown as ChatMessage
 }
 
 // message:
@@ -272,15 +268,10 @@ export const postRunner = async (
   tools?: Tool[]
 ): Promise<ResponseSet> => {
   // send message to postChat
-  const { currentStream, 
-    // additionalMessages 
-  } = await postChat(
-    systemPrompt,
-    messageArray,
-    newMessage,
-    currentTool,
-    tools
-  )
+  const {
+    currentStream
+    // additionalMessages
+  } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
 
   if (currentStream instanceof ReadableStream) {
     const [checkStream, textStream] = currentStream.tee()

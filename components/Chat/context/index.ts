@@ -50,7 +50,7 @@ export type ChatContextType = {
   setMessagesById: (id: string, messages: ChatMessage[]) => void
 
   // New fields
-  sendMessage: (e: React.MouseEvent<HTMLButtonElement>|React.KeyboardEvent) => void
+  sendMessage: (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent) => void
   regenerateMessage: (cuttoffIndex: number) => void
   setConversation: (messages: ChatMessage[]) => void
   conversationRef: RefObject<ChatMessage[]>
