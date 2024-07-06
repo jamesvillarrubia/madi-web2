@@ -1,90 +1,88 @@
 # madi-web
 
 ## Description
-madi-web is the official web interface for MADI (Modular AI for Design and Innovation), a transformative initiative designed by NASA. This web interface facilitates diverse functionalities, aiming to enhance innovation and design processes through modular and scalable AI solutions. It serves as a platform to leverage AI capabilities, providing users with an intuitive interface for understanding and interacting with various AI modules.
+The **madi-web** is a comprehensive web interface for MADI (Modular AI for Innovation and Design), a project initiated by NASA. This application provides a robust platform designed to integrate artificial intelligence tools into various design and innovation processes. The interface caters to enhancing user interaction with AI modules, providing a seamless and user-friendly environment for managing complex tasks and workflows.
 
 ## Badges
 [![Build Status](https://img.shields.io/badge/build-passing-brightgreen)](https://shields.io)
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
-[![Version](https://img.shields.io/badge/version-0.0.0-orange)](https://github.com/user/repo/releases)
+[![Version](https://img.shields.io/badge/version-1.0.0-orange)](https://github.com/user/repo/releases)
 
 ## Visuals
 ![Screenshot](link-to-screenshot.png)
 
-Visual representations or demonstrations of the platform in action can be greatly beneficial in helping users understand the usability and features of madi-web. Adding screenshots, walkthrough videos or GIFs demonstrating the use of various modules can enhance this section.
+Visual aids such as screenshots, GIFs, or videos would greatly complement understanding and appreciation of the **madi-web** interface, presenting the actual UI/UX elements in action.
 
 ## Installation
 ### Requirements
-To successfully install and run madi-web, ensure your system meets the following:
 - Node.js >= 14.0
-- react >= 18
-- next >= 14.0.4
-- Supported on modern browsers
+- Next.js
+- A modern web browser.
 
 ### Steps
+To get the environment set up and run **madi-web**, follow these steps:
 1. Clone the repository:
     ```bash
     git clone https://github.com/user/repo.git
     cd repo
     ```
-2. Install dependencies:
+2. Install necessary packages:
     ```bash
     npm install
     ```
-3. Build the project:
-    ```bash
-    npm run build
-    ```
-4. Run the application:
+3. Initialize the application:
     ```bash
     npm start
     ```
 
 ## Usage
-To start using madi-web, follow these steps after installation:
+Begin by navigating to your localhost in the browser. Here, you can interact with various AI modules and tools:
+
 ```bash
-# Running in development mode
-npm run dev
+# Navigate to the project directory
+example of navigating and interacting
 ```
+
 Output:
 ```
-ready - started server on 0.0.0.0:3000, url: http://localhost:3000
+Visual confirmation that the interaction occurred
 ```
-For more detailed usage, please refer to the [Documentation](link-to-documentation).
+
+For more detailed usage and further examples, refer to the [Documentation](link-to-documentation).
 
 ## Support
-For assistance or to report issues, please contact us at:
+Reach out for support via:
 - [GitHub Issues](https://github.com/user/repo/issues)
-- Email: [james.villarrubia@gmail.com](mailto:james.villarrubia@gmail.com)
+- Email: [support@example.com](mailto:support@example.com)
 
 ## Roadmap
-Plans for future updates include:
-- Integration of more AI modules.
-- Enhancements in UI/UX for better user experience.
-- Implementation of additional security features.
+We are continually evolving the project, planning to implement:
+- Enhanced data analysis tools.
+- Integration with additional NASA systems.
+- Increased automation capabilities.
 
 ## Contributing
-If you are interested in contributing to madi-web, please follow these steps:
-1. Fork the repository.
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`).
-3. Make your changes.
-4. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
-5. Push to the branch (`git push origin feature/AmazingFeature`).
-6. Open a pull request.
+To contribute to the **madi-web** project, follow these steps:
 
-See the [Contributing Guidelines](CONTRIBUTING.md) for more details.
+1. Fork the repository.
+2. Create your feature branch (`git checkout -b feature-AmazingFeature`).
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`).
+4. Push to the branch (`git push origin feature-AmazingFeature`).
+5. Open a pull request.
+
+Please refer to the [Contributing Guidelines](CONTRIBUTING.md) for more details.
 
 ### Development Setup
-- Ensure all dependencies are installed with `npm install`.
-- Validate coding standards by running `npm run lint`.
-- Execute tests using `npm test`.
+- Run `npm install` to download necessary dependencies.
+- For code quality control, use `npm run lint`.
+- Verify with tests using `npm test`.
 
 ## Authors and Acknowledgment
-- **James Villarrubia** - Initial work - [GitHub Profile](https://github.com/author)
-- Special thanks to contributors involved in the MADI initiative for their invaluable efforts.
+- **James Villarrubia** - Initial development - [GitHub Profile](https://github.com/author)
+- Key collaborators and contributors are acknowledged here.
 
 ## License
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
 ## Project Status
-madi-web is currently in active development. New contributors and ideas are welcome to help advance our goals for AI-driven innovation in design methodologies.
+**madi-web** is actively being developed and maintained with plans for future enhancements and integrations. If interested in contributing to or maintaining this project, please reach out or contribute as outlined above.
