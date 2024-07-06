@@ -14,8 +14,8 @@
    Additional Context: The component is highly customizable with numerous props to control its behavior, making it suitable for various use cases where inline editing of text is required. It also handles accessibility concerns with proper use of ARIA attributes and keyboard event handling.
 *** END-SUMMARY **/
 /* eslint-disable react/prop-types */
-import { Heading, IconButton, TextField } from '@radix-ui/themes';
-import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react';
+import { Heading, IconButton, TextField } from '@radix-ui/themes'
+import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react'
 
 
 interface EditableTextProps {
@@ -57,27 +57,27 @@ function EditableText(props: EditableTextProps) {
 
   useEffect(() => {
     if (props.value !== undefined) {
-      setValueInternal(props.value);
-      setSavedValue(props.value);
+      setValueInternal(props.value)
+      setSavedValue(props.value)
     }
 
     if (props.editing !== undefined) {
-      setEditingInternal(props.editing);
+      setEditingInternal(props.editing)
     }
-  }, [props.editing, props.value]);
+  }, [props.editing, props.value])
 
   function handleKeyDown(e: KeyboardEvent<HTMLInputElement>): void {
     const isEnter = [13, 'Enter'].some((c) => e.key === c || e.code === c)
     const isEscape = [27, 'Escape', 'Esc'].some((c) => e.code === c || e.key === c)
     if (isEnter) {
-      props.submitOnEnter && handleSave();
-      e?.preventDefault();
+      props.submitOnEnter && handleSave()
+      e?.preventDefault()
     }
     if (isEscape) {
-      props.cancelOnEscape && handleCancel();
-      e.preventDefault();
+      props.cancelOnEscape && handleCancel()
+      e.preventDefault()
     }
-    props.inputProps?.onKeyDown && props.inputProps.onKeyDown(e);
+    props.inputProps?.onKeyDown && props.inputProps.onKeyDown(e)
   }
 
   function handleOnBlur(e: FocusEvent<HTMLInputElement>): void {
@@ -108,11 +108,11 @@ function EditableText(props: EditableTextProps) {
   }
 
   function handleCancel(): void {
-    const val = savedValue ?? props.value;
-    setValid(true);
-    setEditingInternal(false);
-    setValueInternal(val);
-    props.onCancel?.(val, props.inputProps);
+    const val = savedValue ?? props.value
+    setValid(true)
+    setEditingInternal(false)
+    setValueInternal(val)
+    props.onCancel?.(val, props.inputProps)
   }
 
   function handleActivateEditMode(): void {
@@ -122,16 +122,16 @@ function EditableText(props: EditableTextProps) {
 
   async function handleSave(): Promise<void> {
     if (typeof props.validation === 'function') {
-      const isValid = await props.validation(valueInternal);
+      const isValid = await props.validation(valueInternal)
       if (!isValid) {
-        setValid(false);
-        await props.onValidationFail?.(valueInternal);
-        return;
+        setValid(false)
+        await props.onValidationFail?.(valueInternal)
+        return
       }
     }
-    setEditingInternal(false);
-    setSavedValue(valueInternal);
-    props.onSave(valueInternal, props.inputProps);
+    setEditingInternal(false)
+    setSavedValue(valueInternal)
+    props.onSave(valueInternal, props.inputProps)
   }
 
   function _renderInput() {
@@ -149,11 +149,11 @@ function EditableText(props: EditableTextProps) {
         // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={editingInternal}
       />
-    );
+    )
   }
 
   function _renderEditingMode() {
-    const inputElem = _renderInput();
+    const inputElem = _renderInput()
 
     return (
       <div>
@@ -173,13 +173,13 @@ function EditableText(props: EditableTextProps) {
         {!valid && !props.onValidationFail && <div className={''}>{props.validationMessage}</div>}
         {props.hint && <div className={''}>{props.hint}</div>}
       </div>
-    );
+    )
   }
 
   function _renderViewMode() {
     const viewClickHandler = props.editOnViewClick ? handleActivateEditMode : undefined
     const _value =
-      typeof props.renderValue === 'function' ? props.renderValue(valueInternal) : valueInternal;
+      typeof props.renderValue === 'function' ? props.renderValue(valueInternal) : valueInternal
     return (
       <TextField.Root className={`group ${props.viewProps?.className || ''}`}>
         <Heading
@@ -202,15 +202,15 @@ function EditableText(props: EditableTextProps) {
           </IconButton>
         </TextField.Slot>
       </TextField.Root>
-    );
+    )
   }
 
-  const mode = editingInternal ? _renderEditingMode() : _renderViewMode();
+  const mode = editingInternal ? _renderEditingMode() : _renderViewMode()
   return (
     <div className="h-10" {...props.containerProps}>
       {mode}
     </div>
-  );
+  )
 }
 
-export default EditableText;
+export default EditableText

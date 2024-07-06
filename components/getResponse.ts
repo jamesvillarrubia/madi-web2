@@ -1,3 +1,28 @@
+/** AUTO-SUMMARY **
+   Purpose: This file primarily handles communication with an API to send and receive chat messages and tool calls, and processes the responses accordingly.
+
+   Key Components:
+   - `messageReducer`: Function to accumulate changes from a delta object into a chat message.
+   - `getTools`: Function to fetch available tools from the API.
+   - `postChat`: Function to post chat messages to the API and handle the response.
+   - `postTools`: Function to post tool calls to the API and handle the response.
+   - `postRunner`: Function to manage the entire process of sending a message, processing tool calls, and handling the responses.
+
+   Functional Overview:
+   - Implements a reducer function to process and accumulate changes in chat messages.
+   - Provides functionality to fetch tools and post messages and tool calls to an API.
+   - Manages the flow of sending a message, processing the response, potentially making tool calls based on the response, and handling all subsequent responses.
+
+   Dependencies and Integrations:
+   - Uses constants from a separate constants file for API paths and headers.
+   - Relies on types and interfaces from a components directory for structured data handling.
+   - Integrates with an API using fetch for data retrieval and posting.
+
+   Additional Context:
+   - Includes a polyfill for `ReadableStream` to enhance compatibility.
+   - Handles various data types and structures to robustly process and respond to complex interactions in a chat-based application.
+   - The file is heavily asynchronous, utilizing modern JavaScript features like async/await and for-await-of loops to handle streams and promises.
+*** END-SUMMARY **/
 import { ChatMessage, ResponseSet, Tool, ToolCall } from '../components/interface'
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 
