@@ -28,7 +28,7 @@ export const disableAnimation = () => {
 
   return () => {
     // Force restyle
-    ;(() => window.getComputedStyle(document.body))()
+    (() => window.getComputedStyle(document.body))()
 
     // Wait for next tick before removing
     setTimeout(() => {
