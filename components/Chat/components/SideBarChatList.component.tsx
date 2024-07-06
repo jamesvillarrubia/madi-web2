@@ -1,27 +1,18 @@
 'use client'
 
 import { Box, Flex, IconButton, ScrollArea, Text } from '@radix-ui/themes'
-import React, { useContext } from 'react'
 import cs from 'classnames'
+import { useContext } from 'react'
 import { AiOutlineCloseCircle } from 'react-icons/ai'
-import { ChatContext, DefaultPersonas } from '../context/index'
 import { FaPlus } from 'react-icons/fa6'
-import { FaTheaterMasks } from 'react-icons/fa'
 import { Chat } from '../../interface'
-import { ChatContextType } from '../context/index'
+import { ChatContext, DefaultPersonas } from '../context/index'
 
 import '../index.scss'
 
 export const SideBarChatList = () => {
-  const {
-    currentChatId,
-    chatList,
-    toggleSidebar,
-    onDeleteChat,
-    onChangeChat,
-    onCreateChat,
-    getChatById
-  } = useContext(ChatContext)
+  const { currentChatId, chatList, onDeleteChat, onChangeChat, onCreateChat, getChatById } =
+    useContext(ChatContext)
 
   return (
     <>
@@ -37,7 +28,7 @@ export const SideBarChatList = () => {
         <Flex direction="column" gap="3">
           {chatList.map((id: string) => {
             // console.log(chatList, id)
-            let chat = getChatById(id) || ({} as Chat)
+            const chat = getChatById(id) || ({} as Chat)
             if (!chat.name) {
               return null
             }

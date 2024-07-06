@@ -1,21 +1,11 @@
 'use client'
 
-import { useContext, useState } from 'react'
-import { Avatar, Flex, Box, IconButton, Card } from '@radix-ui/themes'
+import { useContext } from 'react'
+import { Box, IconButton } from '@radix-ui/themes'
 import * as Tooltip from '@radix-ui/react-tooltip'
 import { ChatContext } from '@/components/Chat'
-
-import { FaceIcon, ImageIcon, SunIcon, CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
-import { FaRegThumbsDown } from 'react-icons/fa'
+import { CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
 import { TiThumbsDown } from 'react-icons/ti'
-
-import { SiOpenai } from 'react-icons/si'
-import { HiUser } from 'react-icons/hi'
-import { Markdown } from './Markdown'
-import { ChatMessage } from '../../interface'
-import * as Collapsible from '@radix-ui/react-collapsible'
-import { FaAngleDown } from 'react-icons/fa'
-import { FaAngleUp } from 'react-icons/fa'
 
 export interface ActionBubbleProps {
   message: string
@@ -23,7 +13,7 @@ export interface ActionBubbleProps {
 }
 
 export const ActionBubble = (props: ActionBubbleProps) => {
-  let messageIndex = props.index
+  const messageIndex = props.index
   const copyToClipboard = () => {
     navigator.clipboard
       .writeText(props.message)
@@ -70,14 +60,14 @@ export const ActionBubble = (props: ActionBubbleProps) => {
   )
 }
 
-const ActionTooltip = (props: any) => {
+const ActionTooltip = ({ children, content }: { children: React.ReactNode; content: string }) => {
   return (
     <Tooltip.Provider>
       <Tooltip.Root delayDuration={300}>
-        <Tooltip.Trigger asChild>{props.children}</Tooltip.Trigger>
+        <Tooltip.Trigger asChild>{children}</Tooltip.Trigger>
         <Tooltip.Portal>
           <Tooltip.Content className="TooltipContent" side="bottom" sideOffset={5}>
-            <Box className="text-white bg-black py-2 px-3 text-sm rounded-lg">{props.content}</Box>
+            <Box className="text-white bg-black py-2 px-3 text-sm rounded-lg">{content}</Box>
             <Tooltip.Arrow className="TooltipArrow" />
           </Tooltip.Content>
         </Tooltip.Portal>

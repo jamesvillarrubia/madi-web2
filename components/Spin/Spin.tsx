@@ -1,21 +1,21 @@
 'use client'
 
-import React, { ReactElement, useState, useEffect, useCallback } from 'react'
-import { debounce, DebouncedFunc } from 'lodash-es'
+import { Text } from '@radix-ui/themes'
 import cs from 'classnames'
-import { Box, Text } from '@radix-ui/themes'
+import { debounce } from 'lodash-es'
+import React, { ReactElement, useCallback, useEffect, useState, ForwardedRef } from 'react'
 import { SpinProps } from './interface'
 
 import { AiOutlineLoading3Quarters } from 'react-icons/ai'
 import DotLoading from './DotLoading'
 
-export function isEmptyReactNode(node: any): boolean {
+export function isEmptyReactNode(node: unknown): boolean {
   return !node && (node === null || node === undefined || node === '' || node === false)
 }
 
 import './index.scss'
 
-const Spin = (props: SpinProps, ref: any) => {
+const Spin = (props: SpinProps, ref: ForwardedRef<HTMLDivElement>) => {
   const {
     style,
     className,
@@ -115,7 +115,7 @@ const Spin = (props: SpinProps, ref: any) => {
   )
 }
 
-const SpinComponent = React.forwardRef<unknown, SpinProps>(Spin)
+const SpinComponent = React.forwardRef<HTMLDivElement, SpinProps>(Spin)
 
 SpinComponent.displayName = 'Spin'
 

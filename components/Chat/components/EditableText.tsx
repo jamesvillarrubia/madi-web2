@@ -1,25 +1,43 @@
 /* eslint-disable react/prop-types */
+import { Heading, IconButton, TextField } from '@radix-ui/themes'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react'
-import { Flex, Heading, IconButton, ScrollArea, TextArea, TextField } from '@radix-ui/themes'
-import Head from 'next/head'
 
-function EditableText(props: any) {
+interface EditableTextProps {
+  value?: string
+  editing?: boolean
+  submitOnEnter?: boolean
+  cancelOnEscape?: boolean
+  cancelOnUnfocus?: boolean
+  submitOnUnfocus?: boolean
+  startEditingOnFocus?: boolean
+  startEditingOnEnter?: boolean
+  editOnViewClick?: boolean
+  saveButtonContent?: React.ReactNode
+  cancelButtonContent?: React.ReactNode
+  editButtonContent?: React.ReactNode
+  validation?: (value: string) => boolean | Promise<boolean>
+  onValidationFail?: (value: string) => void
+  validationMessage?: string
+  hint?: string
+  renderValue?: (value: string) => React.ReactNode
+  onSave: (value: string, inputProps?: React.InputHTMLAttributes<HTMLInputElement>) => void
+  onCancel?: (value: string, inputProps?: React.InputHTMLAttributes<HTMLInputElement>) => void
+  onEditingStart?: (value: string, inputProps?: React.InputHTMLAttributes<HTMLInputElement>) => void
+  inputProps?: React.InputHTMLAttributes<HTMLInputElement>
+  viewProps?: React.HTMLAttributes<HTMLDivElement>
+  containerProps?: React.HTMLAttributes<HTMLDivElement>
+  tabIndex?: number
+  showButtonsOnHover?: boolean
+}
+
+function EditableText(props: EditableTextProps) {
   // state
   const [editingInternal, setEditingInternal] = useState(props.editing)
   const [valid, setValid] = useState<boolean>(true)
   const [valueInternal, setValueInternal] = useState<string>(props.value || '')
-  const [savedValue, setSavedValue] = useState<string | undefined>(undefined)
+  const [savedValue, setSavedValue] = useState<string>('')
   const [viewFocused, setViewFocused] = useState<boolean>(false)
-  // refs
-  const saveButton = React.createRef<HTMLButtonElement>()
-  const editingContainer = React.createRef<HTMLDivElement>()
-  const editingButtons = React.createRef<any>()
-
-  useEffect(() => {
-    if (props.cancelOnUnfocus && props.submitOnUnfocus) {
-      console.warn('Cancelling')
-    }
-  }, [props.cancelOnUnfocus, props.submitOnUnfocus])
+  const editingButtons = React.createRef<HTMLDivElement>()
 
   useEffect(() => {
     if (props.value !== undefined) {
@@ -32,7 +50,7 @@ function EditableText(props: any) {
     }
   }, [props.editing, props.value])
 
-  function handleKeyDown(e: KeyboardEvent<any>): void {
+  function handleKeyDown(e: KeyboardEvent<HTMLInputElement>): void {
     const isEnter = [13, 'Enter'].some((c) => e.key === c || e.code === c)
     const isEscape = [27, 'Escape', 'Esc'].some((c) => e.code === c || e.key === c)
     if (isEnter) {
@@ -46,20 +64,20 @@ function EditableText(props: any) {
     props.inputProps?.onKeyDown && props.inputProps.onKeyDown(e)
   }
 
-  function handleOnBlur(e: FocusEvent<any>): void {
+  function handleOnBlur(e: FocusEvent<HTMLInputElement>): void {
     const isEditingButton = editingButtons.current?.contains(e?.relatedTarget)
     props.cancelOnUnfocus && !isEditingButton && handleCancel()
     props.submitOnUnfocus && !isEditingButton && !props.cancelOnUnfocus && handleSave()
     props.inputProps?.onBlur && props.inputProps.onBlur(e)
   }
 
-  function handleViewFocus(e: FocusEvent<HTMLDivElement>): void {
+  function handleViewFocus(e: FocusEvent<HTMLInputElement>): void {
     setViewFocused(true)
     props.startEditingOnFocus && setEditingInternal(true)
     props.viewProps?.onFocus && props.viewProps.onFocus(e)
   }
 
-  function handleKeyDownForView(e: KeyboardEvent<any>): void {
+  function handleKeyDownForView(e: KeyboardEvent<HTMLInputElement>): void {
     const isEnter = [13, 'Enter'].some((c) => e.key === c || e.code === c)
     const startEditing = isEnter && viewFocused && props.startEditingOnEnter
     startEditing && e.preventDefault()
@@ -67,10 +85,10 @@ function EditableText(props: any) {
     props.viewProps?.onKeyDown && props.viewProps.onKeyDown(e)
   }
 
-  function handleInputChange(e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>): void {
+  function handleInputChange(e: ChangeEvent<HTMLInputElement>): void {
     setValid(true)
     setValueInternal(e.target.value)
-    props.inputProps?.onChange?.(e as any)
+    props.inputProps?.onChange?.(e as ChangeEvent<HTMLInputElement>)
   }
 
   function handleCancel(): void {
@@ -82,10 +100,8 @@ function EditableText(props: any) {
   }
 
   function handleActivateEditMode(): void {
-    //   if (getCanEdit(props.canEdit)) {
     setEditingInternal(true)
     props.onEditingStart?.(valueInternal, props.inputProps)
-    //   }
   }
 
   async function handleSave(): Promise<void> {
@@ -109,12 +125,12 @@ function EditableText(props: any) {
         variant="surface"
         placeholder="Name the chat..."
         size="3"
-        //   className="flex-1 rounded-3xl chat-textarea"
         tabIndex={0}
         value={valueInternal}
         onKeyDown={handleKeyDown}
         onBlur={handleOnBlur}
         onChange={handleInputChange}
+        // eslint-disable-next-line jsx-a11y/no-autofocus
         autoFocus={editingInternal}
       />
     )
@@ -132,7 +148,7 @@ function EditableText(props: any) {
               {props.saveButtonContent}
             </IconButton>
           </TextField.Slot>
-          <TextField.Slot>
+          <TextField.Slot className="pr-4">
             <IconButton size="3" variant="ghost" onClick={handleCancel}>
               {props.cancelButtonContent}
             </IconButton>
@@ -145,33 +161,27 @@ function EditableText(props: any) {
   }
 
   function _renderViewMode() {
-    // calculate edit button classes
     const viewClickHandler = props.editOnViewClick ? handleActivateEditMode : undefined
     const _value =
       typeof props.renderValue === 'function' ? props.renderValue(valueInternal) : valueInternal
     return (
-      <TextField.Root className={`group ${props.viewProps.className}`}>
+      <TextField.Root className={`group ${props.viewProps?.className || ''}`}>
         <Heading
           size="5"
           m="2"
           highContrast={true}
           tabIndex={props.tabIndex}
-          {...props.viewProps}
+          // {...props.viewProps}
           onKeyDown={handleKeyDownForView}
           onFocus={handleViewFocus}
           onClick={viewClickHandler}
         >
           {_value}
         </Heading>
-        <TextField.Slot className={'invisible group-hover:visible'}>
-          <IconButton
-            size="3"
-            variant="ghost"
-            // type="button"
-            // {...props.editButtonProps}
-            highContrast={true}
-            onClick={handleActivateEditMode}
-          >
+        <TextField.Slot
+          className={props.showButtonsOnHover ? 'invisible group-hover:visible' : 'invisible'}
+        >
+          <IconButton size="3" variant="ghost" highContrast={true} onClick={handleActivateEditMode}>
             {props.editButtonContent}
           </IconButton>
         </TextField.Slot>

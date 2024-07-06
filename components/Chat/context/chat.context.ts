@@ -1,12 +1,11 @@
-import { useCallback, useEffect, useState, useRef } from 'react'
-import { createContext } from 'react'
-import { v4 as uuid } from 'uuid'
-import { useSearchParams } from 'next/navigation'
-import { ChatMessage, Chat, Persona, Tool, ChatGPTInstance } from '../../interface'
-import { DefaultTools } from '../../Tools/default_tools'
-import { useLocalStorageContext } from '../../localStorage'
 import { useToast } from '@/components'
-import { postRunner, convertChunktoJsonArray } from '@/components/getResponse'
+import { convertChunktoJsonArray, postRunner } from '@/components/getResponse'
+import { useSearchParams } from 'next/navigation'
+import { useCallback, useEffect, useRef, useState } from 'react'
+import { v4 as uuid } from 'uuid'
+import { DefaultTools } from '../../Tools/default_tools'
+import { Chat, ChatGPTInstance, ChatMessage, Persona, Tool } from '../../interface'
+import { useLocalStorageContext } from '../../localStorage'
 
 export const DefaultPersonas: Persona[] = [
   {
@@ -20,7 +19,7 @@ export const DefaultPersonas: Persona[] = [
 
 export const useChatContext = () => {
   const { toast } = useToast()
-  const toastRef = useRef<any>(null)
+  // const toastRef = useRef<any>(null)
   const {
     state,
     setStorageState,
@@ -100,8 +99,8 @@ export const useChatContext = () => {
     conversation: ChatMessage[],
     systemPrompt: string,
     localIdAtStart: string,
-    currentTool: any,
-    toolList: any,
+    currentTool: string,
+    toolList: Tool[],
     setConversation: (conv: ChatMessage[]) => void,
     setMessagesById: (id: string, messages: ChatMessage[]) => void,
     setCurrentMessage: (msg: string) => void,
@@ -127,7 +126,9 @@ export const useChatContext = () => {
       localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
       let resultContent = ''
-      for await (const chunk of currentStream as any) {
+
+      //@ts-expect-error - currentStream is a ReadableStream polyfill
+      for await (const chunk of currentStream) {
         const decoder = new TextDecoder('utf-8')
         console.log('sendMessage Chunks', decoder.decode(chunk))
         const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
@@ -158,17 +159,19 @@ export const useChatContext = () => {
       }, 1)
 
       setIsLoading(false)
-    } catch (error: any) {
-      console.error(error)
-      toast({
-        title: 'Error',
-        description: error.message
-      })
-      setIsLoading(false)
+    } catch (error: unknown) {
+      if (error instanceof Error) {
+        console.error(error)
+        toast({
+          title: 'Error',
+          description: error.message
+        })
+        setIsLoading(false)
+      }
     }
   }
 
-  const sendMessage = async (e: any) => {
+  const sendMessage = async (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent) => {
     cancelledRef.current = false // reset the cancelled status before sending a new message
 
     e.preventDefault()
@@ -183,14 +186,17 @@ export const useChatContext = () => {
     }
     setMessage('')
     setIsLoading(true)
-    let localIdAtStart = currentChatId || ''
+    const localIdAtStart = currentChatId || ''
     setStartId(localIdAtStart)
 
-    let updatedConversation = [...conversation!, { content: input, role: 'user' }] as ChatMessage[]
+    const updatedConversation = [
+      ...conversation!,
+      { content: input, role: 'user' }
+    ] as ChatMessage[]
     setConversation(updatedConversation)
     localIdAtStart ? setMessagesById(localIdAtStart, updatedConversation) : undefined
 
-    let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
+    const systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 
     await coreSendMessage(
       input,
@@ -217,7 +223,7 @@ export const useChatContext = () => {
       setConversation(updatedConversation)
       setIsLoading(true)
 
-      let systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
+      const systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 
       await coreSendMessage(
         '',
@@ -238,7 +244,7 @@ export const useChatContext = () => {
 
   const cancelSend = () => {
     cancelledRef.current = true
-    let updatedConversation = [
+    const updatedConversation = [
       ...conversation!,
       { content: currentMessage, role: 'assistant' }
     ] as ChatMessage[]
@@ -271,7 +277,7 @@ export const useChatContext = () => {
 
   useEffect(() => {
     if (currentChatId) {
-      let chat = getChatById(currentChatId)
+      const chat = getChatById(currentChatId)
       if (chat?.messages) setConversation(chat.messages)
     }
   }, [currentChatId, conversation, getChatById])

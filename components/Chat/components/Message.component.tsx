@@ -1,15 +1,14 @@
 'use client'
 
-import { useContext, useState } from 'react'
-import { Avatar, Flex, Container } from '@radix-ui/themes'
-import { SiOpenai } from 'react-icons/si'
-import { HiUser } from 'react-icons/hi'
-import { Markdown } from './Markdown'
-import { ChatMessage } from '../../interface'
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { FaAngleDown } from 'react-icons/fa'
-import { FaAngleUp } from 'react-icons/fa'
+import { Avatar, Flex } from '@radix-ui/themes'
+import { useState } from 'react'
+import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
+import { HiUser } from 'react-icons/hi'
+import { SiOpenai } from 'react-icons/si'
+import { ChatMessage } from '../../interface'
 import { ActionBubble } from './ActionBubble'
+import { Markdown } from './Markdown'
 
 export interface MessageProps {
   message: ChatMessage

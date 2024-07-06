@@ -1,5 +1,6 @@
 'use client'
 
+import React from 'react'
 import { Fragment, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 
 import { MEDIA, ColorSchemes, disableAnimation, getSystemTheme } from './utils'

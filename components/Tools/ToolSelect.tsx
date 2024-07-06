@@ -1,24 +1,16 @@
-import { Flex, Heading, IconButton, ScrollArea, TextArea, Button, Select } from '@radix-ui/themes'
-import {
-  forwardRef,
-  useContext,
-  useEffect,
-  useImperativeHandle,
-  useRef,
-  useState,
-  Fragment
-} from 'react'
-import { ChatMessage, Tool } from '../interface'
-import { ChatContext } from '../Chat/context'
-import { getTools } from '@/components/getResponse'
 import { useAuthContext } from '@/components/authenticate'
+import { getTools } from '@/components/getResponse'
+import { Select } from '@radix-ui/themes'
+import { Fragment, useContext, useEffect } from 'react'
+import { ChatContext } from '../Chat/context'
+import { Tool } from '../interface'
 
 export const ToolSelect = () => {
-  let { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
-  let { currentUser } = useAuthContext()
+  const { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
+  const { currentUser } = useAuthContext()
 
   const splitByPlugin = (toolList: Tool[]) => {
-    return toolList.reduce((acc: any, tool: Tool) => {
+    return toolList.reduce((acc: Record<string, Tool[]>, tool: Tool) => {
       const pluginName = tool.plugin || 'Common'
       if (!acc[pluginName]) {
         acc[pluginName] = []

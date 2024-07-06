@@ -1,6 +1,6 @@
 import { createContext, RefObject, Ref } from 'react'
 import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interface'
-
+import { AppState } from '@/components/localStorage'
 export * from './chat.context'
 
 export type ChatContextType = {
@@ -26,7 +26,7 @@ export type ChatContextType = {
   onChangeChat: (id: string) => void
 
   // LocalStorage
-  setStorageState: (state: any) => void
+  setStorageState: (state: AppState) => void
   appendMessageById: (id: string, message: ChatMessage) => void
   setChatById: (id: string, chat: Chat) => void
   setChatNameById: (id: string, name: string) => void
@@ -35,8 +35,8 @@ export type ChatContextType = {
   setMessagesById: (id: string, messages: ChatMessage[]) => void
 
   // New fields
-  sendMessage: (e: any) => void
-  regenerateMessage: (e: any) => void
+  sendMessage: (e: React.MouseEvent<HTMLButtonElement> | React.KeyboardEvent) => void
+  regenerateMessage: (cuttoffIndex: number) => void
   setConversation: (messages: ChatMessage[]) => void
   conversationRef: RefObject<ChatMessage[]>
   textAreaRef: RefObject<HTMLTextAreaElement>

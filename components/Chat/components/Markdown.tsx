@@ -22,12 +22,12 @@ export interface MarkdownProps {
 export const Markdown = ({ className, children }: MarkdownProps) => {
   return (
     <ReactMarkdown
-      className="prose dark:prose-invert max-w-none"
+      className={`prose dark:prose-invert max-w-none ${className}`}
       remarkPlugins={[remarkParse, remarkMath, remarkRehype, remarkGfm]}
       rehypePlugins={[rehypeKatex, rehypeStringify]}
       components={{
         code(props) {
-          const { children, className, node, ref, ...rest } = props
+          const { children, className, ref, ...rest } = props
           const match = /language-(\w+)/.exec(className || '')
           return (
             <>
