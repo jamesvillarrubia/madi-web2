@@ -21,6 +21,12 @@ export const SideBar = () => {
       <Flex className="p-2 pb-4 h-full overflow-hidden w-64" direction="column" gap="3">
         <SideBarChatList />
         <SupportButton />
+        <Text color="gray" size="1" align={'center'} className="pr-6">
+          Sponsored by{' '}
+          <a href="https://www.nasa.gov/directorates/armd/tacp/cas/" className="underline">
+            NASA CAS
+          </a>
+        </Text>
       </Flex>
     </Flex>
   )
