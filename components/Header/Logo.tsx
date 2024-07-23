@@ -8,7 +8,7 @@ export const Wordmark: React.FC<MADILogoProps> = (props) => (
       xmlns="http://www.w3.org/2000/svg"
       fillRule="evenodd"
       fill="currentColor"
-      height="auto"
+      height="100%"
       width="100%"
       {...props}
       viewBox="0 0 2160 606"
@@ -25,7 +25,7 @@ export const Symbol: React.FC<MADILogoProps> = (props) => (
     <svg
       xmlns="http://www.w3.org/2000/svg"
       width="100%"
-      height="auto"
+      height="100%"
       fill="currentColor"
       {...props}
       viewBox="0 0 571 1017"
