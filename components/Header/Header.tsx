@@ -2,6 +2,7 @@
 
 import NextLink from 'next/link'
 import { Symbol, Wordmark } from './Logo'
+import React from 'react';
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
 import { Flex, Heading, IconButton, Select, Tooltip, Text } from '@radix-ui/themes'
@@ -14,6 +15,9 @@ import { useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 import { useTheme } from '../Themes'
 import { HeaderUser } from './HeaderUser'
+import D3Visual from './Visual/index.html';
+
+
 
 export interface HeaderProps {
   children?: React.ReactNode
@@ -46,6 +50,20 @@ export const Header = () => {
             </Heading>
           </div>
         </NextLink>
+        <h1>
+          {/*<a href="./Visual/v1/index.html"><i>Visualization</i></a>*/}
+          <nav>
+            <ul>
+              {/* Other links */}
+              <li>
+                {/* Link to the D3 visual in the Visual folder */}
+                <a href="./Visual/index.html" rel="noopener noreferrer">
+                  Visualization
+                </a>
+              </li>
+            </ul>
+          </nav>
+        </h1>
         <Flex align="center" gap="3" className="ml-auto">
           <HeaderUser />
           <Select.Root value={theme} onValueChange={setTheme}>
