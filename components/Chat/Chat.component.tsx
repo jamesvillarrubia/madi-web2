@@ -189,7 +189,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
-            <Flex gap="3" className="absolute right-0 pr-4 bottom-2 pt">
+            <Flex gap="3" className="absolute right-0 pr-4 bottom-3 pt">
               {isLoading && (
                 <>
                   <Flex

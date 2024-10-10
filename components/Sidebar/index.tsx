@@ -6,7 +6,7 @@ import { SlSupport } from 'react-icons/sl'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 
-import { ChatContext } from '@/components/Chat/context'
+// import { ChatContext } from '@/components/Chat/context'
 // import { SideBarChatList } from '@/components/Chat/components/SideBarChatList.component'
 
 /**
@@ -14,10 +14,12 @@ import { ChatContext } from '@/components/Chat/context'
  * @returns {JSX.Element} The rendered sidebar component.
  */
 export const SideBar = ({ children }: {children: React.ReactNode}) => {
-  const { toggleSidebar } = useContext(ChatContext)
+  // const { toggleSidebar } = useContext(ChatContext)
 
   return (
-    <Flex direction="column" className={cs('chart-sider-bar', { show: toggleSidebar })}>
+    <Flex direction="column" className={cs('chart-sider-bar', 
+    // { show: toggleSidebar }
+    )}>
       <Flex className="p-2 pb-4 h-full overflow-hidden w-64" direction="column" gap="3">
         {children}
         <SupportButton />

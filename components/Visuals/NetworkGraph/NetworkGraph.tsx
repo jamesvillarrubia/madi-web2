@@ -4,9 +4,14 @@ import NextLink from 'next/link'
 import React from 'react'
 import * as d3 from 'd3'
 import { useEffect, useRef } from 'react'
+import { Flex } from '@radix-ui/themes'
 
 export const NetworkGraphOptions = () => {
-  return <div>... no options</div>
+  return (
+    <Flex className="h-full mt-5" gap={'3'}>
+      <span className='w-full text-center italic text-gray-500'>No options available.</span>
+    </Flex>
+  )
 }
 export const NetworkGraph = () => {
   const ref = useRef<SVGSVGElement>(null);
