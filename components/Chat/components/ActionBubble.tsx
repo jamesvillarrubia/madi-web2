@@ -1,8 +1,8 @@
 'use client'
 
 import { useContext } from 'react'
-import { Box, IconButton } from '@radix-ui/themes'
-import * as Tooltip from '@radix-ui/react-tooltip'
+import { Box, IconButton, Tooltip } from '@radix-ui/themes'
+// import * as Tooltip from '@radix-ui/tooltip'
 import { ChatContext } from '@/components/Chat'
 import { CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
 import { TiThumbsDown } from 'react-icons/ti'
@@ -29,7 +29,7 @@ export const ActionBubble = (props: ActionBubbleProps) => {
 
   return (
     <Box width="max-content">
-      <ActionTooltip content="Copy">
+      <Tooltip content="Copy">
         <IconButton
           className="mr-2 w-5 h-5"
           radius="large"
@@ -39,8 +39,8 @@ export const ActionBubble = (props: ActionBubbleProps) => {
         >
           <CopyIcon />
         </IconButton>
-      </ActionTooltip>
-      <ActionTooltip content="Regenerate">
+      </Tooltip>
+      <Tooltip content="Regenerate">
         <IconButton
           className="mr-2 w-5 h-5"
           radius="large"
@@ -50,12 +50,12 @@ export const ActionBubble = (props: ActionBubbleProps) => {
         >
           <SymbolIcon />
         </IconButton>
-      </ActionTooltip>
-      <ActionTooltip content="Bad Reponse - Coming Soon">
+      </Tooltip>
+      <Tooltip content="Bad Reponse - Coming Soon">
         <IconButton className="mr-2 w-5 h-5" radius="large" variant="ghost" size="1">
           <TiThumbsDown />
         </IconButton>
-      </ActionTooltip>
+      </Tooltip>
     </Box>
   )
 }

@@ -15,8 +15,6 @@ import { useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 import { useTheme } from '../Themes'
 import { HeaderUser } from './HeaderUser'
-import D3Visual from './Visual/index.html';
-
 
 
 export interface HeaderProps {
