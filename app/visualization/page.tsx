@@ -2,22 +2,17 @@
 
 import Wrapper from '@/components/Wrapper.component'
 import Contexts from '@/components/Contexts.component'
-import NetworkGraph from '@/components/Visuals/NetworkGraph/NetworkGraph'
+import {NetworkGraph} from '@/components/Visuals/NetworkGraph/NetworkGraph'
 
 const NetworkGraphPage = () => {
   //const chatProvider: ChatContextType = useChatContext()
 
   return (
-    <>
+    <Contexts>
       <Wrapper>
-        <NetworkGraph ref={} />
+        <NetworkGraph />
       </Wrapper>
-      </>
-    //<Contexts>
-      //<Wrapper>
-        //<NetworkGraph ref={} />
-      //</Wrapper>
-    //</Contexts>
+    </Contexts>
   )
 }
 

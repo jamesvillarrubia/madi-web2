@@ -5,7 +5,7 @@ import { Symbol, Wordmark } from './Logo'
 import React from 'react';
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { Flex, Heading, IconButton, Select, Tooltip, Text } from '@radix-ui/themes'
+import { Flex, Heading, IconButton, Select, Tooltip, Text, Button } from '@radix-ui/themes'
 import cs from 'classnames'
 import { FaAdjust, FaMoon } from 'react-icons/fa'
 import { IoSunny } from 'react-icons/io5'
@@ -50,20 +50,16 @@ export const Header = () => {
             </Heading>
           </div>
         </NextLink>
-        <h1>
-          {/*<a href="./Visual/v1/index.html"><i>Visualization</i></a>*/}
-          <nav>
-            <ul>
-              {/* Other links */}
-              <li>
-                {/* Link to the D3 visual in the Visual folder */}
-                <a href="./Visual/index.html" rel="noopener noreferrer">
-                  Visualization
-                </a>
-              </li>
-            </ul>
-          </nav>
-        </h1>
+
+       <Flex gap="3" className="ml-10">
+        <NextLink href="/">
+          <Button size="3" variant ='outline'>Chat</Button>
+        </NextLink>
+        <NextLink href="/visualization">
+          <Button size="3" variant ='outline'>Visualization</Button>
+        </NextLink>
+       </Flex>
+
         <Flex align="center" gap="3" className="ml-auto">
           <HeaderUser />
           <Select.Root value={theme} onValueChange={setTheme}>
