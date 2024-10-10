@@ -5,7 +5,7 @@ import { Symbol, Wordmark } from './Logo'
 import React from 'react';
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import { Flex, Heading, IconButton, Select, Tooltip, Text, Button } from '@radix-ui/themes'
+import { Flex, Heading, IconButton, Select, Tooltip, Text, Button, TabNav } from '@radix-ui/themes'
 import cs from 'classnames'
 import { FaAdjust, FaMoon } from 'react-icons/fa'
 import { IoSunny } from 'react-icons/io5'
@@ -15,6 +15,8 @@ import { useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 import { useTheme } from '../Themes'
 import { HeaderUser } from './HeaderUser'
+import { usePathname } from 'next/navigation';
+
 
 
 export interface HeaderProps {
@@ -24,6 +26,8 @@ export interface HeaderProps {
 }
 
 export const Header = () => {
+  const pathname = usePathname();
+
   const { theme, setTheme } = useTheme()
   const { onToggleSidebar } = useContext(ChatContext)
   const router = useRouter()
@@ -50,12 +54,14 @@ export const Header = () => {
         </NextLink>
 
        <Flex gap="3" className="ml-10">
-        <NextLink href="/">
-          <Button size="3" variant ='outline'>Chat</Button>
-        </NextLink>
-        <NextLink href="/visualization">
-          <Button size="3" variant ='outline'>Visualization</Button>
-        </NextLink>
+        <TabNav.Root className="shadow-none">
+            <TabNav.Link href="/chat" active={pathname === '/chat' || pathname === '/'}>
+              Chat
+            </TabNav.Link>
+            <TabNav.Link href="/visualization" active={pathname === '/visualization'}>
+              Visualization
+            </TabNav.Link>
+          </TabNav.Root>
        </Flex>
 
         <Flex align="center" gap="3" className="ml-auto">
