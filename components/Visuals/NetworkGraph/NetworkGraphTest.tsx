@@ -46,7 +46,10 @@ const NetworkGraph = () => {
     const colors = maturityLevels.map((maturity: string) => colorScale[maturity]);
     const shapes = sources.map((source: string) => sourceShapeMap[source]);
     const labels = embeddings.map((item: any) =>
-      `<span class="maturity">${item.maturity}</span> <span class="source">${item.source}</span><br>${item.prompt}`
+      `<div style="background-color: white; padding: 0px 5px 5px 5px; border: 1px solid #ccc; border-radius: 4px; box-shadow: 0 0 5px rgba(0, 0, 0, 0.2); font-size: 12px; max-width: 200px; word-wrap: break-word;">
+      <span style="font-weight: bold;">${item.source}</span><br> 
+      <span style="font-style: italic;>${item.maturity}</span><br> 
+      <span class="prompt">${item.prompt}</span></div>`
     );
 
     // Cosine similarity calculation
@@ -64,7 +67,7 @@ const NetworkGraph = () => {
       label: labels[index],
     }));
 
-    const links = [];
+    const links: { source: number; target: number; dist: number }[] = [];
     for (let i = 0; i < nodes.length; i++) {
       const nodeLinks = similarity
         .filter((link) => (link.source === i || link.target === i) && link.dist >= threshold)
@@ -111,6 +114,7 @@ const NetworkGraph = () => {
       .data(links)
       .enter()
       .append('line')
+      .attr('stroke', '#999')
       .attr('stroke-width', 1);
 
     const nodeGroup = svg.append('g').attr('class', 'nodes');
@@ -122,19 +126,66 @@ const NetworkGraph = () => {
       .append('path')
       .attr('d', (d, i) => d3.symbol().type(shapes[i]).size(200)())
       .attr('fill', (d) => d.color)
+      .on('mouseover', showLabel)
+      .on('mouseout', hideLabel)
       .call(drag(simulation));
 
-    const label = svg
-      .append('g')
-      .attr('class', 'labels')
-      .selectAll('foreignObject')
-      .data(nodes)
-      .enter()
-      .append('foreignObject')
-      .attr('class', 'node-label')
-      .style('visibility', 'hidden')
-      .style('pointer-events', 'none')
-      .html((d) => `<div class="label-content">${d.label}</div>`);
+    // const label = svg
+    //   .append('g')
+    //   .attr('class', 'labels')
+    //   .selectAll('foreignObject')
+    //   .data(nodes)
+    //   .enter()
+    //   .append('foreignObject')
+    //   .attr('class', 'node-label')
+    //   .attr('id', (d) => `label-${d.id}`)
+    //   .style('visibility', 'hidden')
+    //   .style('pointer-events', 'none')
+    //   .html((d) => `<div class="label-content">${d.label}</div>`);
+
+    const label = svg.append('g')
+            .attr('class', 'labels') // Add class to the <g> element for styling
+            .selectAll('foreignObject')
+            .data(nodes)
+            .enter()
+            .append('foreignObject')
+            .attr('class', 'node-label') // Add class to the <foreignObject> element
+            .style('visibility', 'hidden')
+            .style('pointer-events', 'none') // Prevent labels from interfering with mouse events
+            .html(d => `<div xmlns="http://www.w3.org/1999/xhtml" class="label-content">${d.label}</div>`)
+            .each(function (d, i) {
+                const labelElement = this.querySelector('.label-content');
+                if (labelElement) {
+                    const { width, height } = labelElement.getBoundingClientRect();
+                    const nodeElement = node.nodes()[i];
+                    const nodeBBox = nodeElement.getBBox();
+                    d3.select(this)
+                        .attr('width', 200)
+                        .attr('height', '100%')
+                    // .attr('x', -100)
+                    // .attr('y', 0);
+                }
+            });
+
+
+  // Show label on mouseover
+        function showLabel(event, d) {
+            label.filter(node => node.id === d.id)
+                .style('visibility', 'visible')
+            d3.select(this)
+                .style('stroke', 'hotpink')
+                .style('stroke-width', '3px');
+        }
+
+        // Hide label on mouseout
+        function hideLabel(event, d) {
+            label.filter(node => node.id === d.id)
+                .style('visibility', 'hidden');
+            d3.select(this)
+                .style('stroke', null)
+                .style('stroke-width', null);
+
+        }
 
     simulation.on('tick', () => {
       link
@@ -180,9 +231,10 @@ const NetworkGraph = () => {
     return dotProduct / (normA * normB);
   }
 
+
   return (
     <div>
-      <svg ref={svgRef} width="100%" height="600px"></svg>
+      <svg ref={svgRef} width="100%" height="800px"></svg>
       <div className="slider-container">
         <input
           type="range"
