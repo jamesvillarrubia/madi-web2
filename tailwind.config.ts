@@ -8,6 +8,16 @@ const config: Config = {
     './app/**/*.{js,ts,jsx,tsx,mdx}'
   ],
   theme: {
+    // colors:{
+    //   // primary: '#5c6ac4',
+    //   // secondary: '#ecc94b',
+    //   // accent: '#4fd1c5',
+    //   // neutral: '#f0f0f0',
+    //   // info: '#3ABFF8',
+    //   // success: '#32E875',
+    //   // warning: '#FFD23F',
+    //   // error: '#FB3862'
+    // },
     extend: {
       backgroundImage: {
         'gradient-radial': 'radial-gradient(var(--tw-gradient-stops))',

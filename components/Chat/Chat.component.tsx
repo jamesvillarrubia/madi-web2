@@ -22,7 +22,10 @@ import { ChatMessage } from '../interface'
 import EditableText from './components/EditableText'
 import Message from './components/Message.component'
 import { ChatContext } from './context'
+import { SidebarContext } from '../Wrapper.component';
+
 import './index.scss'
+import './chat.scss'
 
 export interface ChatProps {}
 
@@ -65,6 +68,8 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
     cancelSend,
     clearMessages
   } = useContext(ChatContext)
+  const { setIsSidebarOpen} = useContext(SidebarContext);
+
 
   const handleKeypress = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -107,7 +112,6 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       height="100%"
       className="relative"
       gap="3"
-      style={{ backgroundColor: 'var(--accent-2)' }}
     >
       <Flex
         justify="between"
@@ -239,8 +243,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
                 color="gray"
                 size="2"
                 className="rounded-xl md:hidden"
-                disabled={isLoading}
-                onClick={onToggleSidebar}
+                onClick={() => setIsSidebarOpen(true)}
               >
                 <AiOutlineUnorderedList className="h-4 w-4" />
               </IconButton>
