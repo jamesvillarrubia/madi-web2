@@ -1,8 +1,9 @@
 'use client'
 
-import { Box, Flex, Text } from '@radix-ui/themes'
+import { Box, Flex, Text, Button } from '@radix-ui/themes'
 import { QuestionMarkIcon } from '@radix-ui/react-icons'
 import { SlSupport } from 'react-icons/sl'
+import { FaGithub } from 'react-icons/fa6'
 import React, { useContext } from 'react'
 import cs from 'classnames'
 
@@ -13,17 +14,35 @@ import cs from 'classnames'
  * SideBar component that displays the chat list and support button.
  * @returns {JSX.Element} The rendered sidebar component.
  */
-export const SideBar = ({ children }: {children: React.ReactNode}) => {
+export const SideBar = ({ children }: { children: React.ReactNode }) => {
   // const { toggleSidebar } = useContext(ChatContext)
 
   return (
-    <Flex direction="column" className={cs('chart-sider-bar', 
-    // { show: toggleSidebar }
-    )}>
+    <Flex
+      direction="column"
+      className={cs(
+        'chart-sider-bar'
+      )}
+    >
       <Flex className="p-2 pb-4 h-full overflow-hidden w-64" direction="column" gap="3">
         {children}
-        <SupportButton />
-        <Text color="gray" size="1" align={'center'} className="pr-6">
+        <Flex className="w-full" direction="column" gap="1">
+          <ButtonWrapper onClick={() => window.open('mailto:hq-dl-madi@mail.nasa.gov', '_blank')}>
+            <SlSupport />
+            <Text>Support</Text>
+          </ButtonWrapper>
+          {/* <ButtonWrapper onClick={() => window.open('mailto:hq-dl-madi@mail.nasa.gov', '_blank')}>
+          <QuestionMarkIcon />
+          <Text>FAQs</Text>
+        </ButtonWrapper> */}
+          <ButtonWrapper
+            onClick={() => window.open('https://nasa-madi.github.io/madi-core/', '_blank')}
+          >
+            <FaGithub />
+            <Text>Documentation</Text>
+          </ButtonWrapper>
+        </Flex>
+        <Text color="gray" size="1" align={'center'} className="pr-6 pt-4">
           Sponsored by{' '}
           <a href="https://www.nasa.gov/directorates/armd/tacp/cas/" className="underline">
             NASA CAS
@@ -34,34 +53,23 @@ export const SideBar = ({ children }: {children: React.ReactNode}) => {
   )
 }
 
+const ButtonWrapper = ({
+  children,
+  onClick
+}: {
+  children: React.ReactNode
+  onClick?: () => void
+}) => (
+  <Button
+    width="auto"
+    size={'3'}
+    variant="outline"
+    color="gray"
+    className="flex gap-2 py-1 px-4 justify-start cursor-pointer shadow-none"
+    onClick={onClick}
+  >
+    {children}
+  </Button>
+)
+
 export default SideBar
-
-/**
- * SupportButton component that opens the default mail client when clicked.
- * @returns {JSX.Element} The rendered support button component.
- */
-export const SupportButton = () => {
-  return (
-    <Box
-      width="auto"
-      className="bg-token-surface-primary active:scale-95 cursor-pointer"
-      onClick={() => window.open('mailto:hq-dl-madi@mail.nasa.gov', '_blank')}
-    >
-      <SlSupport />
-      <Text>Support</Text>
-    </Box>
-  )
-}
-
-/**
- * FAQButton component that displays a FAQs button.
- * @returns {JSX.Element} The rendered FAQ button component.
- */
-export const FAQButton = () => {
-  return (
-    <Box width="auto" className="bg-token-surface-primary active:scale-95 cursor-pointer">
-      <QuestionMarkIcon />
-      <Text>FAQs</Text>
-    </Box>
-  )
-}
