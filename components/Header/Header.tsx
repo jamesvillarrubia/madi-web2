@@ -14,8 +14,7 @@ import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 import { useTheme } from '../Themes'
-import { HeaderUser } from './HeaderUser'
-import D3Visual from './Visual/index.html';
+import { HeaderUser } from './HeaderUser';
 
 
 
