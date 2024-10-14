@@ -22,11 +22,12 @@ import { ChatMessage } from '../interface'
 import EditableText from './components/EditableText'
 import Message from './components/Message.component'
 import { ChatContext } from './context'
-import { SidebarContext } from '../Wrapper.component';
+import { SidebarContext } from '../Wrapper.component'
 
 import './index.scss'
 import './chat.scss'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 export interface ChatProps {}
 
 interface CustomRef {
@@ -50,7 +51,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
     // toolList,
     // setMessagesById,
     setChatNameById,
-    onToggleSidebar,
+    // onToggleSidebar,
 
     sendMessage,
     // regenerateMessage,
@@ -68,8 +69,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
     cancelSend,
     clearMessages
   } = useContext(ChatContext)
-  const { setIsSidebarOpen} = useContext(SidebarContext);
-
+  const { setIsSidebarOpen } = useContext(SidebarContext)
 
   const handleKeypress = (e: React.KeyboardEvent) => {
     if (e.keyCode === 13 && !e.shiftKey) {
@@ -107,12 +107,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   })
 
   return (
-    <Flex
-      direction="column"
-      height="100%"
-      className="relative"
-      gap="3"
-    >
+    <Flex direction="column" height="100%" className="relative" gap="3">
       <Flex
         justify="between"
         align="center"
@@ -171,9 +166,10 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       </ScrollArea>
       <Flex className="px-4 pb-1" gap="0" direction={'column'}>
         <Container size="3" className="max-w-1000px">
-          <Flex 
-          // shrink="1" 
-          className="pb-2">
+          <Flex
+            // shrink="1"
+            className="pb-2"
+          >
             <ToolSelect />
           </Flex>
           <Flex align="end" justify="between" gap="3" className="relative">

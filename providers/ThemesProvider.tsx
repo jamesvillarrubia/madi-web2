@@ -7,7 +7,6 @@ export const ThemesProvider = ({ children }: PropsWithChildren) => {
     <ThemeProvider>
       <Theme accentColor="blue" style={{ height: '100%' }} className="h-full">
         {children}
-        {/* <ThemePanel /> */}
       </Theme>
     </ThemeProvider>
   )

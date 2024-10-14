@@ -12,7 +12,7 @@ const ChatPage = () => {
 
   return (
     <Contexts>
-      <Wrapper sidebarComponent={<SideBarChatList/>}>
+      <Wrapper sidebarComponent={<SideBarChatList />}>
         <Chat ref={chatProvider.chatRef} />
       </Wrapper>
     </Contexts>

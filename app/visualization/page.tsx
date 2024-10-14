@@ -11,13 +11,11 @@ interface SideBarVisualsProps {
   onSelectChange: (value: string) => void
 }
 
-
-  /**
-   * Given the selected graph, render the associated options
-   * @returns a JSX element representing the options for the selected graph
-   */
-const SideBarVisuals = ({ selectedGraph, onSelectChange }:SideBarVisualsProps) => {
-
+/**
+ * Given the selected graph, render the associated options
+ * @returns a JSX element representing the options for the selected graph
+ */
+const SideBarVisuals = ({ selectedGraph, onSelectChange }: SideBarVisualsProps) => {
   const renderOptions = () => {
     switch (selectedGraph) {
       case 'networkGraph':
@@ -33,12 +31,8 @@ const SideBarVisuals = ({ selectedGraph, onSelectChange }:SideBarVisualsProps) =
 
   return (
     <Flex className="h-full" gap={'3'} direction={'column'}>
-      <Select.Root 
-        defaultValue="networkGraph" 
-        onValueChange={onSelectChange}
-        size="2"
-      >
-        <Select.Trigger variant="soft" className='w-full' />
+      <Select.Root defaultValue="networkGraph" onValueChange={onSelectChange} size="2">
+        <Select.Trigger variant="soft" className="w-full" />
         <Select.Content className="w-full">
           <Select.Group className="w-full">
             <Select.Item value="networkGraph">Network Graph</Select.Item>
@@ -80,7 +74,11 @@ const NetworkGraphPage = () => {
 
   return (
     <Contexts>
-      <Wrapper sidebarComponent={<SideBarVisuals selectedGraph={selectedGraph} onSelectChange={handleSelectChange} />}>
+      <Wrapper
+        sidebarComponent={
+          <SideBarVisuals selectedGraph={selectedGraph} onSelectChange={handleSelectChange} />
+        }
+      >
         {renderGraph()}
       </Wrapper>
     </Contexts>

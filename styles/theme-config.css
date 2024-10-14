@@ -2,7 +2,6 @@
   --default-font-family: var(--font-inter);
 }
 
-
 /* 
 
 :root, .light, .light-theme {
@@ -152,19 +151,18 @@
   }
 } */
 
-:root{
+:root {
   /* --accent: #4fd1c5; */
   /* --neutral: #f0f0f0; */
   /* --info: #3ABFF8; */
-  --success: #56E39F;
-  --warning: #FFD23F;
-  --error: #FB3862;
+  --success: #56e39f;
+  --warning: #ffd23f;
+  --error: #fb3862;
   --danger: var(--error);
   --danger-dark: #d83457;
-
-
 }
-.dark, .dark-theme {
+.dark,
+.dark-theme {
   --blue-1: #212934;
   --blue-2: #222c38;
   --blue-3: #223a57;
@@ -199,7 +197,8 @@
 
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
-    .dark, .dark-theme {
+    .dark,
+    .dark-theme {
       --blue-1: oklch(27.8% 0.0227 253.6);
       --blue-2: oklch(29% 0.0261 253.6);
       --blue-3: oklch(34.4% 0.0593 253.6);
@@ -233,7 +232,9 @@
     }
   }
 }
-:root, .light, .light-theme {
+:root,
+.light,
+.light-theme {
   --blue-1: #fbfdff;
   --blue-2: #f5f9fe;
   --blue-3: #e8f3fe;
@@ -268,7 +269,9 @@
 
 @supports (color: color(display-p3 1 1 1)) {
   @media (color-gamut: p3) {
-    :root, .light, .light-theme {
+    :root,
+    .light,
+    .light-theme {
       --blue-1: oklch(99.3% 0.0031 247.5);
       --blue-2: oklch(98.1% 0.0083 247.5);
       --blue-3: oklch(96% 0.0192 247.5);

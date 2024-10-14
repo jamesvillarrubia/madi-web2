@@ -1,25 +1,20 @@
 'use client'
 
-import { Box, Flex, Text, Button } from '@radix-ui/themes'
-import { QuestionMarkIcon } from '@radix-ui/react-icons'
+import { Flex, Text, Button } from '@radix-ui/themes'
+// import { QuestionMarkIcon } from '@radix-ui/react-icons'
 import { SlSupport } from 'react-icons/sl'
 import { FaGithub } from 'react-icons/fa6'
-import { SlPuzzle } from 'react-icons/sl'
 import { IoExtensionPuzzleOutline } from 'react-icons/io5'
 
-import React, { useContext } from 'react'
+import React from 'react'
 import NextLink from 'next/link'
 import cs from 'classnames'
-
-// import { ChatContext } from '@/components/Chat/context'
-// import { SideBarChatList } from '@/components/Chat/components/SideBarChatList.component'
 
 /**
  * SideBar component that displays the chat list and support button.
  * @returns {JSX.Element} The rendered sidebar component.
  */
 export const SideBar = ({ children }: { children: React.ReactNode }) => {
-  // const { toggleSidebar } = useContext(ChatContext)
 
   return (
     <Flex direction="column" className={cs('chart-sider-bar')}>

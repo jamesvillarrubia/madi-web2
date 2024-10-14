@@ -8,7 +8,12 @@ export const HeaderUser = () => {
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>
         <IconButton radius="full">
-          <Avatar fallback={<SiOpenai className="h-5 w-5" />} size="2" radius="full" variant='solid'/>
+          <Avatar
+            fallback={<SiOpenai className="h-5 w-5" />}
+            size="2"
+            radius="full"
+            variant="solid"
+          />
         </IconButton>
       </DropdownMenu.Trigger>
     </DropdownMenu.Root>

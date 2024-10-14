@@ -1,5 +1,6 @@
 import * as React from 'react'
 
+// eslint-disable-next-line @typescript-eslint/no-empty-object-type
 interface MADILogoProps extends React.SVGProps<SVGSVGElement> {}
 
 export const Wordmark: React.FC<MADILogoProps> = (props) => (
