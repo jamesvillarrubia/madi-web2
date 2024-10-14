@@ -1,12 +1,11 @@
 'use client'
 
-import { Box, Flex, Text, Button, } from '@radix-ui/themes'
+import { Box, Flex, Text, Button } from '@radix-ui/themes'
 import { QuestionMarkIcon } from '@radix-ui/react-icons'
 import { SlSupport } from 'react-icons/sl'
 import { FaGithub } from 'react-icons/fa6'
-import { SlPuzzle } from "react-icons/sl";
-import { IoExtensionPuzzleOutline } from "react-icons/io5";
-
+import { SlPuzzle } from 'react-icons/sl'
+import { IoExtensionPuzzleOutline } from 'react-icons/io5'
 
 import React, { useContext } from 'react'
 import NextLink from 'next/link'
@@ -23,12 +22,7 @@ export const SideBar = ({ children }: { children: React.ReactNode }) => {
   // const { toggleSidebar } = useContext(ChatContext)
 
   return (
-    <Flex
-      direction="column"
-      className={cs(
-        'chart-sider-bar'
-      )}
-    >
+    <Flex direction="column" className={cs('chart-sider-bar')}>
       <Flex className="p-2 pb-4 h-full overflow-hidden w-64" direction="column" gap="3">
         {children}
         <Flex className="w-full" direction="column" gap="1">
@@ -73,7 +67,6 @@ const ButtonWrapper = ({
   onClick?: () => void
 }) => (
   <Button
-    width="auto"
     size={'3'}
     variant="outline"
     color="gray"

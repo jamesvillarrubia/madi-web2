@@ -171,7 +171,9 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       </ScrollArea>
       <Flex className="px-4 pb-1" gap="0" direction={'column'}>
         <Container size="3" className="max-w-1000px">
-          <Flex shrink="1" className="pb-2">
+          <Flex 
+          // shrink="1" 
+          className="pb-2">
             <ToolSelect />
           </Flex>
           <Flex align="end" justify="between" gap="3" className="relative">

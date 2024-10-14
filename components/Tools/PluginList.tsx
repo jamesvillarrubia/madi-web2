@@ -1,13 +1,12 @@
 import { useAuthContext } from '@/components/authenticate'
 import { getTools } from '@/components/getResponse'
-import { Select } from '@radix-ui/themes'
-import { Fragment, useContext, useEffect } from 'react'
+import {  useContext, useEffect } from 'react'
 import { ChatContext } from '../Chat/context'
 import { Tool } from '../interface'
-import { Text, Grid, Box, CheckboxCards, Button, Checkbox,Flex, Container, ScrollArea, Link, Card } from '@radix-ui/themes'
+import { Text, Grid,  Checkbox,Flex, Container, ScrollArea, Link, Card } from '@radix-ui/themes'
 
 export const PluginList = () => {
-  const { toolList, setToolList, currentTool, setCurrentTool } = useContext(ChatContext)
+  const { toolList, setToolList } = useContext(ChatContext)
   const { currentUser } = useAuthContext()
 
 
@@ -56,7 +55,7 @@ export const PluginList = () => {
 
 
 
-const ToolCard = ({tool, disabled})=>{
+const ToolCard = ({tool, disabled}:{tool:Tool, disabled:boolean})=>{
     return(
 
         <Card 
