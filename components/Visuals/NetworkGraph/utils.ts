@@ -3,7 +3,7 @@
 
 import { NodeDatum, SimulationLink, SimilarityLink, LabelSelection, DragEvent } from './types'
 import * as d3 from 'd3'
-import styles from './NetworkGraph.module.css' 
+import styles from './NetworkGraph.module.css'
 
 export function drag(simulation: d3.Simulation<NodeDatum, undefined>) {
   function dragstarted(event: DragEvent, d: NodeDatum) {
@@ -201,7 +201,7 @@ export function createLabelElements(
 }
 
 export function updateLinkPositions(
-  linkElements: d3.Selection<SVGLineElement, unknown, null, undefined>
+  linkElements: d3.Selection<SVGLineElement, SimulationLink, null, undefined>
 ) {
   linkElements
     .attr('x1', (d) => (d.source as any).x ?? 0)
@@ -211,13 +211,13 @@ export function updateLinkPositions(
 }
 
 export function updateNodePositions(
-  nodeElements: d3.Selection<SVGPathElement, unknown, null, undefined>
+  nodeElements: d3.Selection<SVGPathElement, NodeDatum, null, undefined>
 ) {
   nodeElements.attr('transform', (d) => `translate(${d.x},${d.y})`)
 }
 
 export function updateLabelPositions(
-  labelElements: d3.Selection<SVGForeignObjectElement, unknown, null, undefined>
+  labelElements: d3.Selection<SVGForeignObjectElement, NodeDatum, null, undefined>
 ) {
   labelElements.attr('x', (d) => (d.x ?? 0) + 10).attr('y', (d) => (d.y ?? 0) + 10)
 }

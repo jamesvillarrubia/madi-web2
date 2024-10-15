@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
 import React from 'react'
@@ -7,7 +8,6 @@ import { Flex } from '@radix-ui/themes'
 import embedding_data from './output.json'
 import { MaturityLevel } from './types'
 import { useTheme } from '@/components/Themes'
-
 
 import {
   createNodes,
@@ -28,11 +28,9 @@ import {
 } from './utils'
 import { ThresholdSlider } from './ThresholdSlider'
 
-
-
 const NODE_SHAPES = [
   // d3.symbolDiamond,
-  d3.symbolCircle,
+  d3.symbolCircle
   // d3.symbolSquare,
   // d3.symbolTriangle,
   // d3.symbolStar,
@@ -42,10 +40,11 @@ const NODE_SHAPES = [
 ]
 
 export const NetworkGraphOptions = () => {
-
   return (
     <Flex className="h-full mt-5" gap={'3'}>
-      <span className="w-full text-center italic text-gray-600 dark:text-gray-400">No options available.</span>
+      <span className="w-full text-center italic text-gray-600 dark:text-gray-400">
+        No options available.
+      </span>
     </Flex>
   )
 }
@@ -63,25 +62,24 @@ export const NetworkGraph = () => {
       'Medium',
       'Low',
       'X1',
-      'Execution',
-    ];
-  
-    const scale: Record<MaturityLevel, string> = {} as Record<MaturityLevel, string>;
-    maturityLevels.forEach((level, index) => {
-      const t = (index+1) / (maturityLevels.length);
-      const color = d3.rgb(d3.interpolatePlasma(t));
-      scale[level] = theme === 'dark' ? color.brighter(1).toString() : color.darker(0.1).toString();
-    });
-    return scale;
-  }, [theme]);
+      'Execution'
+    ]
 
+    const scale: Record<MaturityLevel, string> = {} as Record<MaturityLevel, string>
+    maturityLevels.forEach((level, index) => {
+      const t = (index + 1) / maturityLevels.length
+      const color = d3.rgb(d3.interpolatePlasma(t))
+      scale[level] = theme === 'dark' ? color.brighter(1).toString() : color.darker(0.1).toString()
+    })
+    return scale
+  }, [theme])
 
   const embeddings = useMemo(() => {
     return Array.isArray(embedding_data) ? embedding_data : []
   }, [])
 
   const lineColor = useMemo(() => {
-    return theme === 'dark' ?'#595959': '#adadad'
+    return theme === 'dark' ? '#595959' : '#adadad'
   }, [theme])
 
   useEffect(() => {
@@ -102,7 +100,9 @@ export const NetworkGraph = () => {
     )
 
     const colors = maturityLevels.map((maturity) => {
-      const color = COLOR_SCALE[maturity as MaturityLevel] ? COLOR_SCALE[maturity as MaturityLevel] : COLOR_SCALE['whitespace']
+      const color = COLOR_SCALE[maturity as MaturityLevel]
+        ? COLOR_SCALE[maturity as MaturityLevel]
+        : COLOR_SCALE['whitespace']
       return color
     })
     const shapes = sources.map((source) => sourceShapeMap[source])
@@ -115,6 +115,7 @@ export const NetworkGraph = () => {
     const simulation = createSimulation(nodes, links, width, height)
     const zoom = createZoomBehavior(svg)
 
+    //@ts-ignore
     svg.call(zoom)
 
     const linkElements = createLinkElements(svg, links, lineColor)
@@ -130,11 +131,14 @@ export const NetworkGraph = () => {
       })
 
     simulation.on('tick', () => {
+      //@ts-ignore
       updateLinkPositions(linkElements)
+      //@ts-ignore
       updateNodePositions(nodeElements)
+      //@ts-ignore
       updateLabelPositions(labelElements)
     })
-  }, [embeddings, threshold, theme])
+  }, [embeddings, threshold, theme, lineColor, COLOR_SCALE])
 
   return (
     <div>

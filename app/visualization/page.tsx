@@ -5,6 +5,7 @@ import Wrapper from '@/components/Wrapper.component'
 import Contexts from '@/components/Contexts.component'
 import { NetworkGraph, NetworkGraphOptions } from '@/components/Visuals/NetworkGraph/NetworkGraph'
 import { Flex, Select } from '@radix-ui/themes'
+import { Suspense } from 'react'
 
 interface SideBarVisualsProps {
   selectedGraph: string
@@ -73,15 +74,17 @@ const NetworkGraphPage = () => {
   }
 
   return (
-    <Contexts>
-      <Wrapper
-        sidebarComponent={
-          <SideBarVisuals selectedGraph={selectedGraph} onSelectChange={handleSelectChange} />
-        }
-      >
-        {renderGraph()}
-      </Wrapper>
-    </Contexts>
+    <Suspense fallback={<div>Loading...</div>}>
+      <Contexts>
+        <Wrapper
+          sidebarComponent={
+            <SideBarVisuals selectedGraph={selectedGraph} onSelectChange={handleSelectChange} />
+          }
+        >
+          {renderGraph()}
+        </Wrapper>
+      </Contexts>
+    </Suspense>
   )
 }
 
