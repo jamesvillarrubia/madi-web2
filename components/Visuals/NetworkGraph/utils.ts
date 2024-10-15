@@ -3,6 +3,7 @@
 
 import { NodeDatum, SimulationLink, SimilarityLink, LabelSelection, DragEvent } from './types'
 import * as d3 from 'd3'
+import styles from './NetworkGraph.module.css' 
 
 export function drag(simulation: d3.Simulation<NodeDatum, undefined>) {
   function dragstarted(event: DragEvent, d: NodeDatum) {
@@ -170,12 +171,7 @@ export function createNodeElements(
     .enter()
     .append('path')
     .attr('d', (d, i) => d3.symbol().type(shapes[i]).size(150)())
-    .attr('fill', (d) => {
-      if(!d.color){
-        console.log(d)
-      }
-      return d.color
-})
+    .attr('fill', (d) => d.color)
     .call(dragBehavior)
 }
 
@@ -190,7 +186,7 @@ export function createLabelElements(
     .data(nodes)
     .enter()
     .append('foreignObject')
-    .attr('class', 'node-label')
+    .attr('class', styles['node-label'])
     .style('visibility', 'hidden')
     .style('pointer-events', 'none')
     .style('z-index', '10') // Add this line to set the z-index

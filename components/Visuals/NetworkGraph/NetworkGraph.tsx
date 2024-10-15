@@ -7,7 +7,7 @@ import { Flex } from '@radix-ui/themes'
 import embedding_data from './output.json'
 import { MaturityLevel } from './types'
 import { useTheme } from '@/components/Themes'
-import { Plasma } from "@d3/color-schemes"
+
 
 import {
   createNodes,
@@ -68,7 +68,6 @@ export const NetworkGraph = () => {
   
     const scale: Record<MaturityLevel, string> = {} as Record<MaturityLevel, string>;
     maturityLevels.forEach((level, index) => {
-      console.log(level, index)
       const t = (index+1) / (maturityLevels.length);
       const color = d3.rgb(d3.interpolatePlasma(t));
       scale[level] = theme === 'dark' ? color.brighter(1).toString() : color.darker(0.1).toString();
@@ -95,7 +94,6 @@ export const NetworkGraph = () => {
 
     const embeddingVectors = embeddings.map((item) => item.embedding)
     const maturityLevels = embeddings.map((item) => item.maturity)
-    console.log(maturityLevels)
     const sources = embeddings.map((item) => item.source)
 
     const uniqueSources = Array.from(new Set(sources))
@@ -110,7 +108,6 @@ export const NetworkGraph = () => {
     const shapes = sources.map((source) => sourceShapeMap[source])
     const labels = embeddings.map((item) => createLabel(item))
 
-    console.log(colors)
     const similarity = calculateSimilarity(embeddingVectors)
     const nodes = createNodes(embeddings, colors, labels)
     const links = createLinks(nodes, similarity, threshold)
