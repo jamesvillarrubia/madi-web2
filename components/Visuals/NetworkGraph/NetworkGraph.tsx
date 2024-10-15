@@ -6,6 +6,8 @@ import { useEffect, useRef, useState, useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import embedding_data from './output.json'
 import { MaturityLevel } from './types'
+import { useTheme } from '@/components/Themes'
+import { Plasma } from "@d3/color-schemes"
 
 import {
   createNodes,
@@ -26,30 +28,24 @@ import {
 } from './utils'
 import { ThresholdSlider } from './ThresholdSlider'
 
-const COLOR_SCALE: Record<MaturityLevel, string> = {
-  Low: '#90c4a2',
-  Medium: '#41b6c4',
-  High: '#2c7fb8',
-  SuperHigh: '#253494',
-  X1: '#41c491',
-  whitespace: '#942534'
-}
+
 
 const NODE_SHAPES = [
-  d3.symbolDiamond,
+  // d3.symbolDiamond,
   d3.symbolCircle,
-  d3.symbolSquare,
-  d3.symbolTriangle,
-  d3.symbolStar,
-  d3.symbolCross,
-  d3.symbolWye,
-  d3.symbolAsterisk
+  // d3.symbolSquare,
+  // d3.symbolTriangle,
+  // d3.symbolStar,
+  // d3.symbolCross,
+  // d3.symbolWye,
+  // d3.symbolAsterisk
 ]
 
 export const NetworkGraphOptions = () => {
+
   return (
     <Flex className="h-full mt-5" gap={'3'}>
-      <span className="w-full text-center italic text-gray-500">No options available.</span>
+      <span className="w-full text-center italic text-gray-600 dark:text-gray-400">No options available.</span>
     </Flex>
   )
 }
@@ -57,10 +53,37 @@ export const NetworkGraphOptions = () => {
 export const NetworkGraph = () => {
   const [threshold, setThreshold] = useState(0.895)
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const { theme } = useTheme()
+
+  const COLOR_SCALE: Record<MaturityLevel, string> = useMemo(() => {
+    const maturityLevels: MaturityLevel[] = [
+      'whitespace',
+      'Super High',
+      'High',
+      'Medium',
+      'Low',
+      'X1',
+      'Execution',
+    ];
+  
+    const scale: Record<MaturityLevel, string> = {} as Record<MaturityLevel, string>;
+    maturityLevels.forEach((level, index) => {
+      console.log(level, index)
+      const t = (index+1) / (maturityLevels.length);
+      const color = d3.rgb(d3.interpolatePlasma(t));
+      scale[level] = theme === 'dark' ? color.brighter(1).toString() : color.darker(0.1).toString();
+    });
+    return scale;
+  }, [theme]);
+
 
   const embeddings = useMemo(() => {
     return Array.isArray(embedding_data) ? embedding_data : []
   }, [])
+
+  const lineColor = useMemo(() => {
+    return theme === 'dark' ?'#595959': '#adadad'
+  }, [theme])
 
   useEffect(() => {
     if (!svgRef.current) return
@@ -72,6 +95,7 @@ export const NetworkGraph = () => {
 
     const embeddingVectors = embeddings.map((item) => item.embedding)
     const maturityLevels = embeddings.map((item) => item.maturity)
+    console.log(maturityLevels)
     const sources = embeddings.map((item) => item.source)
 
     const uniqueSources = Array.from(new Set(sources))
@@ -79,10 +103,14 @@ export const NetworkGraph = () => {
       uniqueSources.map((source, index) => [source, NODE_SHAPES[index % NODE_SHAPES.length]])
     )
 
-    const colors = maturityLevels.map((maturity) => COLOR_SCALE[maturity as MaturityLevel])
+    const colors = maturityLevels.map((maturity) => {
+      const color = COLOR_SCALE[maturity as MaturityLevel] ? COLOR_SCALE[maturity as MaturityLevel] : COLOR_SCALE['whitespace']
+      return color
+    })
     const shapes = sources.map((source) => sourceShapeMap[source])
     const labels = embeddings.map((item) => createLabel(item))
 
+    console.log(colors)
     const similarity = calculateSimilarity(embeddingVectors)
     const nodes = createNodes(embeddings, colors, labels)
     const links = createLinks(nodes, similarity, threshold)
@@ -92,7 +120,7 @@ export const NetworkGraph = () => {
 
     svg.call(zoom)
 
-    const linkElements = createLinkElements(svg, links)
+    const linkElements = createLinkElements(svg, links, lineColor)
     const nodeElements = createNodeElements(svg, nodes, shapes, drag(simulation))
     const labelElements = createLabelElements(svg, nodes)
 
@@ -109,7 +137,7 @@ export const NetworkGraph = () => {
       updateNodePositions(nodeElements)
       updateLabelPositions(labelElements)
     })
-  }, [embeddings, threshold])
+  }, [embeddings, threshold, theme])
 
   return (
     <div>
@@ -118,7 +146,5 @@ export const NetworkGraph = () => {
     </div>
   )
 }
-
-// ... helper functions ...
 
 export default NetworkGraph

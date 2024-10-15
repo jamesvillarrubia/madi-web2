@@ -143,7 +143,8 @@ export function createSimulation(nodes: any[], links: any[], width: number, heig
 
 export function createLinkElements(
   svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
-  links: any[]
+  links: any[],
+  color: string
 ) {
   return svg
     .append('g')
@@ -151,7 +152,7 @@ export function createLinkElements(
     .data(links)
     .enter()
     .append('line')
-    .attr('stroke', '#999')
+    .attr('stroke', color)
     .attr('stroke-width', 1)
 }
 
@@ -168,8 +169,13 @@ export function createNodeElements(
     .data(nodes)
     .enter()
     .append('path')
-    .attr('d', (d, i) => d3.symbol().type(shapes[i]).size(200)())
-    .attr('fill', (d) => d.color)
+    .attr('d', (d, i) => d3.symbol().type(shapes[i]).size(150)())
+    .attr('fill', (d) => {
+      if(!d.color){
+        console.log(d)
+      }
+      return d.color
+})
     .call(dragBehavior)
 }
 
