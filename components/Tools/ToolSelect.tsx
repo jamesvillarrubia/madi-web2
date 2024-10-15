@@ -1,7 +1,7 @@
 import { useAuthContext } from '@/components/authenticate'
 import { getTools } from '@/components/getResponse'
 import { Select } from '@radix-ui/themes'
-import { Fragment, useContext, useEffect } from 'react'
+import { Fragment, useContext, useEffect, useCallback } from 'react'
 import { ChatContext } from '../Chat/context'
 import { Tool } from '../interface'
 
@@ -20,33 +20,36 @@ export const ToolSelect = () => {
     }, {})
   }
 
-  const fetchTools = async (retries = 3) => {
-    try {
-      const tools = await getTools()
-      console.log('fetchTools:', tools)
-      if (setToolList) {
-        console.log('setToolList is defined')
-        setToolList(tools)
-      } else {
-        console.warn('setToolList is undefined')
+  const fetchTools = useCallback(
+    async (retries = 3) => {
+      try {
+        const tools = await getTools()
+        console.log('fetchTools:', tools)
+        if (setToolList) {
+          console.log('setToolList is defined')
+          setToolList(tools)
+        } else {
+          console.warn('setToolList is undefined')
+        }
+      } catch (error) {
+        console.error('Error fetching tools:', error)
+        if (retries > 0) {
+          console.log(`Retrying... (${retries} retries left)`)
+          setTimeout(() => fetchTools(retries - 1), 1000)
+        } else {
+          console.error('Max retries reached. Failed to fetch tools.')
+        }
       }
-    } catch (error) {
-      console.error('Error fetching tools:', error)
-      if (retries > 0) {
-        console.log(`Retrying... (${retries} retries left)`)
-        setTimeout(() => fetchTools(retries - 1), 1000)
-      } else {
-        console.error('Max retries reached. Failed to fetch tools.')
-      }
-    }
-  }
+    },
+    [setToolList]
+  )
 
   useEffect(() => {
     console.log('currentUser:', currentUser)
     if (currentUser) {
       fetchTools()
     }
-  }, [currentUser, setToolList])
+  }, [currentUser, fetchTools, setToolList])
 
   if (!toolList || toolList.length === 0) {
     return null
