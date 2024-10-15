@@ -11,6 +11,7 @@ export const PluginList = () => {
 
   useEffect(() => {
     if (currentUser) {
+      // eslint-disable-next-line
       ;(async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
