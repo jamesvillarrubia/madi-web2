@@ -87,7 +87,7 @@ const Theme = ({
       // Save to storage
       try {
         localStorage.setItem(storageKey, theme)
-      } catch (e) {
+      } catch {
         // Unsupported
       }
     },

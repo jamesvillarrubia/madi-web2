@@ -44,7 +44,6 @@ body {
   }
 }
 
-
 /* This is when it's a sibling of .isolate */
 .isolate ~ .chat-flex {
   height: calc(100% - 110px);
@@ -55,4 +54,6 @@ body {
   height: calc(100% - 64px);
 }
 
-.rt-BaseButton:hover { cursor: pointer; }
+.rt-BaseButton:hover {
+  cursor: pointer;
+}

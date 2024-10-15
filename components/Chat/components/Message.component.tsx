@@ -17,7 +17,7 @@ export interface MessageProps {
 function isJsonString(str: string) {
   try {
     JSON.parse(str)
-  } catch (e) {
+  } catch {
     return false
   }
   return true

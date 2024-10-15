@@ -13,6 +13,7 @@ export const disableAnimation = () => {
 
   return () => {
     // Force restyle
+    // eslint-disable-next-line
     ;(() => window.getComputedStyle(document.body))()
 
     // Wait for next tick before removing

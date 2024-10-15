@@ -5,13 +5,14 @@ import { ChatContextType } from '@/components/Chat/context'
 
 import Wrapper from '@/components/Wrapper.component'
 import Contexts from '@/components/Contexts.component'
+import SideBarChatList from '@/components/Chat/components/SideBarChatList.component'
 
 const ChatPage = () => {
   const chatProvider: ChatContextType = useChatContext()
 
   return (
     <Contexts>
-      <Wrapper>
+      <Wrapper sidebarComponent={<SideBarChatList />}>
         <Chat ref={chatProvider.chatRef} />
       </Wrapper>
     </Contexts>

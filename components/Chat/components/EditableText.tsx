@@ -1,5 +1,6 @@
+/* eslint-disable @typescript-eslint/no-unused-expressions */
 /* eslint-disable react/prop-types */
-import { Heading, IconButton, TextField } from '@radix-ui/themes'
+import { Heading, IconButton, TextField, Flex } from '@radix-ui/themes'
 import React, { ChangeEvent, FocusEvent, KeyboardEvent, useEffect, useState } from 'react'
 
 interface EditableTextProps {
@@ -118,31 +119,22 @@ function EditableText(props: EditableTextProps) {
     props.onSave(valueInternal, props.inputProps)
   }
 
-  function _renderInput() {
-    return (
-      <TextField.Input
-        radius="full"
-        variant="surface"
-        placeholder="Name the chat..."
-        size="3"
-        tabIndex={0}
-        value={valueInternal}
-        onKeyDown={handleKeyDown}
-        onBlur={handleOnBlur}
-        onChange={handleInputChange}
-        // eslint-disable-next-line jsx-a11y/no-autofocus
-        autoFocus={editingInternal}
-      />
-    )
-  }
-
   function _renderEditingMode() {
-    const inputElem = _renderInput()
-
     return (
       <div>
-        <TextField.Root>
-          {inputElem}
+        <TextField.Root
+          radius="full"
+          variant="surface"
+          placeholder="Name the chat..."
+          size="3"
+          tabIndex={0}
+          value={valueInternal}
+          onKeyDown={handleKeyDown}
+          onBlur={handleOnBlur}
+          onChange={handleInputChange}
+          // eslint-disable-next-line jsx-a11y/no-autofocus
+          autoFocus={editingInternal}
+        >
           <TextField.Slot>
             <IconButton size="3" variant="ghost" onClick={handleSave}>
               {props.saveButtonContent}
@@ -164,32 +156,35 @@ function EditableText(props: EditableTextProps) {
     const viewClickHandler = props.editOnViewClick ? handleActivateEditMode : undefined
     const _value =
       typeof props.renderValue === 'function' ? props.renderValue(valueInternal) : valueInternal
+
     return (
-      <TextField.Root className={`group ${props.viewProps?.className || ''}`}>
+      <Flex className="group cursor-edit" align={'center'} gap={'3'}>
         <Heading
           size="5"
           m="2"
           highContrast={true}
           tabIndex={props.tabIndex}
-          // {...props.viewProps}
           onKeyDown={handleKeyDownForView}
           onFocus={handleViewFocus}
           onClick={viewClickHandler}
         >
           {_value}
         </Heading>
-        <TextField.Slot
-          className={props.showButtonsOnHover ? 'invisible group-hover:visible' : 'invisible'}
+        <IconButton
+          size="3"
+          variant="ghost"
+          highContrast={true}
+          onClick={handleActivateEditMode}
+          className="invisible group-hover:visible"
         >
-          <IconButton size="3" variant="ghost" highContrast={true} onClick={handleActivateEditMode}>
-            {props.editButtonContent}
-          </IconButton>
-        </TextField.Slot>
-      </TextField.Root>
+          {props.editButtonContent}
+        </IconButton>
+      </Flex>
     )
   }
 
   const mode = editingInternal ? _renderEditingMode() : _renderViewMode()
+
   return (
     <div className="h-10" {...props.containerProps}>
       {mode}
