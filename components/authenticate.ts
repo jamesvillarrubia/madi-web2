@@ -14,7 +14,7 @@ export const Authentication = createContext<AuthContextType>(
 export const useAuthContext = () => {
   const [currentUser, setCurrentUser] = useState<User | undefined>(undefined)
 
-  const authenticateUser = async () => {
+  const authenticateUser = async (retries = 3) => {
     try {
       const url = `${API_HOST}/users`
       let res = await fetch(url, {
@@ -47,6 +47,12 @@ export const useAuthContext = () => {
       }
     } catch (error) {
       console.error('Error during authentication:', error)
+      if (retries > 0) {
+        console.log(`Retrying authentication... (${retries} retries left)`)
+        setTimeout(() => authenticateUser(retries - 1), 1000)
+      } else {
+        console.error('Max retries reached. Authentication failed.')
+      }
     }
   }
 
