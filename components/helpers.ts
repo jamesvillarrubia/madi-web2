@@ -3,9 +3,9 @@
 import axios from 'axios'
 
 interface UploadResponse {
-  files: string[];
-  success: boolean;
-  message: string;
+  files: string[]
+  success: boolean
+  message: string
 }
 
 export const uploadFiles = async (files: File[]) => {

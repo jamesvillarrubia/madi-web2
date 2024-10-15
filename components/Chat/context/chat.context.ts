@@ -123,7 +123,7 @@ export const useChatContext = () => {
         ...additionalMessages
       ] as ChatMessage[]
       setConversation(updatedConversation)
-      if(localIdAtStart) setMessagesById(localIdAtStart, updatedConversation)
+      if (localIdAtStart) setMessagesById(localIdAtStart, updatedConversation)
 
       let resultContent = ''
 
@@ -194,7 +194,7 @@ export const useChatContext = () => {
       { content: input, role: 'user' }
     ] as ChatMessage[]
     setConversation(updatedConversation)
-    if(localIdAtStart) setMessagesById(localIdAtStart, updatedConversation)
+    if (localIdAtStart) setMessagesById(localIdAtStart, updatedConversation)
 
     const systemPrompt = getChatById(currentChatId || '')?.persona?.prompt || ''
 

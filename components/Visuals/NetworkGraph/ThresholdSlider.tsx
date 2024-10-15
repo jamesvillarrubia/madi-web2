@@ -1,8 +1,8 @@
-import React from 'react';
+import React from 'react'
 
 interface ThresholdSliderProps {
-  value: number;
-  onChange: (value: number) => void;
+  value: number
+  onChange: (value: number) => void
 }
 
 export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({ value, onChange }) => {
@@ -17,5 +17,5 @@ export const ThresholdSlider: React.FC<ThresholdSliderProps> = ({ value, onChang
         onChange={(e) => onChange(parseFloat(e.target.value))}
       />
     </div>
-  );
-};
+  )
+}

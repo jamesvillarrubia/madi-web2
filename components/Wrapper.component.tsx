@@ -4,7 +4,7 @@ import { Flex, IconButton } from '@radix-ui/themes'
 import { Drawer } from './Drawer.component'
 // import ThemesProvider from '@/providers/ThemesProvider'
 
-import { Cross2Icon} from '@radix-ui/react-icons'
+import { Cross2Icon } from '@radix-ui/react-icons'
 
 import { Toaster, Banner, SideBar } from '@/components'
 import { Header } from '@/components/Header/Header'

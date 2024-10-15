@@ -13,7 +13,7 @@ import {
   Tooltip,
   Text,
   Button,
-  TabNav,
+  TabNav
   // Separator
 } from '@radix-ui/themes'
 import * as Collapsible from '@radix-ui/react-collapsible'

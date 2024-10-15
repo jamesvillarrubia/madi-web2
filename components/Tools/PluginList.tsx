@@ -11,7 +11,7 @@ export const PluginList = () => {
 
   useEffect(() => {
     if (currentUser) {
-      (async () => {
+      ;(async () => {
         const fetchTools = await getTools()
         if (setToolList) setToolList(fetchTools)
       })()

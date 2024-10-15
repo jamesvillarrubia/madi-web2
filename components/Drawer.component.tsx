@@ -131,7 +131,7 @@ const Content = React.forwardRef<HTMLDivElement, ContentProps>(function ({ style
   )
 })
 
-Content.displayName = 'Content';
+Content.displayName = 'Content'
 
 export const Drawer = {
   Root: Dialog.Root,

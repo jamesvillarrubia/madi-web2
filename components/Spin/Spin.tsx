@@ -39,9 +39,9 @@ const Spin = (props: SpinProps, ref: ForwardedRef<HTMLDivElement>) => {
   const _usedLoading = delay ? loading : propLoading
 
   useEffect(() => {
-    if(delay && debouncedSetLoading(propLoading)){
+    if (delay && debouncedSetLoading(propLoading)) {
       return () => {
-        if(debouncedSetLoading) debouncedSetLoading.cancel()
+        if (debouncedSetLoading) debouncedSetLoading.cancel()
       }
     }
   }, [debouncedSetLoading, delay, propLoading])
