@@ -20,13 +20,31 @@ export const ToolSelect = () => {
     }, {})
   }
 
+  const fetchTools = async (retries = 3) => {
+    try {
+      const tools = await getTools()
+      console.log('fetchTools:', tools)
+      if (setToolList) {
+        console.log('setToolList is defined')
+        setToolList(tools)
+      } else {
+        console.warn('setToolList is undefined')
+      }
+    } catch (error) {
+      console.error('Error fetching tools:', error)
+      if (retries > 0) {
+        console.log(`Retrying... (${retries} retries left)`)
+        setTimeout(() => fetchTools(retries - 1), 1000)
+      } else {
+        console.error('Max retries reached. Failed to fetch tools.')
+      }
+    }
+  }
+
   useEffect(() => {
+    console.log('currentUser:', currentUser)
     if (currentUser) {
-      // eslint-disable-next-line
-      ;(async () => {
-        const fetchTools = await getTools()
-        if (setToolList) setToolList(fetchTools)
-      })()
+      fetchTools()
     }
   }, [currentUser, setToolList])
 
@@ -35,21 +53,6 @@ export const ToolSelect = () => {
   }
 
   const splitTools = splitByPlugin(toolList || [])
-
-  // useEffect(() => {
-  //   console.log('toolcheck currentUser', currentUser)
-  //   if (currentUser) {
-  //     ;(async () => {
-  //       const fetchTools = await getTools()
-  //       if (setToolList) setToolList(fetchTools)
-  //       console.log('fetchTools', fetchTools)
-  //     })()
-  //   }
-  // }, [currentUser, setToolList])
-
-  // if (!toolList || toolList.length === 0) {
-  //   return null
-  //
 
   return (
     <Select.Root defaultValue={currentTool} size="2" onValueChange={setCurrentTool}>
