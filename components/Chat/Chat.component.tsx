@@ -22,7 +22,7 @@ import { ChatMessage } from '../interface'
 import EditableText from './components/EditableText'
 import Message from './components/Message.component'
 import { ChatContext } from './context'
-import { SidebarContext } from '../Wrapper.component'
+import { SidebarContext } from '@/components/Layout/Wrapper.component'
 
 import './index.scss'
 import './chat.scss'

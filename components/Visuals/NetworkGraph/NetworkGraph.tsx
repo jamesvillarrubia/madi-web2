@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import React from 'react'
+import React, { use } from 'react'
 import * as d3 from 'd3'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
@@ -82,6 +82,10 @@ export const NetworkGraph = () => {
     return theme === 'dark' ? '#595959' : '#adadad'
   }, [theme])
 
+
+
+
+
   useEffect(() => {
     if (!svgRef.current) return
 
@@ -138,7 +142,9 @@ export const NetworkGraph = () => {
       //@ts-ignore
       updateLabelPositions(labelElements)
     })
-  }, [embeddings, threshold, theme, lineColor, COLOR_SCALE])
+
+  }, [embeddings])
+
 
   return (
     <div>

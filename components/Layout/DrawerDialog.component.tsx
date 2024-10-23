@@ -1,8 +1,7 @@
 import React from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 import * as Dialog from '@radix-ui/react-dialog'
-// import { Dialog } from '@radix-ui/themes';
-import { ThemesProvider } from '../providers/ThemesProvider'
+import { ThemesProvider } from '../../providers/ThemesProvider'
 
 type ContentProps = React.ComponentPropsWithoutRef<typeof Dialog.Content> & {
   origin: 'left' | 'right' | 'top' | 'bottom'
