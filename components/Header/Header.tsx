@@ -60,7 +60,7 @@ export const HeaderBar = () => {
       style={{ backgroundColor: 'var(--color-background)' }}
     >
       <Flex align="center" gap="3">
-        <NextLink href="/">
+        <NextLink href="">
           <div className="flex items-center" style={{ marginTop: '-2px' }}>
             <Heading
               as="h1"
@@ -83,10 +83,10 @@ export const HeaderBar = () => {
 
         <Flex gap="3" className="pl-10 md:flex hidden">
           <TabNav.Root className="shadow-none">
-            <TabNav.Link href="/chat" active={pathname === '/chat' || pathname === '/'}>
+            <TabNav.Link href="chat" active={pathname === '/chat' || pathname === '/'}>
               Chat
             </TabNav.Link>
-            <TabNav.Link href="/visualization" active={pathname === '/visualization'}>
+            <TabNav.Link href="visualization" active={pathname === '/visualization'}>
               Visualization
             </TabNav.Link>
           </TabNav.Root>
@@ -134,12 +134,12 @@ const CollapsibleDemo = () => {
       }}
     >
       <Flex direction="column" gap="3" className="w-full">
-        <NextLink href="/chat" className="">
+        <NextLink href="chat" className="">
           <Button className="w-full" size="4" variant="soft">
             Chat
           </Button>
         </NextLink>
-        <NextLink href="/visualization" className="">
+        <NextLink href="visualization" className="">
           <Button className="w-full" size="4" variant="soft">
             Visualization
           </Button>
