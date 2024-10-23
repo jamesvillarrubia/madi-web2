@@ -1,6 +1,6 @@
 import { useToast } from '@/components'
 import { convertChunktoJsonArray, postRunner } from '@/components/getResponse'
-import { useSearchParams } from 'next/navigation'
+// import { useSearchParams } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import { v4 as uuid } from 'uuid'
 import { DefaultTools } from '../../Tools/default_tools'
@@ -31,8 +31,9 @@ export const useChatContext = () => {
     deleteChatById
   } = useLocalStorageContext()
 
-  const searchParams = useSearchParams()
-  const debug = searchParams.get('debug') === 'true'
+  // const searchParams = useSearchParams()
+  // const debug = searchParams.get('debug') === 'true'
+  const debug = false
 
   // Tools
   const [currentTool, setCurrentTool] = useState<string>('auto')
