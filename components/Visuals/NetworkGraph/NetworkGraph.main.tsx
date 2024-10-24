@@ -1,13 +1,14 @@
 /* eslint-disable @typescript-eslint/ban-ts-comment */
 'use client'
 
-import React, { use } from 'react'
+import React from 'react'
 import * as d3 from 'd3'
 import { useEffect, useRef, useState, useMemo } from 'react'
 import { Flex } from '@radix-ui/themes'
 import embedding_data from './output.json'
 import { MaturityLevel } from './types'
 import { useTheme } from '@/components/Themes'
+import { NodeDatum, SimulationLink } from './types'
 
 import {
   createNodes,
@@ -108,7 +109,7 @@ export const NetworkGraph = () => {
 
 
 
-  const [built, setBuilt] = useState(false)
+  // const [built, setBuilt] = useState(false)
 
   
 
@@ -124,7 +125,7 @@ export const NetworkGraph = () => {
     //@ts-ignore
     svg.call(zoom)
 
-    const nodes = createNodes(embeddings, colors, labels, [])
+    const nodes = createNodes(embeddings, colors, labels)
     const links = createLinks(nodes, similarity, threshold)
     simulationRef.current = createSimulation(nodes)
 
@@ -151,7 +152,7 @@ export const NetworkGraph = () => {
     })
 
       forceSimulation(simulationRef.current, links, width, height)
-  }, [embeddings, threshold, theme, lineColor, COLOR_SCALE])
+  }, [embeddings, colors, labels, lineColor, shapes, threshold, similarity])
 
   return (
     <div>
