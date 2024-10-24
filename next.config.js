@@ -6,16 +6,16 @@ const nextConfig = {
   sassOptions: {
     // includePaths: [path.join(__dirname, 'styles')]
   },
-  reactStrictMode: false
-  // async redirects() {
-  //   return [
-  //     {
-  //       source: '/',
-  //       destination: '/chat',
-  //       permanent: true
-  //     }
-  //   ]
-  // }
+  reactStrictMode: false,
+
+  async rewrites() {
+    return [
+      {
+        source: '/:path*',
+        destination: '/'
+      }
+    ]
+  }
 }
 
 module.exports = nextConfig

@@ -3,7 +3,6 @@ import { ReactNode } from 'react'
 import ThemesProvider from '@/providers/ThemesProvider'
 import Contexts from '@/components/Contexts.component'
 
-
 import '@/styles/globals.scss'
 import '@/styles/theme-config.css'
 
@@ -24,12 +23,12 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-    <html lang="en" suppressHydrationWarning>
-      <body className={inter.className}>
-        <ThemesProvider>
-          <Contexts>{children}</Contexts>
-        </ThemesProvider>
-      </body>
-    </html>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <ThemesProvider>
+            <Contexts>{children}</Contexts>
+          </ThemesProvider>
+        </body>
+      </html>
   )
 }

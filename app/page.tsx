@@ -1,3 +1,9 @@
 'use client'
-import ChatPage from './chat/page'
-export default ChatPage
+
+import dynamic from 'next/dynamic';
+
+const AppRouter = dynamic(() => import('./router'), { ssr: false });
+
+export default function App() {
+  return <AppRouter />;
+}
