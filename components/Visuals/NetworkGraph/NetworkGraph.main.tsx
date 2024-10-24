@@ -24,7 +24,8 @@ import {
   createSimulation,
   calculateSimilarity,
   showLabel,
-  hideLabel
+  hideLabel,
+  forceSimulation
 } from './utils'
 import { ThresholdSlider } from './ThresholdSlider'
 
@@ -49,9 +50,12 @@ export const NetworkGraphOptions = () => {
   )
 }
 
+
 export const NetworkGraph = () => {
+  console.log('Rendering network graph...')
   const [threshold, setThreshold] = useState(0.895)
   const svgRef = useRef<SVGSVGElement | null>(null)
+  const simulationRef = useRef<d3.Simulation<NodeDatum, SimulationLink> | null>(null)
   const { theme } = useTheme()
 
   const COLOR_SCALE: Record<MaturityLevel, string> = useMemo(() => {
@@ -82,49 +86,52 @@ export const NetworkGraph = () => {
     return theme === 'dark' ? '#595959' : '#adadad'
   }, [theme])
 
+  const embeddingVectors = embeddings.map((item) => item.embedding)
+  const maturityLevels = embeddings.map((item) => item.maturity)
+  const sources = embeddings.map((item) => item.source)
+
+  const uniqueSources = Array.from(new Set(sources))
+  const sourceShapeMap = Object.fromEntries(
+    uniqueSources.map((source, index) => [source, NODE_SHAPES[index % NODE_SHAPES.length]])
+  )
+
+  const colors = maturityLevels.map((maturity) => {
+    const color = COLOR_SCALE[maturity as MaturityLevel]
+      ? COLOR_SCALE[maturity as MaturityLevel]
+      : COLOR_SCALE['whitespace']
+    return color
+  })
+  const shapes = sources.map((source) => sourceShapeMap[source])
+  const labels = embeddings.map((item) => createLabel(item))
+
+  const similarity = calculateSimilarity(embeddingVectors)
 
 
+
+  const [built, setBuilt] = useState(false)
+
+  
 
 
   useEffect(() => {
+    console.log('useEffect rerendering network graph...')
     if (!svgRef.current) return
-
     const svg = d3.select(svgRef.current)
-    svg.selectAll('*').remove()
-
-    const { width, height } = svg.node()?.getBoundingClientRect() ?? { width: 800, height: 600 }
-
-    const embeddingVectors = embeddings.map((item) => item.embedding)
-    const maturityLevels = embeddings.map((item) => item.maturity)
-    const sources = embeddings.map((item) => item.source)
-
-    const uniqueSources = Array.from(new Set(sources))
-    const sourceShapeMap = Object.fromEntries(
-      uniqueSources.map((source, index) => [source, NODE_SHAPES[index % NODE_SHAPES.length]])
-    )
-
-    const colors = maturityLevels.map((maturity) => {
-      const color = COLOR_SCALE[maturity as MaturityLevel]
-        ? COLOR_SCALE[maturity as MaturityLevel]
-        : COLOR_SCALE['whitespace']
-      return color
-    })
-    const shapes = sources.map((source) => sourceShapeMap[source])
-    const labels = embeddings.map((item) => createLabel(item))
-
-    const similarity = calculateSimilarity(embeddingVectors)
-    const nodes = createNodes(embeddings, colors, labels)
-    const links = createLinks(nodes, similarity, threshold)
-
-    const simulation = createSimulation(nodes, links, width, height)
     const zoom = createZoomBehavior(svg)
-
+    const { width, height } = svg.node()?.getBoundingClientRect() ?? { width: 800, height: 600 }
+  
+    svg.selectAll('*').remove()
     //@ts-ignore
     svg.call(zoom)
 
+    const nodes = createNodes(embeddings, colors, labels, [])
+    const links = createLinks(nodes, similarity, threshold)
+    simulationRef.current = createSimulation(nodes)
+
     const linkElements = createLinkElements(svg, links, lineColor)
-    const nodeElements = createNodeElements(svg, nodes, shapes, drag(simulation))
+    const nodeElements = createNodeElements(svg, nodes, shapes, drag(simulationRef.current))
     const labelElements = createLabelElements(svg, nodes)
+
 
     nodeElements
       .on('mouseover', function (event, d) {
@@ -134,7 +141,7 @@ export const NetworkGraph = () => {
         hideLabel.call(this, event, d, labelElements)
       })
 
-    simulation.on('tick', () => {
+    simulationRef.current.on('tick', () => {
       //@ts-ignore
       updateLinkPositions(linkElements)
       //@ts-ignore
@@ -143,8 +150,8 @@ export const NetworkGraph = () => {
       updateLabelPositions(labelElements)
     })
 
-  }, [embeddings])
-
+      forceSimulation(simulationRef.current, links, width, height)
+  }, [embeddings, threshold, theme, lineColor, COLOR_SCALE])
 
   return (
     <div>

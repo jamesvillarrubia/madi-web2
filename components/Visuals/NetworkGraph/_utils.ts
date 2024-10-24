@@ -53,6 +53,26 @@ export function hideLabel(
   d3.select(this).style('stroke', null).style('stroke-width', null)
 }
 
+
+// export function calculateLinks(
+//   nodes: NodeDatum[],
+//   threshold: number
+// ): SimulationLink[] {
+//   const similarity: SimulationLink[] = calculateSimilarity(nodes.map(node => node.x)); // Assuming x is used for similarity, adjust as needed
+//   return similarity.filter(link => link.dist >= threshold);
+// }
+
+export function calculateSimilarity(embeddingVectors: number[]): SimilarityLink[] {
+  const similarity: SimilarityLink[] = [];
+  for (let i = 0; i < embeddingVectors.length; i++) {
+    for (let j = i + 1; j < embeddingVectors.length; j++) {
+      const dist = cosineSimilarity([embeddingVectors[i]], [embeddingVectors[j]]);
+      similarity.push({ source: i, target: j, dist });
+    }
+  }
+  return similarity;
+}
+
 export function cosineSimilarity(a: number[], b: number[]) {
   const dotProduct = a.reduce((sum, val, i) => sum + val * b[i], 0)
   const normA = Math.sqrt(a.reduce((sum, val) => sum + val * val, 0))
@@ -60,14 +80,15 @@ export function cosineSimilarity(a: number[], b: number[]) {
   return dotProduct / (normA * normB)
 }
 
-export function createNodes(embeddings: any[], colors: string[], labels: string[]): NodeDatum[] {
+export function createNodes(embeddings: any[], colors: string[], labels: string[], storedPositions: { [key: string]: { x: number; y: number } }): NodeDatum[] {
   return embeddings.map((_, index) => ({
     id: index,
     color: colors[index],
-    label: labels[index]
-  }))
+    label: labels[index],
+    x: storedPositions[index]?.x ?? Math.random() * 800, // Default to random if no stored position
+    y: storedPositions[index]?.y ?? Math.random() * 600, // Default to random if no stored position
+  }));
 }
-
 export function createZoomBehavior(svg: d3.Selection<SVGSVGElement, unknown, null, undefined>) {
   return d3
     .zoom<SVGSVGElement, unknown>()
@@ -121,23 +142,10 @@ export function createLabel(item: { source: string; maturity: string; prompt: st
     `
 }
 
-export function calculateSimilarity(embeddingVectors: number[][]): SimilarityLink[] {
-  const similarity: SimilarityLink[] = []
-  for (let i = 0; i < embeddingVectors.length; i++) {
-    for (let j = i + 1; j < embeddingVectors.length; j++) {
-      const dist = cosineSimilarity(embeddingVectors[i], embeddingVectors[j])
-      similarity.push({ source: i, target: j, dist })
-    }
-  }
-  return similarity
-}
 
-export function createSimulation(nodes: any[]) {
-  return d3.forceSimulation(nodes)
-}
 
-export function forceSimulation(simulation:any, links: any[], width: number, height: number) {
-  return simulation
+export function setupSimulation(simulation: d3.Simulation<NodeDatum, SimulationLink>, nodes: any[], links: any[], width: number, height: number) {
+  return simulation.nodes(nodes)
     .force('link', d3.forceLink(links))
     .force('charge', d3.forceManyBody().strength(-100))
     .force('x', d3.forceX())

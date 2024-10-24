@@ -1,9 +1,11 @@
+/* eslint-disable react/jsx-key */
 'use client'
 
 import { useState } from 'react'
 import Wrapper from '@/components/Layout/Wrapper.component'
-import { NetworkGraph } from '@/components/Visuals/NetworkGraph/NetworkGraph'
-import { SideBarVisuals } from '@/components/Visuals/NetworkGraph/NetworkGraph.Sidebar'
+import SideBar from '@/components/Visuals/Visuals.sidebar'
+import Visuals from '@/components/Visuals/Visuals.component'
+import NetworkGraph, { NetworkGraphOptions } from '@/components/Visuals/NetworkGraph/NetworkGraph.main'
 
 
 
@@ -14,9 +16,17 @@ const VisualizationPage = () => {
     setSelectedGraph(value)
   }
 
+  const graphMap : Record<string, [string, React.ReactNode, React.ReactNode]> = {
+    networkGraph: ['Network Graph', <NetworkGraph />, <NetworkGraphOptions />], 
+    graph2: ['Graph 2',<div>Graph 2</div>, <div>Graph 2 Options</div>],
+    graph3: ['Graph 3',<div>Graph 3</div>, <div>Graph 3 Options</div>],
+  }
+  
+
   return (
-    <Wrapper sidebarComponent={<SideBarVisuals  selectedGraph={selectedGraph} onSelectChange={handleSelectChange}/>}>
-      <NetworkGraph />
+    <Wrapper sidebarComponent={<SideBar graphMap={graphMap} graphOptions={graphMap[selectedGraph][2]} onSelectChange={handleSelectChange}/>
+    }>
+      <Visuals selectedGraph={selectedGraph} graphMap={graphMap} />
     </Wrapper>
   )
 }

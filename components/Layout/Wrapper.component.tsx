@@ -27,9 +27,9 @@ const Wrapper = ({ sidebarComponent, children }: Props) => {
             </Suspense>
           </SideBar>
           <div className="flex-1 relative">
-            <Suspense fallback={<div>Loading...</div>}>
+            {/* <Suspense fallback={<div>Loading...</div>}> */}
               {children}
-            </Suspense>
+            {/* </Suspense> */}
           </div>
         </Flex>
       </SidebarContext.Provider>

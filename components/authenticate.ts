@@ -60,7 +60,7 @@ export const useAuthContext = () => {
   )
 
   useEffect(() => {
-    authenticateUser()
+    // authenticateUser()
   }, [authenticateUser])
 
   return { currentUser, authenticateUser }
