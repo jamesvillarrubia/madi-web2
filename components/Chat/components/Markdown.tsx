@@ -13,7 +13,8 @@ import { RxClipboardCopy } from 'react-icons/rx'
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { IconButton } from '@radix-ui/themes'
+import { IconButton, Flex } from '@radix-ui/themes'
+import './markdown.scss'
 
 export interface MarkdownProps {
   className?: string
@@ -42,23 +43,26 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
           const minWidthEm = `${`${children}`.split('\n').length.toString().length}.25em`;
           const containsNewline = `${children}`.includes('\n');
             return (
-              <>
+
+              <Flex className={containsNewline ? 'w-fit min-w-full relative':'flex-0 inline'}>
                 {containsNewline ? (
                 <IconButton
-                  className="absolute right-4 top-4 copy-btn"
+                  className="absolute right-2 top-2 copy-btn"
                   variant="solid"
+                  color='gray'
                   data-clipboard-text={children}
                 >
                   <RxClipboardCopy />
                 </IconButton>): null}
-                {match ? (
+                <Flex>
+                {containsNewline ? (
                   <SyntaxHighlighter 
                   {...rest} 
                   style={vscDarkPlus} 
-                  language={match[1]} 
+                  language={match?.[1] || 'text'} 
                   PreTag="div"
                   showLineNumbers={true}
-                  showInlineLineNumbers={false}
+                  // showInlineLineNumbers={false}
                   lineNumberStyle={{ 
                     color: 'gray' ,
                     minWidth: minWidthEm,
@@ -74,7 +78,8 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
                     {children}
                   </code>
                 )}
-              </>
+                </Flex>
+              </Flex>
             )
           // }
           
