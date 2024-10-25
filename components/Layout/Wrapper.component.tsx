@@ -20,17 +20,17 @@ const Wrapper = ({ sidebarComponent, children }: Props) => {
       <Header />
       <SidebarContext.Provider value={{ isSidebarOpen, setIsSidebarOpen }}>
         <DrawerComponent>{sidebarComponent}</DrawerComponent>
-        <Flex className="relative chat-flex z-0">
+        <Flex className="relative chat-flex z-0 flex-shrink-0">
           <SideBar>
             <Suspense fallback={<div>Loading...</div>}>
               {sidebarComponent}
             </Suspense>
           </SideBar>
-          <div className="flex-1 relative">
+          <Flex flexShrink={"1"} className='w-full max-w-full min-w-0'>
             {/* <Suspense fallback={<div>Loading...</div>}> */}
               {children}
             {/* </Suspense> */}
-          </div>
+          </Flex>
         </Flex>
       </SidebarContext.Provider>
       <Toaster/>

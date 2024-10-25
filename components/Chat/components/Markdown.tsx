@@ -20,6 +20,7 @@ export interface MarkdownProps {
 }
 
 export const Markdown = ({ className, children }: MarkdownProps) => {
+  // console.log(children)
   return (
     <ReactMarkdown
       className={`prose dark:prose-invert max-w-none ${className}`}
@@ -27,28 +28,48 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
       rehypePlugins={[rehypeKatex, rehypeStringify]}
       components={{
         code(props) {
-          const { children, className, ref, ...rest } = props
+          console.log(JSON.stringify(props, null, 2))
+          // @ts-ignore
+          const { children, className, ref, node, ...rest } = props
           const match = /language-(\w+)/.exec(className || '')
-          return (
-            <>
-              <IconButton
-                className="absolute right-4 top-4 copy-btn"
-                variant="solid"
-                data-clipboard-text={children}
-              >
-                <RxClipboardCopy />
-              </IconButton>
-              {match ? (
-                <SyntaxHighlighter {...rest} style={vscDarkPlus} language={match[1]} PreTag="div">
-                  {String(children).replace(/\n$/, '')}
-                </SyntaxHighlighter>
-              ) : (
-                <code ref={ref} {...rest} className={className}>
-                  {children}
-                </code>
-              )}
-            </>
-          )
+          if(`${children}`.startsWith('```') || `${children}`.startsWith('~~~')){
+            return (
+              <>
+                <IconButton
+                  className="absolute right-4 top-4 copy-btn"
+                  variant="solid"
+                  data-clipboard-text={children}
+                >
+                  <RxClipboardCopy />
+                </IconButton>
+                {match ? (
+                  <SyntaxHighlighter {...rest} style={vscDarkPlus} language={match[1]} PreTag="div">
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code ref={ref} {...rest} className={className}>
+                    {children}
+                  </code>
+                )}
+              </>
+            )
+          }else{
+            return (
+              <>
+                {match ? (
+                  <SyntaxHighlighter {...rest} style={vscDarkPlus} language={match[1]} PreTag="div">
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code ref={ref} {...rest} className={className}>
+                    {children}
+                  </code>
+                )}
+              </>
+            )
+          }
+          
+          
         }
       }}
     >

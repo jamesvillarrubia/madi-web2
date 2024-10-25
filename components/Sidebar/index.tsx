@@ -16,7 +16,7 @@ import cs from 'classnames'
  */
 export const SideBar = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Flex direction="column" className={cs('chart-sider-bar')}>
+    <Flex direction="column" className={cs('chart-sider-bar','flex-shrink-0')}>
       <Flex className="p-2 pb-4 h-full overflow-hidden w-64" direction="column" gap="3">
         {children}
         <Flex className="w-full" direction="column" gap="1">
