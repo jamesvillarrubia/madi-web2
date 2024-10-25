@@ -13,7 +13,7 @@ import { RxClipboardCopy } from 'react-icons/rx'
 
 import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter'
 import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism'
-import { IconButton, Flex } from '@radix-ui/themes'
+import { IconButton, Flex, Theme } from '@radix-ui/themes'
 import './markdown.scss'
 
 export interface MarkdownProps {
@@ -25,7 +25,7 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
   // console.log(children)
   return (
     <ReactMarkdown
-      className={`prose dark:prose-invert max-w-none ${className}`}
+      className={`markdown-wrapper prose dark:prose-invert max-w-none ${className}`}
       remarkPlugins={[remarkParse, remarkMath, remarkRehype, remarkGfm, 
         // remarkStringify
       ]}
@@ -44,45 +44,52 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
           const containsNewline = `${children}`.includes('\n');
             return (
 
-              <Flex className={containsNewline ? 'w-fit min-w-full relative':'flex-0 inline'}>
-                {containsNewline ? (
-                <IconButton
-                  className="absolute right-2 top-2 copy-btn"
-                  variant="solid"
-                  color='gray'
-                  data-clipboard-text={children}
-                >
-                  <RxClipboardCopy />
-                </IconButton>): null}
-                <Flex>
-                {containsNewline ? (
-                  <SyntaxHighlighter 
-                  {...rest} 
-                  style={vscDarkPlus} 
-                  language={match?.[1] || 'text'} 
-                  PreTag="div"
-                  showLineNumbers={true}
-                  // showInlineLineNumbers={false}
-                  lineNumberStyle={{ 
-                    color: 'gray' ,
-                    minWidth: minWidthEm,
-                    paddingRight: '1em',
-                    textAlign: 'right',
-                    userSelect: 'none'
-                  }}
-                  >
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code ref={ref} {...rest} className={className}>
-                    {children}
-                  </code>
-                )}
-                </Flex>
-              </Flex>
+              <Flex className={containsNewline ? 'flex-col w-full min-w-full':'flex-0 inline'}>
+                  {containsNewline ? (
+                    <Theme appearance="dark" className="w-full">
+                      <Flex className='w-full py-1 px-3 justify-between text-sm'
+                      style={{backgroundColor: 'var(--gray-7)'}}>
+                        <Flex className=''>
+                          {(match?.[1]||'text').toLowerCase()}
+                        </Flex>
+                        <Flex className=''>
+                          <IconButton
+                            className="copy-btn"
+                            variant="ghost"
+                            color='gray'
+                            data-clipboard-text={children}
+                          >
+                            <RxClipboardCopy /> Copy
+                          </IconButton>
+                        </Flex>
+                      </Flex>
+                      <Flex className='min-w-full'>
+                        <SyntaxHighlighter 
+                          {...rest} 
+                          className="markdown-syntax m-0 p-0"
+                          style={vscDarkPlus} 
+                          language={match?.[1] || 'text'} 
+                          PreTag="div"
+                          showLineNumbers={true}
+                          // showInlineLineNumbers={false}
+                          lineNumberStyle={{ 
+                            color: 'gray' ,
+                            minWidth: minWidthEm,
+                            paddingRight: '1em',
+                            textAlign: 'right',
+                            userSelect: 'none'
+                          }}>
+                          {String(children).replace(/\n$/, '')}
+                        </SyntaxHighlighter>
+                      </Flex>
+                    </Theme>
+                    ) : (
+                      <code ref={ref} {...rest} className={className}>
+                        {children}
+                      </code>
+                    )}
+                  </Flex>
             )
-          // }
-          
           
         }
       }}
