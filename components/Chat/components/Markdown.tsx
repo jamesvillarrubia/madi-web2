@@ -6,7 +6,8 @@ import remarkRehype from 'remark-rehype'
 import remarkMath from 'remark-math'
 
 import rehypeKatex from 'rehype-katex'
-import rehypeStringify from 'rehype-stringify'
+// import rehypeStringify from 'rehype-stringify'
+// import remarkStringify from 'remark-stringify'
 
 import { RxClipboardCopy } from 'react-icons/rx'
 
@@ -24,26 +25,48 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
   return (
     <ReactMarkdown
       className={`prose dark:prose-invert max-w-none ${className}`}
-      remarkPlugins={[remarkParse, remarkMath, remarkRehype, remarkGfm]}
-      rehypePlugins={[rehypeKatex, rehypeStringify]}
+      remarkPlugins={[remarkParse, remarkMath, remarkRehype, remarkGfm, 
+        // remarkStringify
+      ]}
+      rehypePlugins={[rehypeKatex]}//, rehypeStringify]}
       components={{
+        // pre(props) {
+        //   console.log(JSON.stringify(props, null, 2))
+        //   return {props.children}
+        // },
         code(props) {
-          console.log(JSON.stringify(props, null, 2))
+          console.log(props)
           // @ts-ignore
           const { children, className, ref, node, ...rest } = props
           const match = /language-(\w+)/.exec(className || '')
-          if(`${children}`.startsWith('```') || `${children}`.startsWith('~~~')){
+          const minWidthEm = `${`${children}`.split('\n').length.toString().length}.25em`;
+          const containsNewline = `${children}`.includes('\n');
             return (
               <>
+                {containsNewline ? (
                 <IconButton
                   className="absolute right-4 top-4 copy-btn"
                   variant="solid"
                   data-clipboard-text={children}
                 >
                   <RxClipboardCopy />
-                </IconButton>
+                </IconButton>): null}
                 {match ? (
-                  <SyntaxHighlighter {...rest} style={vscDarkPlus} language={match[1]} PreTag="div">
+                  <SyntaxHighlighter 
+                  {...rest} 
+                  style={vscDarkPlus} 
+                  language={match[1]} 
+                  PreTag="div"
+                  showLineNumbers={true}
+                  showInlineLineNumbers={false}
+                  lineNumberStyle={{ 
+                    color: 'gray' ,
+                    minWidth: minWidthEm,
+                    paddingRight: '1em',
+                    textAlign: 'right',
+                    userSelect: 'none'
+                  }}
+                  >
                     {String(children).replace(/\n$/, '')}
                   </SyntaxHighlighter>
                 ) : (
@@ -53,21 +76,7 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
                 )}
               </>
             )
-          }else{
-            return (
-              <>
-                {match ? (
-                  <SyntaxHighlighter {...rest} style={vscDarkPlus} language={match[1]} PreTag="div">
-                    {String(children).replace(/\n$/, '')}
-                  </SyntaxHighlighter>
-                ) : (
-                  <code ref={ref} {...rest} className={className}>
-                    {children}
-                  </code>
-                )}
-              </>
-            )
-          }
+          // }
           
           
         }
