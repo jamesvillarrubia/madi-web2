@@ -107,13 +107,14 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   })
 
   return (
-    <Flex direction="column" height="100%" className="relative" gap="3">
+    <Flex direction="column" height="100%" className="relative flex-shrink-1" width={'100%'} maxWidth={'100%'} gap="3">
       <Flex
         justify="between"
         align="center"
         py="3"
         px="4"
         style={{ backgroundColor: 'var(--gray-a3)' }}
+        width={'100%'}
       >
         <EditableText
           viewProps={{
@@ -147,12 +148,13 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
         </div>
       </Flex>
       <ScrollArea
-        className="flex-1 px-4"
+        className="flex-1 px-4 pr-5"
         type="auto"
+        size={"2"}
         scrollbars="vertical"
-        style={{ height: '100%' }}
+        style={{ height: '100%', width: '100%', minWidth: '100%' }}
       >
-        <Container size="3" className="max-w-1000px">
+        <Container size="3" className="w-full">
           {conversation?.map((item, index) => <Message key={index} message={item} index={index} />)}
           {currentMessage && idAtStart === currentChatId && (
             <Message
@@ -165,7 +167,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
         <div className="h-24"></div>
       </ScrollArea>
       <Flex className="px-4 pb-1" gap="0" direction={'column'}>
-        <Container size="3" className="max-w-1000px">
+        <Container size="3" className="">
           <Flex
             // shrink="1"
             className="pb-2"

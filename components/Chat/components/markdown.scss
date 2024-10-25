@@ -1,0 +1,14 @@
+.markdown-wrapper pre{
+    // margin: 0;
+    padding: 0;
+    // width: 100%;
+    // max-width: 100%;
+    white-space: pre;
+    position: relative;
+    overflow-x: scroll;
+    & > div {
+        margin: 0;
+        padding: 0;
+        overflow: visible !important;
+    }
+}
