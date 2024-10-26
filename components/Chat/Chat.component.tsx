@@ -193,8 +193,8 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
-            <Flex gap="3" className="absolute right-0 pr-4 bottom-3 pt">
-              {isLoading && (
+            <Flex gap="3" className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center">
+              {!isLoading && (
                 <>
                   <Flex
                     width="6"
@@ -218,34 +218,34 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
                 </>
               )}
               <IconButton
-                variant="soft"
+                variant="ghost"
                 disabled={isLoading}
                 color="gray"
                 size="2"
-                className="rounded-xl"
+                className="w-[30px] h-[30px] rounded-full hover:color-ruby-9 p-1"
                 onClick={sendMessage}
               >
-                <FiSend className="h-4 w-4" />
+                <FiSend className="h-6 w-6 pr-[2px] pt-[2px]" />
               </IconButton>
               <IconButton
-                variant="soft"
+                variant="ghost"
                 color="gray"
                 size="2"
-                className="rounded-xl"
+                className="w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
                 disabled={isLoading}
                 onClick={clearMessages}
               >
-                <AiOutlineClear className="h-4 w-4" />
+                <AiOutlineClear className="h-6 w-6 pl-[1px] pb-[1px]" />
               </IconButton>
 
               <IconButton
-                variant="soft"
+                variant="ghost"
                 color="gray"
                 size="2"
-                className="rounded-xl md:hidden"
+                className="md:hidden w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
                 onClick={() => setIsSidebarOpen(true)}
               >
-                <AiOutlineUnorderedList className="h-4 w-4" />
+                <AiOutlineUnorderedList className="h-6 w-6 pl-[1px] pb-[1px]" />
               </IconButton>
             </Flex>
           </Flex>
