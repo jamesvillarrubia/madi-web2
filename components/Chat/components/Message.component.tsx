@@ -1,7 +1,7 @@
 'use client'
 
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { Avatar, Flex } from '@radix-ui/themes'
+import { Avatar, Flex, IconButton } from '@radix-ui/themes'
 import { useState } from 'react'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import { HiUser } from 'react-icons/hi'
@@ -58,11 +58,15 @@ const Message = (props: MessageProps) => {
       <Flex gap="2" className={`mb-5 ${isUser ? 'justify-end' : ''}`}>
         {!isUser ? (
           <Avatar
-            fallback={isUser ? <HiUser className="h-5 w-5" /> : <SiOpenai className="h-5 w-5" />}
-            color={isUser ? undefined : 'green'}
+            fallback={
+              isUser ? <HiUser className="h-5 w-5" /> 
+                : <SiOpenai className="h-5 w-5" />
+                }
             size="2"
             radius="full"
             className='mt-1'
+            variant='solid'
+            color='ruby'
           />
         ) : null}
         <Flex
