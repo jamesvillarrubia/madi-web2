@@ -9,6 +9,8 @@ import { SiOpenai } from 'react-icons/si'
 import { ChatMessage } from '../../interface'
 import { ActionBubble } from './ActionBubble'
 import { Markdown } from './Markdown'
+import { Symbol, Wordmark } from '../../Header/Logo'
+
 
 export interface MessageProps {
   message: ChatMessage
@@ -60,7 +62,9 @@ const Message = (props: MessageProps) => {
           <Avatar
             fallback={
               isUser ? <HiUser className="h-5 w-5" /> 
-                : <SiOpenai className="h-5 w-5" />
+                // : <SiOpenai className="h-5 w-5" />
+                : <Symbol className="inline-block w-3" />
+
                 }
             size="2"
             radius="full"

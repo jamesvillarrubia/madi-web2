@@ -44,7 +44,7 @@ export const useAuthContext = () => {
         const json = await res.json()
         if (json.data) {
           console.log('res', res)
-          setCurrentUser(json.data)
+          setCurrentUser(json.data[0])
         }
       } catch (error) {
         console.error('Error during authentication:', error)
@@ -60,7 +60,7 @@ export const useAuthContext = () => {
   )
 
   useEffect(() => {
-    // authenticateUser()
+    authenticateUser()
   }, [authenticateUser])
 
   return { currentUser, authenticateUser }

@@ -194,7 +194,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
               onKeyDown={handleKeypress}
             />
             <Flex gap="3" className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center">
-              {!isLoading && (
+              {isLoading && (
                 <>
                   <Flex
                     width="6"
