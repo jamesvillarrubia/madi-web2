@@ -1,0 +1,33 @@
+{
+    "name": "interfaces-web",
+    "$schema": "../../node_modules/nx/schemas/project-schema.json",
+    "projectType": "application",
+    "sourceRoot": "apps/interfaces/web/src",
+    "targets": {
+      "build": {
+        "executor": "nx:run-commands",
+        "options": {
+          "commands": [
+            "cd apps/interfaces/web && npm run build"
+          ]
+        }
+      },
+      "serve": {
+        "executor": "nx:run-commands",
+        "options": {
+          "commands": [
+            "cd apps/interfaces/web && npm run start"
+          ]
+        }
+      },
+      "dev": {
+        "executor": "nx:run-commands",
+        "options": {
+          "commands": [
+            "cd apps/interfaces/web && npm run dev"
+          ]
+        }
+      }
+    },
+    "tags": []
+  }

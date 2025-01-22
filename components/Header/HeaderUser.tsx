@@ -5,7 +5,7 @@ import { HiUser } from 'react-icons/hi'
 import { useAuthContext } from '../authenticate'
 
 export const HeaderUser = () => {
-  let { currentUser } = useAuthContext()
+  const { currentUser } = useAuthContext()
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger>

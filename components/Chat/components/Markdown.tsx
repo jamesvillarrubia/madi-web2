@@ -36,9 +36,8 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
         //   return {props.children}
         // },
         code(props) {
-          console.log(props)
-          // @ts-ignore
-          const { children, className, ref, node, ...rest } = props
+          console.log(props) 
+          const { children, className, ref, ...rest } = props
           const match = /language-(\w+)/.exec(className || '')
           const minWidthEm = `${`${children}`.split('\n').length.toString().length}.25em`;
           const containsNewline = `${children}`.includes('\n');

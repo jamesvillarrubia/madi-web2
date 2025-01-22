@@ -1,5 +1,6 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as Collapsible from '@radix-ui/react-collapsible'
 import { Avatar, Flex, IconButton } from '@radix-ui/themes'
 import { useState } from 'react'
