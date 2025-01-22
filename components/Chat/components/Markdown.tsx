@@ -1,5 +1,5 @@
 import ReactMarkdown from 'react-markdown'
-
+import React from 'react'
 import remarkGfm from 'remark-gfm'
 import remarkParse from 'remark-parse'
 import remarkRehype from 'remark-rehype'
