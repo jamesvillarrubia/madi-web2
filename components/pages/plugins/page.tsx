@@ -4,7 +4,6 @@ import SideBarChatList from '@/components/Chat/components/SideBarChatList.compon
 import { PluginList } from '@/components/Tools/PluginList'
 
 const PluginsPage = () => {
-  
   return (
     <Wrapper sidebarComponent={<SideBarChatList />}>
       <PluginList />

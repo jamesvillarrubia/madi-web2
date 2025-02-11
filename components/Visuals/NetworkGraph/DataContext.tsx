@@ -83,18 +83,18 @@
 //   // const sources = useMemo(() => embeddings.map((item) => item.source), [embeddings]);
 
 //   // const uniqueSources = useMemo(() => Array.from(new Set(sources)), [sources]);
-//   // const sourceShapeMap = useMemo(() => 
-//   //   Object.fromEntries(uniqueSources.map((source, index) => [source, NODE_SHAPES[index % NODE_SHAPES.length]])), 
+//   // const sourceShapeMap = useMemo(() =>
+//   //   Object.fromEntries(uniqueSources.map((source, index) => [source, NODE_SHAPES[index % NODE_SHAPES.length]])),
 //   //   [uniqueSources]
 //   // );
 
-//   // const colors = useMemo(() => 
+//   // const colors = useMemo(() =>
 //   //   maturityLevels.map((maturity) => {
 //   //     const color = COLOR_SCALE[maturity as MaturityLevel]
 //   //       ? COLOR_SCALE[maturity as MaturityLevel]
 //   //       : COLOR_SCALE['whitespace'];
 //   //     return color;
-//   //   }), 
+//   //   }),
 //   //   [maturityLevels, COLOR_SCALE]
 //   // );
 
@@ -105,7 +105,6 @@
 //   // const similarities = useMemo(() => calculateSimilarity(embeddingVectors), [embeddingVectors]);
 //   // const nodes = useMemo(() => createNodes(embeddings, colors, labels, nodePositions), [embeddings, colors, labels, nodePositions]);
 //   // const links = useMemo(() => createLinks(nodes, similarities, threshold), [nodes, similarities, threshold]);
-
 
 //   const COLOR_SCALE = (() => {
 //     const maturityLevels = ['whitespace', 'Super High', 'High', 'Medium', 'Low', 'X1', 'Execution'];
@@ -141,19 +140,13 @@
 //   const nodes = createNodes(embeddings, colors, labels, nodePositions);
 //   const links = createLinks(nodes, similarities, threshold);
 
-
-
-
-
-
-
 //   return (
-//     <DataContext.Provider value={{ 
-//       // embeddings, 
-//       // nodePositions, 
-//       // setNodePositions, 
-//       // simulation: simulationRef.current, 
-//       // hasRun, 
+//     <DataContext.Provider value={{
+//       // embeddings,
+//       // nodePositions,
+//       // setNodePositions,
+//       // simulation: simulationRef.current,
+//       // hasRun,
 //       // setHasRun,
 //       // similarities,
 //       // shapes,

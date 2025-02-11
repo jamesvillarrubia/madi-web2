@@ -5,7 +5,6 @@ import { DrawerComponent } from '@/components/Layout/Drawer.component'
 import { Toaster, Banner, SideBar } from '@/components'
 import { Header } from '@/components/Header/Header'
 
-
 interface Props {
   sidebarComponent: ReactNode
   children: ReactNode
@@ -22,18 +21,16 @@ const Wrapper = ({ sidebarComponent, children }: Props) => {
         <DrawerComponent>{sidebarComponent}</DrawerComponent>
         <Flex className="relative chat-flex z-0">
           <SideBar>
-            <Suspense fallback={<div>Loading...</div>}>
-              {sidebarComponent}
-            </Suspense>
+            <Suspense fallback={<div>Loading...</div>}>{sidebarComponent}</Suspense>
           </SideBar>
-          <Flex flexShrink={"1"} className='w-full max-w-full min-w-0'>
+          <Flex flexShrink={'1'} className="w-full max-w-full min-w-0">
             {/* <Suspense fallback={<div>Loading...</div>}> */}
-              {children}
+            {children}
             {/* </Suspense> */}
           </Flex>
         </Flex>
       </SidebarContext.Provider>
-      <Toaster/>
+      <Toaster />
     </>
   )
 }
@@ -48,17 +45,3 @@ export const SidebarContext = createContext<{
   isSidebarOpen: false,
   setIsSidebarOpen: () => {}
 })
-
-
-
-
-
-
-
-
-
-
-
-
-
-

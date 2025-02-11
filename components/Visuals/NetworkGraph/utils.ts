@@ -136,7 +136,7 @@ export function createSimulation(nodes: any[]) {
   return d3.forceSimulation(nodes)
 }
 
-export function forceSimulation(simulation:any, links: any[], width: number, height: number) {
+export function forceSimulation(simulation: any, links: any[], width: number, height: number) {
   return simulation
     .force('link', d3.forceLink(links))
     .force('charge', d3.forceManyBody().strength(-100))

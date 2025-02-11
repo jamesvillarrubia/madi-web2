@@ -55,13 +55,13 @@ export const ActionBubble = (props: ActionBubbleProps) => {
           </IconButton>
         </Tooltip>
         <Tooltip content="Bad Reponse - Coming Soon">
-          <IconButton 
+          <IconButton
             className="inline-flex w-[20px] h-[20px] p-2 m-0 mr-1"
-            radius="large" 
+            radius="large"
             variant="ghost"
             size="1"
             asChild
-            >
+          >
             <TiThumbsDown />
           </IconButton>
         </Tooltip>

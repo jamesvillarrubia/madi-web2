@@ -107,7 +107,14 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   })
 
   return (
-    <Flex direction="column" height="100%" className="relative flex-shrink-1" width={'100%'} maxWidth={'100%'} gap="3">
+    <Flex
+      direction="column"
+      height="100%"
+      className="relative flex-shrink-1"
+      width={'100%'}
+      maxWidth={'100%'}
+      gap="3"
+    >
       <Flex
         justify="between"
         align="center"
@@ -150,7 +157,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       <ScrollArea
         className="flex-1 px-4 pr-5"
         type="auto"
-        size={"2"}
+        size={'2'}
         scrollbars="vertical"
         style={{ height: '100%', width: '100%', minWidth: '100%' }}
       >
@@ -193,7 +200,10 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
-            <Flex gap="3" className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center">
+            <Flex
+              gap="3"
+              className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center"
+            >
               {isLoading && (
                 <>
                   <Flex

@@ -1,11 +1,9 @@
-
 'use client'
 import React, { useContext } from 'react'
 import { Flex, IconButton } from '@radix-ui/themes'
 import { Drawer } from '@/components/Layout/DrawerDialog.component'
 import { Cross2Icon } from '@radix-ui/react-icons'
 import { SidebarContext } from '@/components/Layout/Wrapper.component'
-
 
 export const DrawerComponent = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)

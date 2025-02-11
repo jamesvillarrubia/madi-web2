@@ -12,7 +12,6 @@ import { ActionBubble } from './ActionBubble'
 import { Markdown } from './Markdown'
 import { Symbol, Wordmark } from '../../Header/Logo'
 
-
 export interface MessageProps {
   message: ChatMessage
   index: number
@@ -62,16 +61,18 @@ const Message = (props: MessageProps) => {
         {!isUser ? (
           <Avatar
             fallback={
-              isUser ? <HiUser className="h-5 w-5" /> 
+              isUser ? (
+                <HiUser className="h-5 w-5" />
+              ) : (
                 // : <SiOpenai className="h-5 w-5" />
-                : <Symbol className="inline-block w-3" />
-
-                }
+                <Symbol className="inline-block w-3" />
+              )
+            }
             size="2"
             radius="full"
-            className='mt-1'
-            variant='solid'
-            color='ruby'
+            className="mt-1"
+            variant="solid"
+            color="ruby"
           />
         ) : null}
         <Flex

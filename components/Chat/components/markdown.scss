@@ -1,25 +1,25 @@
-.markdown-wrapper pre{
-    margin: 0;
-    padding: 0;
-    border: 1px solid rgba(255,255,255,0.1);
-    // width: 100%;
-    // // max-width: 100%;
-    // white-space: pre;
-    // position: relative;
-    // overflow-x: scroll;
-    // & > div {
-    //     margin: 0;
-    //     padding: 0;
-    //     overflow: visible !important;
-    // }
-    overflow: hidden;
+.markdown-wrapper pre {
+  margin: 0;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  // width: 100%;
+  // // max-width: 100%;
+  // white-space: pre;
+  // position: relative;
+  // overflow-x: scroll;
+  // & > div {
+  //     margin: 0;
+  //     padding: 0;
+  //     overflow: visible !important;
+  // }
+  overflow: hidden;
 }
 span.linenumber.react-syntax-highlighter-line-number {
-    color: gray !important;
+  color: gray !important;
 }
 .markdown-syntax {
-    // padding: 0 inherit !important;
-    padding-top: 1rem !important;
-    margin:0 !important;
-    width: 100%;
+  // padding: 0 inherit !important;
+  padding-top: 1rem !important;
+  margin: 0 !important;
+  width: 100%;
 }

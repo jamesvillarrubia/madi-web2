@@ -15,11 +15,8 @@ const Contexts = ({ children }: Props) => {
   const authProvider: AuthContextType = useAuthContext()
 
   return (
-
     <Authentication.Provider value={authProvider}>
-      <ChatContext.Provider value={chatProvider}>
-        {children}
-      </ChatContext.Provider>
+      <ChatContext.Provider value={chatProvider}>{children}</ChatContext.Provider>
     </Authentication.Provider>
   )
 }

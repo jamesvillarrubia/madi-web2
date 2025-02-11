@@ -23,12 +23,12 @@ const inter = Inter({ subsets: ['latin'], variable: '--font-inter' })
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
-      <html lang="en" suppressHydrationWarning>
-        <body className={inter.className}>
-          <ThemesProvider>
-            <Contexts>{children}</Contexts>
-          </ThemesProvider>
-        </body>
-      </html>
+    <html lang="en" suppressHydrationWarning>
+      <body className={inter.className}>
+        <ThemesProvider>
+          <Contexts>{children}</Contexts>
+        </ThemesProvider>
+      </body>
+    </html>
   )
 }

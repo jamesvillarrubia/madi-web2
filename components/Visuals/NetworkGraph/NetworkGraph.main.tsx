@@ -51,7 +51,6 @@ export const NetworkGraphOptions = () => {
   )
 }
 
-
 export const NetworkGraph = () => {
   console.log('Rendering network graph...')
   const [threshold, setThreshold] = useState(0.895)
@@ -107,12 +106,7 @@ export const NetworkGraph = () => {
 
   const similarity = calculateSimilarity(embeddingVectors)
 
-
-
   // const [built, setBuilt] = useState(false)
-
-  
-
 
   useEffect(() => {
     console.log('useEffect rerendering network graph...')
@@ -120,7 +114,7 @@ export const NetworkGraph = () => {
     const svg = d3.select(svgRef.current)
     const zoom = createZoomBehavior(svg)
     const { width, height } = svg.node()?.getBoundingClientRect() ?? { width: 800, height: 600 }
-  
+
     svg.selectAll('*').remove()
     //@ts-ignore
     svg.call(zoom)
@@ -132,7 +126,6 @@ export const NetworkGraph = () => {
     const linkElements = createLinkElements(svg, links, lineColor)
     const nodeElements = createNodeElements(svg, nodes, shapes, drag(simulationRef.current))
     const labelElements = createLabelElements(svg, nodes)
-
 
     nodeElements
       .on('mouseover', function (event, d) {
@@ -151,7 +144,7 @@ export const NetworkGraph = () => {
       updateLabelPositions(labelElements)
     })
 
-      forceSimulation(simulationRef.current, links, width, height)
+    forceSimulation(simulationRef.current, links, width, height)
   }, [embeddings, colors, labels, lineColor, shapes, threshold, similarity])
 
   return (

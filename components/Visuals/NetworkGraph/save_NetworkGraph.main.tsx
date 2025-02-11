@@ -56,8 +56,6 @@
 // } from './_utils'
 // import { ThresholdSlider } from './ThresholdSlider'
 
-
-
 // export const NetworkGraphOptions = () => {
 //   return (
 //     <Flex className="h-full mt-5" gap={'3'}>
@@ -74,17 +72,9 @@
 //   const svgRef = useRef<SVGSVGElement | null>(null);
 //   const { theme } = useTheme();
 
-
 //   const lineColor = useMemo(() => {
 //     return theme === 'dark' ? '#595959' : '#adadad'
 //   }, [theme])
-
-
-
-
-
-
-
 
 //   useEffectDebugger(() => {
 //     console.log('Rendering network graph...')
@@ -100,7 +90,6 @@
 //     // const { width, height } = svg.node()?.getBoundingClientRect() ?? { width: 800, height: 600 }
 //     setupSimulation(simulation, nodes, links, 800, 600)
 
-
 //     if(!hasRun && embeddings.length > 0 && nodePositions) {
 //       console.log('Setting up simulation...')
 //     }
@@ -109,7 +98,6 @@
 
 //     //@ts-ignore
 //     svg.call(zoom)
-
 
 //     nodeElements
 //       .on('mouseover', function (event, d) {
@@ -120,7 +108,7 @@
 //       })
 
 //     // if(!hasRun) {
-      
+
 //       simulation?.on('tick', () => {
 //         //@ts-ignore
 //         updateLinkPositions(linkElements)
@@ -134,15 +122,15 @@
 //     // }
 
 //   }, [
-//     // embeddings, 
-//     // nodePositions, 
-//     // simulation, 
-//     // hasRun, 
-//     // threshold, 
-//     // lineColor, 
-//     // links, 
-//     nodes, 
-//     // setHasRun, 
+//     // embeddings,
+//     // nodePositions,
+//     // simulation,
+//     // hasRun,
+//     // threshold,
+//     // lineColor,
+//     // links,
+//     nodes,
+//     // setHasRun,
 //     // shapes
 //   ])
 

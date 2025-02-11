@@ -53,7 +53,6 @@
 //   d3.select(this).style('stroke', null).style('stroke-width', null)
 // }
 
-
 // // export function calculateLinks(
 // //   nodes: NodeDatum[],
 // //   threshold: number
@@ -141,8 +140,6 @@
 //       </div>
 //     `
 // }
-
-
 
 // export function setupSimulation(simulation: d3.Simulation<NodeDatum, SimulationLink>, nodes: any[], links: any[], width: number, height: number) {
 //   return simulation.nodes(nodes)
