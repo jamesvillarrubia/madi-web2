@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test'
 
-test('test', async ({ page }) => {
+test('most basic usage', async ({ page }) => {
   test.setTimeout(30000)
 
   await page.route('http://localhost:3030/users', async (route) => {
@@ -61,5 +61,5 @@ test('test', async ({ page }) => {
 
   // confirm there's a message bubble
   let message = page.getByText('Hello!')
-  expect(message).toBeVisible()
+  await message.waitFor();
 })
