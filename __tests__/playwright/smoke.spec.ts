@@ -10,9 +10,9 @@ test('test', async ({ page }) => {
 
   await page.route('http://localhost:3030/tools', async (route) => {
     const json = {
-      skip:0,
-      limit:0,
-      total:1,
+      skip: 0,
+      limit: 0,
+      total: 1,
       data: [
         {
           type: 'function',
@@ -37,15 +37,10 @@ test('test', async ({ page }) => {
   await page.goto('http://localhost:3000/')
 
   // create a new chat
-  await page
-    .locator(':text-is("New Chat")')
-    .click()
+  await page.locator(':text-is("New Chat")').click()
 
   // click on the chat
-  await page
-    .locator(':text-is("Untitled")')
-    .nth(1)
-    .click()
+  await page.locator(':text-is("Untitled")').nth(1).click()
 
   // renaming the chat
   await page.getByRole('heading', { name: 'Untitled' }).click()
@@ -65,7 +60,6 @@ test('test', async ({ page }) => {
   await inp.press('Enter')
 
   // confirm there's a message bubble
-  let message = page.getByText('Hello!');
-  expect(message).toBeVisible();
-
+  let message = page.getByText('Hello!')
+  expect(message).toBeVisible()
 })
