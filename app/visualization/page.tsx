@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, Suspense } from 'react'
 import Wrapper from '@/components/Wrapper.component'
 import Contexts from '@/components/Contexts.component'
 import { NetworkGraph, NetworkGraphOptions } from '@/components/Visuals/NetworkGraph/NetworkGraph'
@@ -73,7 +73,7 @@ const NetworkGraphPage = () => {
   }
 
   return (
-    <Contexts>
+    <Suspense><Contexts>
       <Wrapper
         sidebarComponent={
           <SideBarVisuals selectedGraph={selectedGraph} onSelectChange={handleSelectChange} />
@@ -81,7 +81,7 @@ const NetworkGraphPage = () => {
       >
         {renderGraph()}
       </Wrapper>
-    </Contexts>
+    </Contexts></Suspense>
   )
 }
 

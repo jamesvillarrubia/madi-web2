@@ -1,5 +1,9 @@
 import React from 'react'
-import { GetPropDefTypes, Link as RadixLink, linkPropDefs } from '@radix-ui/themes'
+
+import { Link as RadixLink } from '@radix-ui/themes'
+import { GetPropDefTypes } from '@radix-ui/themes/dist/esm/props/prop-def.js'
+import { linkPropDefs } from '@radix-ui/themes/dist/esm/components/link.props.js'
+
 import NextLink from 'next/link'
 
 type LinkOwnProps = GetPropDefTypes<typeof linkPropDefs>

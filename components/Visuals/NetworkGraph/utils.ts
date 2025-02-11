@@ -67,15 +67,17 @@ export function createNodes(embeddings: any[], colors: string[], labels: string[
   }))
 }
 
-export function createZoomBehavior(svg: d3.Selection<SVGSVGElement, unknown, null, undefined>) {
-  return d3
+export function createZoomBehavior(svg: d3.Selection<SVGSVGElement, any, null, undefined>) {
+  const zoomBehavior = d3
     .zoom<SVGSVGElement, unknown>()
     .scaleExtent([0.5, 5])
     .on('zoom', (event) => {
       svg.selectAll('g').attr('transform', event.transform)
-    }) as unknown as (
-    selection: d3.Selection<SVGSVGElement | null, unknown, null, undefined>
-  ) => void
+    });
+
+  return (selection: d3.Selection<SVGSVGElement, any, null, undefined>) => {
+    selection.call(zoomBehavior);
+  };
 }
 
 export function createLinks(
@@ -174,7 +176,7 @@ export function createNodeElements(
 }
 
 export function createLabelElements(
-  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  svg: d3.Selection<SVGSVGElement, any, null, undefined>,
   nodes: any[]
 ) {
   return svg
@@ -199,7 +201,7 @@ export function createLabelElements(
 }
 
 export function updateLinkPositions(
-  linkElements: d3.Selection<SVGLineElement, unknown, null, undefined>
+  linkElements: d3.Selection<SVGLineElement, any, any, undefined>
 ) {
   linkElements
     .attr('x1', (d) => (d.source as any).x ?? 0)
@@ -209,13 +211,13 @@ export function updateLinkPositions(
 }
 
 export function updateNodePositions(
-  nodeElements: d3.Selection<SVGPathElement, unknown, null, undefined>
+  nodeElements: d3.Selection<SVGPathElement, any, any, undefined>
 ) {
   nodeElements.attr('transform', (d) => `translate(${d.x},${d.y})`)
 }
 
 export function updateLabelPositions(
-  labelElements: d3.Selection<SVGForeignObjectElement, unknown, null, undefined>
+  labelElements: d3.Selection<SVGForeignObjectElement, any, any, undefined>
 ) {
   labelElements.attr('x', (d) => (d.x ?? 0) + 10).attr('y', (d) => (d.y ?? 0) + 10)
 }
