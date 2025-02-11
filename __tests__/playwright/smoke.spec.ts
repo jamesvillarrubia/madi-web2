@@ -61,5 +61,5 @@ test('most basic usage', async ({ page }) => {
 
   // confirm there's a message bubble
   let message = page.getByText('Hello!')
-  await message.waitFor();
+  await message.waitFor()
 })
