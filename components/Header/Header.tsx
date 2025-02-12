@@ -1,27 +1,19 @@
 'use client'
 
-import NextLink from 'next/link'
+// import NextLink from 'next/link'
+import { Link } from 'react-router-dom'
+
 import { Symbol, Wordmark } from './Logo'
 import React from 'react'
 
 import { HamburgerMenuIcon } from '@radix-ui/react-icons'
-import {
-  Flex,
-  Heading,
-  IconButton,
-  Select,
-  Tooltip,
-  Text,
-  Button,
-  TabNav
-  // Separator
-} from '@radix-ui/themes'
+import { Flex, Heading, IconButton, Select, Tooltip, Text, Button, TabNav } from '@radix-ui/themes'
 import * as Collapsible from '@radix-ui/react-collapsible'
 import cs from 'classnames'
 import { FaAdjust, FaMoon } from 'react-icons/fa'
 import { IoSunny } from 'react-icons/io5'
 
-import { useRouter } from 'next/navigation'
+// import { useRouter } from 'next/navigation'
 import { useContext } from 'react'
 import { ChatContext } from '../Chat/context'
 import { useTheme } from '../Themes'
@@ -50,7 +42,6 @@ export const HeaderBar = () => {
 
   const { theme, setTheme } = useTheme()
   const { onToggleSidebar } = useContext(ChatContext)
-  const router = useRouter()
 
   return (
     <header
@@ -60,13 +51,9 @@ export const HeaderBar = () => {
       style={{ backgroundColor: 'var(--color-background)' }}
     >
       <Flex align="center" gap="3">
-        <NextLink href="/">
+        <Link to="/">
           <div className="flex items-center" style={{ marginTop: '-2px' }}>
-            <Heading
-              as="h1"
-              className="ml-2 md:text-4xl sm:text-lg pt-0 font-mono tracking-wider"
-              onClick={() => router.push('/')}
-            >
+            <Heading as="h1" className="ml-2 md:text-4xl sm:text-lg pt-0 font-mono tracking-wider">
               <Text
                 color="blue"
                 className="pr-2 md:pr-4 md:pl-5 pl-1 inline-block"
@@ -79,15 +66,15 @@ export const HeaderBar = () => {
               <Wordmark className="inline-block pr-3 w-24 md:w-32" />
             </Heading>
           </div>
-        </NextLink>
+        </Link>
 
         <Flex gap="3" className="pl-10 md:flex hidden">
           <TabNav.Root className="shadow-none">
-            <TabNav.Link href="/chat" active={pathname === '/chat' || pathname === '/'}>
-              Chat
+            <TabNav.Link active={pathname === '/chat' || pathname === '/'} asChild>
+              <Link to="/chat">Chat</Link>
             </TabNav.Link>
-            <TabNav.Link href="/visualization" active={pathname === '/visualization'}>
-              Visualization
+            <TabNav.Link active={pathname === '/visualization'} asChild>
+              <Link to="/visualization">Visualization</Link>
             </TabNav.Link>
           </TabNav.Root>
         </Flex>
@@ -134,16 +121,16 @@ const CollapsibleDemo = () => {
       }}
     >
       <Flex direction="column" gap="3" className="w-full">
-        <NextLink href="/chat" className="">
+        <Link to="/chat" className="">
           <Button className="w-full" size="4" variant="soft">
             Chat
           </Button>
-        </NextLink>
-        <NextLink href="/visualization" className="">
+        </Link>
+        <Link to="/visualization" className="">
           <Button className="w-full" size="4" variant="soft">
             Visualization
           </Button>
-        </NextLink>
+        </Link>
       </Flex>
     </Collapsible.Content>
   )

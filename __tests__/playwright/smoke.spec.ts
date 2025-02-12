@@ -1,16 +1,18 @@
-import { test } from '@playwright/test'
+import { test, expect } from '@playwright/test'
 
-test('test', async ({ page }) => {
+test('most basic usage', async ({ page }) => {
   test.setTimeout(30000)
 
   await page.route('http://localhost:3030/users', async (route) => {
-    const json = { data: { email: 'test', name: 'test', id: 0 } }
+    const json = { data: [{ email: 'test', name: 'test', id: 0 }] }
     await route.fulfill({ json })
   })
 
   await page.route('http://localhost:3030/tools', async (route) => {
-    console.log('TOOLS FIRED')
     const json = {
+      skip: 0,
+      limit: 0,
+      total: 1,
       data: [
         {
           type: 'function',
@@ -33,17 +35,14 @@ test('test', async ({ page }) => {
   })
 
   await page.goto('http://localhost:3000/')
-  await page
-    .locator('div')
-    .filter({ hasText: /^New Chat$/ })
-    .first()
-    .click()
-  await page
-    .locator('div')
-    .filter({ hasText: /^Untitled$/ })
-    .nth(1)
-    .click()
 
+  // create a new chat
+  await page.locator(':text-is("New Chat")').click()
+
+  // click on the chat
+  await page.locator(':text-is("Untitled")').nth(1).click()
+
+  // renaming the chat
   await page.getByRole('heading', { name: 'Untitled' }).click()
   await page.getByPlaceholder('Name the chat...').fill('New Name')
   await page.locator('.rt-TextFieldSlot > .rt-reset').first().click()
@@ -55,13 +54,12 @@ test('test', async ({ page }) => {
   await page.locator('button').filter({ hasText: 'Off' }).click()
   await page.getByLabel('Auto').click()
 
-  await page.getByPlaceholder('Send a message...').click()
-  await page.getByPlaceholder('Send a message...').fill('Hello!')
+  // let's type some stuff in the chat
+  let inp = page.getByPlaceholder('Send a message...')
+  await inp.fill('Hello!')
+  await inp.press('Enter')
 
-  // await page
-  //   .locator('div')
-  //   .filter({ hasText: /^AutoHello!$/ })
-  //   .getByRole('button')
-  //   .first()
-  //   .click()
+  // confirm there's a message bubble
+  let message = page.getByText('Hello!')
+  await message.waitFor()
 })

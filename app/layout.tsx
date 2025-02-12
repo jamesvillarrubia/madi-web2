@@ -1,6 +1,7 @@
 import { Inter } from 'next/font/google'
 import { ReactNode } from 'react'
 import ThemesProvider from '@/providers/ThemesProvider'
+import Contexts from '@/components/Contexts.component'
 
 import '@/styles/globals.scss'
 import '@/styles/theme-config.css'
@@ -24,7 +25,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <body className={inter.className}>
-        <ThemesProvider>{children}</ThemesProvider>
+        <ThemesProvider>
+          <Contexts>{children}</Contexts>
+        </ThemesProvider>
       </body>
     </html>
   )
