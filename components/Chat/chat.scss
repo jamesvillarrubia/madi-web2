@@ -46,3 +46,7 @@
     background-color: var(--accent-a6);
   }
 }
+
+.rt-ScrollAreaViewport > div {
+  max-width: 100%;
+}

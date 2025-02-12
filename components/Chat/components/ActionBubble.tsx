@@ -1,7 +1,7 @@
 'use client'
 
 import { useContext } from 'react'
-import { Box, IconButton, Tooltip } from '@radix-ui/themes'
+import { Box, IconButton, Tooltip, Theme } from '@radix-ui/themes'
 // import * as Tooltip from '@radix-ui/tooltip'
 import { ChatContext } from '@/components/Chat'
 import { CopyIcon, SymbolIcon } from '@radix-ui/react-icons'
@@ -28,35 +28,45 @@ export const ActionBubble = (props: ActionBubbleProps) => {
   const { regenerateMessage } = useContext(ChatContext)
 
   return (
-    <Box width="max-content">
-      <Tooltip content="Copy">
-        <IconButton
-          className="mr-2 w-5 h-5"
-          radius="large"
-          variant="ghost"
-          size="1"
-          onClick={copyToClipboard}
-        >
-          <CopyIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip content="Regenerate">
-        <IconButton
-          className="mr-2 w-5 h-5"
-          radius="large"
-          variant="ghost"
-          size="1"
-          onClick={() => regenerateMessage(messageIndex)}
-        >
-          <SymbolIcon />
-        </IconButton>
-      </Tooltip>
-      <Tooltip content="Bad Reponse - Coming Soon">
-        <IconButton className="mr-2 w-5 h-5" radius="large" variant="ghost" size="1">
-          <TiThumbsDown />
-        </IconButton>
-      </Tooltip>
-    </Box>
+    <Theme>
+      <Box width="max-content" className="pt-2">
+        <Tooltip content="Copy">
+          <IconButton
+            className="inline-flex w-[20px] h-[20px] p-2 m-0 mr-1"
+            radius="large"
+            variant="ghost"
+            size="2"
+            onClick={copyToClipboard}
+            asChild
+          >
+            <CopyIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Regenerate">
+          <IconButton
+            className="inline-flex w-[20px] h-[20px] p-2 m-0 mr-1"
+            radius="large"
+            variant="ghost"
+            size="1"
+            onClick={() => regenerateMessage(messageIndex)}
+            asChild
+          >
+            <SymbolIcon />
+          </IconButton>
+        </Tooltip>
+        <Tooltip content="Bad Reponse - Coming Soon">
+          <IconButton
+            className="inline-flex w-[20px] h-[20px] p-2 m-0 mr-1"
+            radius="large"
+            variant="ghost"
+            size="1"
+            asChild
+          >
+            <TiThumbsDown />
+          </IconButton>
+        </Tooltip>
+      </Box>
+    </Theme>
   )
 }
 

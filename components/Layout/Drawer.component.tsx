@@ -1,52 +1,11 @@
 'use client'
-import React, { ReactNode, useState, useContext, createContext } from 'react'
+import React, { useContext } from 'react'
 import { Flex, IconButton } from '@radix-ui/themes'
-import { Drawer } from './Drawer.component'
-// import ThemesProvider from '@/providers/ThemesProvider'
-
+import { Drawer } from '@/components/Layout/DrawerDialog.component'
 import { Cross2Icon } from '@radix-ui/react-icons'
+import { SidebarContext } from '@/components/Layout/Wrapper.component'
 
-import { Toaster, Banner, SideBar } from '@/components'
-import { Header } from '@/components/Header/Header'
-
-interface Props {
-  children: ReactNode
-  sidebarComponent: ReactNode
-}
-
-const Wrapper = ({ children, sidebarComponent }: Props) => {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(false)
-
-  if (!sidebarComponent) {
-    sidebarComponent = <Flex className="h-full"></Flex>
-  }
-  return (
-    <SidebarContext.Provider value={{ isSidebarOpen, setIsSidebarOpen }}>
-      <Banner />
-      <Header />
-      <DrawerComponent>{sidebarComponent}</DrawerComponent>
-      <Flex className="relative chat-flex z-0">
-        <SideBar>{sidebarComponent}</SideBar>
-        <div className="flex-1 relative">{children}</div>
-      </Flex>
-
-      <Toaster />
-    </SidebarContext.Provider>
-  )
-}
-
-export default Wrapper
-
-// Create a context for the sidebar state
-export const SidebarContext = createContext<{
-  isSidebarOpen: boolean
-  setIsSidebarOpen: React.Dispatch<React.SetStateAction<boolean>>
-}>({
-  isSidebarOpen: false,
-  setIsSidebarOpen: () => {}
-})
-
-const DrawerComponent = ({ children }: { children: React.ReactNode }) => {
+export const DrawerComponent = ({ children }: { children: React.ReactNode }) => {
   const { isSidebarOpen, setIsSidebarOpen } = useContext(SidebarContext)
   return (
     <Drawer.Root open={isSidebarOpen} onOpenChange={setIsSidebarOpen}>

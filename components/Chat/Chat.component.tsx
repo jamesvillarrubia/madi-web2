@@ -22,7 +22,7 @@ import { ChatMessage } from '../interface'
 import EditableText from './components/EditableText'
 import Message from './components/Message.component'
 import { ChatContext } from './context'
-import { SidebarContext } from '../Wrapper.component'
+import { SidebarContext } from '@/components/Layout/Wrapper.component'
 
 import './index.scss'
 import './chat.scss'
@@ -107,13 +107,21 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   })
 
   return (
-    <Flex direction="column" height="100%" className="relative" gap="3">
+    <Flex
+      direction="column"
+      height="100%"
+      className="relative flex-shrink-1"
+      width={'100%'}
+      maxWidth={'100%'}
+      gap="3"
+    >
       <Flex
         justify="between"
         align="center"
         py="3"
         px="4"
         style={{ backgroundColor: 'var(--gray-a3)' }}
+        width={'100%'}
       >
         <EditableText
           viewProps={{
@@ -147,12 +155,13 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
         </div>
       </Flex>
       <ScrollArea
-        className="flex-1 px-4"
+        className="flex-1 px-4 pr-5"
         type="auto"
+        size={'2'}
         scrollbars="vertical"
-        style={{ height: '100%' }}
+        style={{ height: '100%', width: '100%', minWidth: '100%' }}
       >
-        <Container size="3" className="max-w-1000px">
+        <Container size="3" className="w-full">
           {conversation?.map((item, index) => <Message key={index} message={item} index={index} />)}
           {currentMessage && idAtStart === currentChatId && (
             <Message
@@ -165,7 +174,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
         <div className="h-24"></div>
       </ScrollArea>
       <Flex className="px-4 pb-1" gap="0" direction={'column'}>
-        <Container size="3" className="max-w-1000px">
+        <Container size="3" className="">
           <Flex
             // shrink="1"
             className="pb-2"
@@ -191,7 +200,10 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
               onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
               onKeyDown={handleKeypress}
             />
-            <Flex gap="3" className="absolute right-0 pr-4 bottom-3 pt">
+            <Flex
+              gap="3"
+              className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center"
+            >
               {isLoading && (
                 <>
                   <Flex
@@ -216,34 +228,34 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
                 </>
               )}
               <IconButton
-                variant="soft"
+                variant="ghost"
                 disabled={isLoading}
                 color="gray"
                 size="2"
-                className="rounded-xl"
+                className="w-[30px] h-[30px] rounded-full hover:color-ruby-9 p-1"
                 onClick={sendMessage}
               >
-                <FiSend className="h-4 w-4" />
+                <FiSend className="h-6 w-6 pr-[2px] pt-[2px]" />
               </IconButton>
               <IconButton
-                variant="soft"
+                variant="ghost"
                 color="gray"
                 size="2"
-                className="rounded-xl"
+                className="w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
                 disabled={isLoading}
                 onClick={clearMessages}
               >
-                <AiOutlineClear className="h-4 w-4" />
+                <AiOutlineClear className="h-6 w-6 pl-[1px] pb-[1px]" />
               </IconButton>
 
               <IconButton
-                variant="soft"
+                variant="ghost"
                 color="gray"
                 size="2"
-                className="rounded-xl md:hidden"
+                className="md:hidden w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
                 onClick={() => setIsSidebarOpen(true)}
               >
-                <AiOutlineUnorderedList className="h-4 w-4" />
+                <AiOutlineUnorderedList className="h-6 w-6 pl-[1px] pb-[1px]" />
               </IconButton>
             </Flex>
           </Flex>

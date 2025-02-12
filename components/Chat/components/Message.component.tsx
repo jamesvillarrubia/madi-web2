@@ -1,7 +1,8 @@
 'use client'
 
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import * as Collapsible from '@radix-ui/react-collapsible'
-import { Avatar, Flex } from '@radix-ui/themes'
+import { Avatar, Flex, IconButton } from '@radix-ui/themes'
 import { useState } from 'react'
 import { FaAngleDown, FaAngleUp } from 'react-icons/fa'
 import { HiUser } from 'react-icons/hi'
@@ -9,6 +10,7 @@ import { SiOpenai } from 'react-icons/si'
 import { ChatMessage } from '../../interface'
 import { ActionBubble } from './ActionBubble'
 import { Markdown } from './Markdown'
+import { Symbol, Wordmark } from '../../Header/Logo'
 
 export interface MessageProps {
   message: ChatMessage
@@ -55,22 +57,31 @@ const Message = (props: MessageProps) => {
       )
     }
     return (
-      <Flex gap="4" className={`mb-5 ${isUser ? 'justify-end' : ''}`}>
+      <Flex gap="2" className={`mb-5 ${isUser ? 'justify-end' : ''}`}>
         {!isUser ? (
           <Avatar
-            fallback={isUser ? <HiUser className="h-4 w-4" /> : <SiOpenai className="h-4 w-4" />}
-            color={isUser ? undefined : 'green'}
-            size="3"
+            fallback={
+              isUser ? (
+                <HiUser className="h-5 w-5" />
+              ) : (
+                // : <SiOpenai className="h-5 w-5" />
+                <Symbol className="inline-block w-3" />
+              )
+            }
+            size="2"
             radius="full"
+            className="mt-1"
+            variant="solid"
+            color="ruby"
           />
         ) : null}
         <Flex
           direction="column"
-          gap="2"
-          className={`py-1 px-3 flex-1 break-word rounded-lg role-${role}`}
+          gap="0"
+          className={`py-1 px-2 flex-1 break-word rounded-lg role-${role}`}
           style={{
             backgroundColor: isUser ? 'var(--gray-a4)' : '',
-            maxWidth: '90%',
+            maxWidth: isUser ? '80%' : '85%',
             alignSelf: 'flex-end',
             textAlign: 'left',
             flex: 'none'
