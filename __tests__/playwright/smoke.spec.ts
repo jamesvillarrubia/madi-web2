@@ -30,6 +30,9 @@ test('most basic usage', async ({ page }) => {
   })
 
   await page.route('http://localhost:3030/chats', async (route) => {
+    // wait 1 second, simulating thinking
+    await new Promise((resolve) => setTimeout(resolve, 1000))
+
     const json = { data: [{ id: 0 }] }
     await route.fulfill({ json })
   })
@@ -61,5 +64,36 @@ test('most basic usage', async ({ page }) => {
 
   // confirm there's a message bubble
   let message = page.getByText('Hello!')
+  await message.waitFor()
+
+  // confirm the chat box is empty
+  inp = page.getByPlaceholder('Send a message...')
+  expect(await inp.inputValue()).toBe('')
+
+  // wait a lil longer
+  await page.waitForTimeout(1000)
+
+  // let's do the same, but by pressing the send button
+  await inp.fill('Hi again!')
+  await page.locator('button.send-button').click()
+
+  message = page.getByText('Hi again!')
+  await message.waitFor()
+
+  inp = page.getByPlaceholder('Send a message...')
+  expect(await inp.inputValue()).toBe('')
+
+  // test the cancel button
+  await inp.fill('Test3')
+  await page.locator('button.send-button').click()
+  let cbutton = page.locator('button:has-text("Cancel")')
+  await cbutton.waitFor()
+  await cbutton.click()
+
+  // cancel button should immediately be gone
+  expect(await cbutton.isHidden()).toBe(true)
+
+  // text should still be there
+  message = page.getByText('Test3')
   await message.waitFor()
 })

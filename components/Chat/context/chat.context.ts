@@ -17,6 +17,16 @@ export const DefaultPersonas: Persona[] = [
   }
 ]
 
+export const useMessageContext = () => {
+  // CurrentMessage
+  const [message, setMessage] = useState('')
+
+  return {
+    message,
+    setMessage
+  }
+}
+
 export const useChatContext = () => {
   const { toast } = useToast()
   // const toastRef = useRef<any>(null)
@@ -49,7 +59,6 @@ export const useChatContext = () => {
   const [conversation, setConversation] = useState<ChatMessage[]>([])
 
   // CurrentMessage
-  const [message, setMessage] = useState('')
   const [currentMessage, setCurrentMessage] = useState<string>('')
 
   //Visual States
@@ -185,7 +194,9 @@ export const useChatContext = () => {
       })
       return
     }
-    setMessage('')
+    // empty the textarea
+    textAreaRef.current!.value = ''
+
     setIsLoading(true)
     const localIdAtStart = currentChatId || ''
     setStartId(localIdAtStart)
@@ -263,12 +274,17 @@ export const useChatContext = () => {
     conversationRef.current = conversation
   }, [conversation])
 
-  useEffect(() => {
-    if (textAreaRef.current) {
-      textAreaRef.current.style.height = '50px'
-      textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 2}px`
+  const handleKeypress = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault()
+      sendMessage(e)
+    } else {
+      if (textAreaRef.current) {
+        textAreaRef.current.style.height = '50px'
+        textAreaRef.current.style.height = `${textAreaRef.current.scrollHeight + 2}px`
+      }
     }
-  }, [message, textAreaRef])
+  }
 
   useEffect(() => {
     if (bottomOfChatRef.current) {
@@ -342,8 +358,6 @@ export const useChatContext = () => {
     setConversation,
 
     // CurrentMessage
-    message,
-    setMessage,
     currentMessage,
     setCurrentMessage,
 
@@ -368,6 +382,8 @@ export const useChatContext = () => {
     sendMessage,
     regenerateMessage,
     cancelSend,
-    clearMessages
+    clearMessages,
+
+    handleKeypress
   }
 }

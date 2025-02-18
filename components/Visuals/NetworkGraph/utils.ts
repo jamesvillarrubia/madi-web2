@@ -68,15 +68,17 @@ export function createNodes(embeddings: any[], colors: string[], labels: string[
   }))
 }
 
-export function createZoomBehavior(svg: d3.Selection<SVGSVGElement, unknown, null, undefined>) {
-  return d3
+export function createZoomBehavior(svg: d3.Selection<SVGSVGElement, any, null, undefined>) {
+  const zoomBehavior = d3
     .zoom<SVGSVGElement, unknown>()
     .scaleExtent([0.5, 5])
     .on('zoom', (event) => {
       svg.selectAll('g').attr('transform', event.transform)
-    }) as unknown as (
-    selection: d3.Selection<SVGSVGElement | null, unknown, null, undefined>
-  ) => void
+    })
+
+  return (selection: d3.Selection<SVGSVGElement, any, null, undefined>) => {
+    selection.call(zoomBehavior)
+  }
 }
 
 export function createLinks(
@@ -179,7 +181,7 @@ export function createNodeElements(
 }
 
 export function createLabelElements(
-  svg: d3.Selection<SVGSVGElement, unknown, null, undefined>,
+  svg: d3.Selection<SVGSVGElement, any, null, undefined>,
   nodes: any[]
 ) {
   return svg
