@@ -41,7 +41,7 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
 })
 TextArea.displayName = 'TextArea'
 
-const MessageBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
+const MessageBox = forwardRef<CustomRef>((props, ref) => {
   const {
     isLoading,
     cancelSend,
@@ -76,6 +76,7 @@ const MessageBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       }
     }
   })
+  MessageBox.displayName = 'Message'
 
   const { setIsSidebarOpen } = useContext(SidebarContext)
 
