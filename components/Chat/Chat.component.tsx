@@ -21,7 +21,7 @@ import { ToolSelect } from '../Tools/ToolSelect'
 import { ChatMessage } from '../interface'
 import EditableText from './components/EditableText'
 import Message from './components/Message.component'
-import { ChatContext } from './context'
+import { ChatContext, MessageContext } from './context'
 import { SidebarContext } from '@/components/Layout/Wrapper.component'
 
 import './index.scss'
@@ -41,48 +41,19 @@ const TextArea = forwardRef<HTMLTextAreaElement, TextAreaProps>((props, ref) => 
 })
 TextArea.displayName = 'TextArea'
 
-const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
-  // const { toast } = useToast()
-  // const toastRef = useRef<any>(null)
+const MessageBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   const {
-    currentChatId,
-    getChatById,
-    // currentTool,
-    // toolList,
-    // setMessagesById,
-    setChatNameById,
-    // onToggleSidebar,
-
-    sendMessage,
-    // regenerateMessage,
-    setConversation,
-    conversationRef,
-    textAreaRef,
-
-    conversation,
-    bottomOfChatRef,
-    currentMessage,
-    idAtStart,
     isLoading,
-    message,
-    setMessage,
     cancelSend,
-    clearMessages
+    clearMessages,
+    textAreaRef,
+    setConversation,
+    handleKeypress,
+    conversationRef,
+    sendMessage
   } = useContext(ChatContext)
-  const { setIsSidebarOpen } = useContext(SidebarContext)
 
-  const handleKeypress = (e: React.KeyboardEvent) => {
-    if (e.keyCode === 13 && !e.shiftKey) {
-      sendMessage(e)
-      e.preventDefault()
-    }
-  }
-
-  useEffect(() => {
-    new clipboard('.copy-btn').on('success', () => {})
-  }, [])
-
-  // console.log('id matches', currentChatId, idAtStart)
+  const { message, setMessage } = useContext(MessageContext)
 
   useEffect(() => {
     if (textAreaRef?.current) {
@@ -105,6 +76,121 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
       }
     }
   })
+
+  const { setIsSidebarOpen } = useContext(SidebarContext)
+
+  return (
+    <Flex className="px-4 pb-1" gap="0" direction={'column'}>
+      <Container size="3" className="">
+        <Flex
+          // shrink="1"
+          className="pb-2"
+        >
+          <ToolSelect />
+        </Flex>
+        <Flex align="end" justify="between" gap="3" className="relative">
+          <TextArea
+            ref={textAreaRef}
+            data-id="root"
+            variant="surface"
+            placeholder="Send a message..."
+            size="3"
+            style={{
+              minHeight: '24px',
+              maxHeight: '200px',
+              overflowY: 'auto'
+            }}
+            className="flex-1 rounded-3xl chat-textarea"
+            tabIndex={0}
+            disabled={isLoading}
+            onKeyDown={handleKeypress}
+          />
+          <Flex
+            gap="3"
+            className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center"
+          >
+            {isLoading && (
+              <>
+                <Flex
+                  width="6"
+                  height="6"
+                  align="center"
+                  justify="center"
+                  style={{ color: 'var(--accent-11)' }}
+                >
+                  <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
+                </Flex>
+                <Button
+                  variant="surface"
+                  // disabled={!isLoading}
+                  color="crimson"
+                  size="2"
+                  className="rounded-xl"
+                  onClick={cancelSend}
+                >
+                  Cancel <FaXmark className="h-4 w-4" />
+                </Button>
+              </>
+            )}
+            <IconButton
+              variant="ghost"
+              disabled={isLoading}
+              color="gray"
+              size="2"
+              className="w-[30px] h-[30px] rounded-full hover:color-ruby-9 p-1 send-button"
+              onClick={(e) => {
+                setMessage(message)
+                sendMessage(e)
+              }}
+            >
+              <FiSend className="h-6 w-6 pr-[2px] pt-[2px]" />
+            </IconButton>
+            <IconButton
+              variant="ghost"
+              color="gray"
+              size="2"
+              className="w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
+              disabled={isLoading}
+              onClick={clearMessages}
+            >
+              <AiOutlineClear className="h-6 w-6 pl-[1px] pb-[1px]" />
+            </IconButton>
+
+            <IconButton
+              variant="ghost"
+              color="gray"
+              size="2"
+              className="md:hidden w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
+              onClick={() => setIsSidebarOpen(true)}
+            >
+              <AiOutlineUnorderedList className="h-6 w-6 pl-[1px] pb-[1px]" />
+            </IconButton>
+          </Flex>
+        </Flex>
+      </Container>
+      <VersionBox />
+    </Flex>
+  )
+})
+
+const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
+  // const { toast } = useToast()
+  // const toastRef = useRef<any>(null)
+  const {
+    currentChatId,
+    getChatById,
+    setChatNameById,
+    conversation,
+    bottomOfChatRef,
+    currentMessage,
+    idAtStart
+  } = useContext(ChatContext)
+
+  useEffect(() => {
+    new clipboard('.copy-btn').on('success', () => {})
+  }, [])
+
+  // console.log('id matches', currentChatId, idAtStart)
 
   return (
     <Flex
@@ -173,95 +259,7 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
         <div ref={bottomOfChatRef}></div>
         <div className="h-24"></div>
       </ScrollArea>
-      <Flex className="px-4 pb-1" gap="0" direction={'column'}>
-        <Container size="3" className="">
-          <Flex
-            // shrink="1"
-            className="pb-2"
-          >
-            <ToolSelect />
-          </Flex>
-          <Flex align="end" justify="between" gap="3" className="relative">
-            <TextArea
-              ref={textAreaRef}
-              data-id="root"
-              variant="surface"
-              placeholder="Send a message..."
-              size="3"
-              style={{
-                minHeight: '24px',
-                maxHeight: '200px',
-                overflowY: 'auto'
-              }}
-              className="flex-1 rounded-3xl chat-textarea"
-              tabIndex={0}
-              value={message}
-              disabled={isLoading}
-              onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setMessage(e.target.value)}
-              onKeyDown={handleKeypress}
-            />
-            <Flex
-              gap="3"
-              className="absolute right-0 pr-4 bottom-0 min-h-[52px] flex-row justify-middle items-center"
-            >
-              {isLoading && (
-                <>
-                  <Flex
-                    width="6"
-                    height="6"
-                    align="center"
-                    justify="center"
-                    style={{ color: 'var(--accent-11)' }}
-                  >
-                    <AiOutlineLoading3Quarters className="animate-spin h-4 w-4" />
-                  </Flex>
-                  <Button
-                    variant="surface"
-                    // disabled={!isLoading}
-                    color="crimson"
-                    size="2"
-                    className="rounded-xl"
-                    onClick={cancelSend}
-                  >
-                    Cancel <FaXmark className="h-4 w-4" />
-                  </Button>
-                </>
-              )}
-              <IconButton
-                variant="ghost"
-                disabled={isLoading}
-                color="gray"
-                size="2"
-                className="w-[30px] h-[30px] rounded-full hover:color-ruby-9 p-1"
-                onClick={sendMessage}
-              >
-                <FiSend className="h-6 w-6 pr-[2px] pt-[2px]" />
-              </IconButton>
-              <IconButton
-                variant="ghost"
-                color="gray"
-                size="2"
-                className="w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
-                disabled={isLoading}
-                onClick={clearMessages}
-              >
-                <AiOutlineClear className="h-6 w-6 pl-[1px] pb-[1px]" />
-              </IconButton>
-
-              <IconButton
-                variant="ghost"
-                color="gray"
-                size="2"
-                className="md:hidden w-[30px] h-[30px] rounded-full text-ruby-1 p-1"
-                onClick={() => setIsSidebarOpen(true)}
-              >
-                <AiOutlineUnorderedList className="h-6 w-6 pl-[1px] pb-[1px]" />
-              </IconButton>
-            </Flex>
-          </Flex>
-        </Container>
-        <VersionBox />
-      </Flex>
+      <MessageBox ref={ref} />
     </Flex>
   )
 })

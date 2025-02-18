@@ -3,6 +3,11 @@ import { Tool, ChatMessage, Chat, Persona, ChatGPTInstance } from '../../interfa
 import { AppState } from '@/components/localStorage'
 export * from './chat.context'
 
+export type MessageContextType = {
+  message: string
+  setMessage: (message: string) => void
+}
+
 export type ChatContextType = {
   debug: boolean
   chatRef: Ref<ChatGPTInstance> | undefined
@@ -47,10 +52,14 @@ export type ChatContextType = {
   currentMessage: string
   idAtStart: string
   isLoading: boolean
-  message: string
-  setMessage: (message: string) => void
+
+  handleKeypress: (e: React.KeyboardEvent) => void
+
   cancelSend: () => void
   clearMessages: () => void
 }
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)
+export const MessageContext = createContext<MessageContextType>(
+  undefined as unknown as MessageContextType
+)
