@@ -84,16 +84,6 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
 
-  // console.log('id matches', currentChatId, idAtStart)
-
-  useEffect(() => {
-    if (textAreaRef?.current) {
-      console.log('textAreaRef is set:', textAreaRef.current)
-    } else {
-      console.log('textAreaRef is null')
-    }
-  }, [textAreaRef])
-
   useImperativeHandle(ref, () => {
     return {
       setConversation(messages: ChatMessage[]) {

@@ -32,7 +32,12 @@ const Message = (props: MessageProps) => {
   const messageIndex = props.index
 
   if (content) {
-    if (role === 'tool' && isJsonString(content)) {
+    if (role === 'tool') {
+      let formatted_contents = content
+      try {
+        formatted_contents = JSON.stringify(JSON.parse(content), null, 2)
+      } catch (e) {} // parse error is actually fine.
+
       return (
         <Flex gap="4" className="-mt-5 mb-5 ml-20 text-xs	" style={{ color: 'var(--accent-a10)' }}>
           <Collapsible.Root className="CollapsibleRoot" open={open} onOpenChange={setOpen}>
@@ -49,7 +54,7 @@ const Message = (props: MessageProps) => {
                   wordWrap: 'break-word' /* Internet Explorer 5.5+ */
                 }}
               >
-                {JSON.stringify(JSON.parse(content), null, 2)}
+                {formatted_contents}
               </pre>
             </Collapsible.Content>
           </Collapsible.Root>

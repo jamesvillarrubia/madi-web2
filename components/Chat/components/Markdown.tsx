@@ -22,7 +22,6 @@ export interface MarkdownProps {
 }
 
 export const Markdown = ({ className, children }: MarkdownProps) => {
-  // console.log(children)
   return (
     <ReactMarkdown
       className={`markdown-wrapper prose dark:prose-invert max-w-none ${className}`}
@@ -40,7 +39,6 @@ export const Markdown = ({ className, children }: MarkdownProps) => {
         //   return {props.children}
         // },
         code(props) {
-          console.log(props)
           const { children, className, ref, ...rest } = props
           const match = /language-(\w+)/.exec(className || '')
           const minWidthEm = `${`${children}`.split('\n').length.toString().length}.25em`

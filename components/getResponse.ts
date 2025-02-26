@@ -117,14 +117,6 @@ export const getTools = async (): Promise<Tool[]> => {
     method: 'GET'
   })
 
-  console.log(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...GCP_IAP_HEADERS
-    },
-    method: 'GET'
-  })
-
   const json = await res.json()
   return json.data
 }
@@ -189,7 +181,10 @@ export const postChat = async (
   }
 }
 
-export const postTools = async (tool_calls: ToolCall[], setLoadingMessage): Promise<ChatMessage[]> => {
+export const postTools = async (
+  tool_calls: ToolCall[], 
+  setLoadingMessage?: (message: string) => void
+): Promise<ChatMessage[]> => {
   const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
@@ -226,7 +221,7 @@ export const postTools = async (tool_calls: ToolCall[], setLoadingMessage): Prom
       // if all tool calls are completed, resolve the promise
       if (tool_info.every((t:any) => t.status === 'Completed')) {
         // clear loading status
-        setLoadingMessage('');
+        if (setLoadingMessage) setLoadingMessage('');
 
         resolve(tool_info.map((t:any) => {
           const args = JSON.parse(t.args);
@@ -239,13 +234,16 @@ export const postTools = async (tool_calls: ToolCall[], setLoadingMessage): Prom
         }));
       } else {
         // otherwise, set the loading message appropriately and wait some second(s) and poll again
-        let messages = tool_info.map((t:any) => { t.status });
-        if (messages.length == 1) {
-          setLoadingMessage(messages[0]);
-        } else {
-          // choose the most incomplete status (minimum of `progress`)
-          let most_incomplete = messages.reduce((a:any, b:any) => a.progress < b.progress ? a : b);
-          setLoadingMessage(most_incomplete.status);
+        let messages = tool_info.map((t:any) => t.status );
+
+        if (setLoadingMessage) {
+          if (messages.length == 1) {
+            setLoadingMessage(messages[0]);
+          } else {
+            // choose the most incomplete status (minimum of `progress`)
+            let most_incomplete = messages.reduce((a:any, b:any) => a.progress < b.progress ? a : b);
+            setLoadingMessage(most_incomplete.status);
+          }
         }
         setTimeout(poll, 1500);
       }
@@ -296,6 +294,14 @@ export const postRunner = async (
     // additionalMessages
   } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
 
+  // add the new message to the message array
+  if (newMessage) {
+    messageArray = [
+      ...messageArray,
+      { role: 'user', content: newMessage },
+    ]
+  }
+
   if (currentStream instanceof ReadableStream) {
     const [checkStream, textStream] = currentStream.tee()
 
@@ -323,21 +329,15 @@ export const postRunner = async (
       if (toolCallMessage.tool_calls) {
         const toolResponse = await postTools(toolCallMessage.tool_calls, setLoadingMessage)
         toolResponses.push(...toolResponse) // extend conversation with function response
-        // console.log('Messages with Tool Responses', toolResponses)
       }
 
       // now rebuild a message array with the right stuff
       // add the original message
 
-      if (newMessage) {
-        messageArray = [
-          ...messageArray,
-          { role: 'user', content: newMessage },
-          toolCallMessage,
-          ...toolResponses
-        ]
-      }
-      // console.log('Final messageArray before Post',messageArray)
+      messageArray = [
+        toolCallMessage,
+        ...toolResponses
+      ];
 
       const { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
 

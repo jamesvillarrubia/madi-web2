@@ -36,7 +36,7 @@ export const useChatContext = () => {
   const debug = false
 
   // Loading Message (updated from tool calls)
-  const [loadingMessage, setLoadingMessage] = useState('')
+  const [loadingMessage, setLoadingMessage] = useState<string>('')
 
   // Tools
   const [currentTool, setCurrentTool] = useState<string>('auto')
