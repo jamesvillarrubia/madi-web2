@@ -1,5 +1,8 @@
+import { overArgs } from 'lodash-es'
 import { ChatMessage, ResponseSet, Tool, ToolCall } from '../components/interface'
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
+import client from './feathersClient'
+import { m } from 'framer-motion'
 
 // @ts-expect-error - This is a polyfill for ReadableStream
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
@@ -186,7 +189,7 @@ export const postChat = async (
   }
 }
 
-export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> => {
+export const postTools = async (tool_calls: ToolCall[], setLoadingMessage): Promise<ChatMessage[]> => {
   const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
@@ -209,7 +212,51 @@ export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> 
     )
   }
 
-  return res.json()
+  // parse JSON response
+  const tool_call_handles = await res.json()
+
+  // now, poll the tool calls until they are all completed
+  const result = await new Promise((resolve, reject) => {
+    const poll = async () => {
+      // get the status of each tool call
+      const tool_info = await client.service('tasks').find({ query: { 
+        id: {$in: tool_call_handles.map((t:any) => t.task_id) } 
+      } });
+
+      // if all tool calls are completed, resolve the promise
+      if (tool_info.every((t:any) => t.status === 'Completed')) {
+        // clear loading status
+        setLoadingMessage('');
+
+        resolve(tool_info.map((t:any) => {
+          const args = JSON.parse(t.args);
+          return {
+            tool_call_id: args.id,
+            role: "tool",
+            name: args.function.name,
+            content: t.result,
+          };
+        }));
+      } else {
+        // otherwise, set the loading message appropriately and wait some second(s) and poll again
+        let messages = tool_info.map((t:any) => { t.status });
+        if (messages.length == 1) {
+          setLoadingMessage(messages[0]);
+        } else {
+          // choose the most incomplete status (minimum of `progress`)
+          let most_incomplete = messages.reduce((a:any, b:any) => a.progress < b.progress ? a : b);
+          setLoadingMessage(most_incomplete.status);
+        }
+        setTimeout(poll, 1500);
+      }
+    };
+
+    poll();
+  });
+
+  console.log('Found a result!', result)
+
+  return result as ChatMessage[]
 }
 
 export const convertChunktoJsonArray = (string: string) => {
@@ -240,7 +287,8 @@ export const postRunner = async (
   messageArray: ChatMessage[],
   newMessage?: string,
   currentTool?: string,
-  tools?: Tool[]
+  tools?: Tool[],
+  setLoadingMessage?: (message: string) => void
 ): Promise<ResponseSet> => {
   // send message to postChat
   const {
@@ -273,7 +321,7 @@ export const postRunner = async (
       // Iterate through the tool calls
       const toolResponses = [] as ChatMessage[]
       if (toolCallMessage.tool_calls) {
-        const toolResponse = await postTools(toolCallMessage.tool_calls)
+        const toolResponse = await postTools(toolCallMessage.tool_calls, setLoadingMessage)
         toolResponses.push(...toolResponse) // extend conversation with function response
         // console.log('Messages with Tool Responses', toolResponses)
       }

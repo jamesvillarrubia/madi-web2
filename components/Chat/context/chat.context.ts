@@ -35,6 +35,9 @@ export const useChatContext = () => {
   // const debug = searchParams.get('debug') === 'true'
   const debug = false
 
+  // Loading Message (updated from tool calls)
+  const [loadingMessage, setLoadingMessage] = useState('')
+
   // Tools
   const [currentTool, setCurrentTool] = useState<string>('auto')
   const [toolList, setToolList] = useState<Tool[]>(DefaultTools || [])
@@ -106,6 +109,7 @@ export const useChatContext = () => {
     setMessagesById: (id: string, messages: ChatMessage[]) => void,
     setCurrentMessage: (msg: string) => void,
     setIsLoading: (loading: boolean) => void,
+    setLoadingMessage: (msg: string) => void,
     cancelledRef: React.MutableRefObject<boolean>,
     toast: (options: { title: string; description: string }) => void
   ) => {
@@ -115,7 +119,8 @@ export const useChatContext = () => {
         conversation,
         input,
         currentTool,
-        toolList
+        toolList,
+        setLoadingMessage,
       )
 
       let updatedConversation = [
@@ -131,7 +136,6 @@ export const useChatContext = () => {
       //@ts-expect-error - currentStream is a ReadableStream polyfill
       for await (const chunk of currentStream) {
         const decoder = new TextDecoder('utf-8')
-        console.log('sendMessage Chunks', decoder.decode(chunk))
         const decoded = convertChunktoJsonArray(decoder.decode(chunk)) || []
         const char = decoded.reduce(
           (acc, d) => `${acc}${d?.choices?.[0]?.delta?.content || ''}`,
@@ -210,6 +214,7 @@ export const useChatContext = () => {
       setMessagesById,
       setCurrentMessage,
       setIsLoading,
+      setLoadingMessage,
       cancelledRef,
       toast
     )
@@ -237,6 +242,7 @@ export const useChatContext = () => {
         setMessagesById,
         setCurrentMessage,
         setIsLoading,
+        setLoadingMessage,
         cancelledRef,
         toast
       )
@@ -353,6 +359,8 @@ export const useChatContext = () => {
     setToggleSidebar,
     isLoading,
     setIsLoading,
+    loadingMessage,
+    setLoadingMessage,
 
     // State
     state,
