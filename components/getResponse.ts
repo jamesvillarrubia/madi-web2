@@ -194,7 +194,8 @@ export const postTools = async (
     },
     method: 'POST',
     body: JSON.stringify({
-      tool_calls: tool_calls
+      tool_calls: tool_calls,
+      polling: true
     })
   })
 
