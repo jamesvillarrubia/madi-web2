@@ -42,7 +42,6 @@ export const SideBarChatList = () => {
                 display="block"
                 onClick={() => {
                   onChangeChat(id)
-                  console.log('onClick', id)
                 }}
               >
                 <Text as="p" className="truncate" style={{ maxWidth: 190 }}>

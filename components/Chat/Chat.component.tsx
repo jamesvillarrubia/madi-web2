@@ -53,6 +53,8 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
     setChatNameById,
     // onToggleSidebar,
 
+    loadingMessage,
+
     sendMessage,
     // regenerateMessage,
     setConversation,
@@ -81,16 +83,6 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
   useEffect(() => {
     new clipboard('.copy-btn').on('success', () => {})
   }, [])
-
-  // console.log('id matches', currentChatId, idAtStart)
-
-  useEffect(() => {
-    if (textAreaRef?.current) {
-      console.log('textAreaRef is set:', textAreaRef.current)
-    } else {
-      console.log('textAreaRef is null')
-    }
-  }, [textAreaRef])
 
   useImperativeHandle(ref, () => {
     return {
@@ -206,6 +198,14 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
             >
               {isLoading && (
                 <>
+                  {loadingMessage != '' && (
+                    <Flex
+                      className="text-xs italic"
+                      style={{ color: 'var(--accent-11)', minWidth: '100px' }}
+                    >
+                      {loadingMessage}
+                    </Flex>
+                  )}
                   <Flex
                     width="6"
                     height="6"

@@ -1,5 +1,6 @@
 import { ChatMessage, ResponseSet, Tool, ToolCall } from '../components/interface'
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
+import client from './feathersClient'
 
 // @ts-expect-error - This is a polyfill for ReadableStream
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
@@ -28,6 +29,14 @@ type Item = {
 
 type Accumulator = {
   [key: string]: DeltaValue // Define a more specific type if possible
+}
+
+type AsyncTaskInfo = {
+  task_id: string
+  status: string
+  args: string
+  result: string
+  progress: number
 }
 
 export function messageReducer(previous: ChatMessage, item: Item): ChatMessage {
@@ -114,14 +123,6 @@ export const getTools = async (): Promise<Tool[]> => {
     method: 'GET'
   })
 
-  console.log(url, {
-    headers: {
-      'Content-Type': 'application/json',
-      ...GCP_IAP_HEADERS
-    },
-    method: 'GET'
-  })
-
   const json = await res.json()
   return json.data
 }
@@ -186,7 +187,10 @@ export const postChat = async (
   }
 }
 
-export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> => {
+export const postTools = async (
+  tool_calls: ToolCall[],
+  setLoadingMessage?: (message: string) => void
+): Promise<ChatMessage[]> => {
   const url = `${API_HOST}${API_TOOL_PATH}`
 
   const res = await fetch(url, {
@@ -196,7 +200,8 @@ export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> 
     },
     method: 'POST',
     body: JSON.stringify({
-      tool_calls: tool_calls
+      tool_calls: tool_calls,
+      polling: true
     })
   })
 
@@ -209,7 +214,60 @@ export const postTools = async (tool_calls: ToolCall[]): Promise<ChatMessage[]> 
     )
   }
 
-  return res.json()
+  // parse JSON response
+  const tool_call_handles = await res.json()
+
+  // now, poll the tool calls until they are all completed
+  const result = await new Promise((resolve) => {
+    const poll = async () => {
+      // get the status of each tool call
+      const tool_info = await client.service('tasks').find({
+        query: {
+          id: { $in: tool_call_handles.map((t: AsyncTaskInfo) => t.task_id) }
+        }
+      })
+
+      // if all tool calls are completed, resolve the promise
+      if (tool_info.every((t: AsyncTaskInfo) => t.status === 'Completed')) {
+        // clear loading status
+        if (setLoadingMessage) setLoadingMessage('')
+
+        resolve(
+          tool_info.map((t: AsyncTaskInfo) => {
+            const args = JSON.parse(t.args)
+            return {
+              tool_call_id: args.id,
+              role: 'tool',
+              name: args.function.name,
+              content: t.result
+            }
+          })
+        )
+      } else {
+        // otherwise, set the loading message appropriately and wait some second(s) and poll again
+        const messages = tool_info.map((t: AsyncTaskInfo) => t.status)
+
+        if (setLoadingMessage) {
+          if (messages.length == 1) {
+            setLoadingMessage(messages[0])
+          } else {
+            // choose the most incomplete status (minimum of `progress`)
+            const most_incomplete = messages.reduce((a: AsyncTaskInfo, b: AsyncTaskInfo) =>
+              a.progress < b.progress ? a : b
+            )
+            setLoadingMessage(most_incomplete.status)
+          }
+        }
+        setTimeout(poll, 1500)
+      }
+    }
+
+    poll()
+  })
+
+  console.log('Found a result!', result)
+
+  return result as ChatMessage[]
 }
 
 export const convertChunktoJsonArray = (string: string) => {
@@ -240,13 +298,19 @@ export const postRunner = async (
   messageArray: ChatMessage[],
   newMessage?: string,
   currentTool?: string,
-  tools?: Tool[]
+  tools?: Tool[],
+  setLoadingMessage?: (message: string) => void
 ): Promise<ResponseSet> => {
   // send message to postChat
   const {
     currentStream
     // additionalMessages
   } = await postChat(systemPrompt, messageArray, newMessage, currentTool, tools)
+
+  // add the new message to the message array
+  if (newMessage) {
+    messageArray = [...messageArray, { role: 'user', content: newMessage }]
+  }
 
   if (currentStream instanceof ReadableStream) {
     const [checkStream, textStream] = currentStream.tee()
@@ -273,23 +337,14 @@ export const postRunner = async (
       // Iterate through the tool calls
       const toolResponses = [] as ChatMessage[]
       if (toolCallMessage.tool_calls) {
-        const toolResponse = await postTools(toolCallMessage.tool_calls)
+        const toolResponse = await postTools(toolCallMessage.tool_calls, setLoadingMessage)
         toolResponses.push(...toolResponse) // extend conversation with function response
-        // console.log('Messages with Tool Responses', toolResponses)
       }
 
       // now rebuild a message array with the right stuff
       // add the original message
 
-      if (newMessage) {
-        messageArray = [
-          ...messageArray,
-          { role: 'user', content: newMessage },
-          toolCallMessage,
-          ...toolResponses
-        ]
-      }
-      // console.log('Final messageArray before Post',messageArray)
+      messageArray = [toolCallMessage, ...toolResponses]
 
       const { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
 

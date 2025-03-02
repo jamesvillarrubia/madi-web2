@@ -51,6 +51,8 @@ export type ChatContextType = {
   setMessage: (message: string) => void
   cancelSend: () => void
   clearMessages: () => void
+  setLoadingMessage: (message: string) => void
+  loadingMessage: string
 }
 
 export const ChatContext = createContext<ChatContextType>(undefined as unknown as ChatContextType)
