@@ -120,7 +120,7 @@ export const useChatContext = () => {
         input,
         currentTool,
         toolList,
-        setLoadingMessage,
+        setLoadingMessage
       )
 
       let updatedConversation = [

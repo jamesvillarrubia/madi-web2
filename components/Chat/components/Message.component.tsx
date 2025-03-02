@@ -38,7 +38,7 @@ const Message = (props: MessageProps) => {
         formatted_contents = JSON.stringify(JSON.parse(content), null, 2)
       } catch (e) {
         // parse error is actually fine.
-      } 
+      }
 
       return (
         <Flex gap="4" className="-mt-5 mb-5 ml-20 text-xs	" style={{ color: 'var(--accent-a10)' }}>

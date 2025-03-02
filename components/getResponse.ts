@@ -188,7 +188,7 @@ export const postChat = async (
 }
 
 export const postTools = async (
-  tool_calls: ToolCall[], 
+  tool_calls: ToolCall[],
   setLoadingMessage?: (message: string) => void
 ): Promise<ChatMessage[]> => {
   const url = `${API_HOST}${API_TOOL_PATH}`
@@ -221,43 +221,49 @@ export const postTools = async (
   const result = await new Promise((resolve) => {
     const poll = async () => {
       // get the status of each tool call
-      const tool_info = await client.service('tasks').find({ query: { 
-        id: {$in: tool_call_handles.map((t:AsyncTaskInfo) => t.task_id) } 
-      } });
+      const tool_info = await client.service('tasks').find({
+        query: {
+          id: { $in: tool_call_handles.map((t: AsyncTaskInfo) => t.task_id) }
+        }
+      })
 
       // if all tool calls are completed, resolve the promise
-      if (tool_info.every((t:AsyncTaskInfo) => t.status === 'Completed')) {
+      if (tool_info.every((t: AsyncTaskInfo) => t.status === 'Completed')) {
         // clear loading status
-        if (setLoadingMessage) setLoadingMessage('');
+        if (setLoadingMessage) setLoadingMessage('')
 
-        resolve(tool_info.map((t:AsyncTaskInfo) => {
-          const args = JSON.parse(t.args);
-          return {
-            tool_call_id: args.id,
-            role: "tool",
-            name: args.function.name,
-            content: t.result,
-          };
-        }));
+        resolve(
+          tool_info.map((t: AsyncTaskInfo) => {
+            const args = JSON.parse(t.args)
+            return {
+              tool_call_id: args.id,
+              role: 'tool',
+              name: args.function.name,
+              content: t.result
+            }
+          })
+        )
       } else {
         // otherwise, set the loading message appropriately and wait some second(s) and poll again
-        const messages = tool_info.map((t:AsyncTaskInfo) => t.status );
+        const messages = tool_info.map((t: AsyncTaskInfo) => t.status)
 
         if (setLoadingMessage) {
           if (messages.length == 1) {
-            setLoadingMessage(messages[0]);
+            setLoadingMessage(messages[0])
           } else {
             // choose the most incomplete status (minimum of `progress`)
-            const most_incomplete = messages.reduce((a:AsyncTaskInfo, b:AsyncTaskInfo) => a.progress < b.progress ? a : b);
-            setLoadingMessage(most_incomplete.status);
+            const most_incomplete = messages.reduce((a: AsyncTaskInfo, b: AsyncTaskInfo) =>
+              a.progress < b.progress ? a : b
+            )
+            setLoadingMessage(most_incomplete.status)
           }
         }
-        setTimeout(poll, 1500);
+        setTimeout(poll, 1500)
       }
-    };
+    }
 
-    poll();
-  });
+    poll()
+  })
 
   console.log('Found a result!', result)
 
@@ -303,10 +309,7 @@ export const postRunner = async (
 
   // add the new message to the message array
   if (newMessage) {
-    messageArray = [
-      ...messageArray,
-      { role: 'user', content: newMessage },
-    ]
+    messageArray = [...messageArray, { role: 'user', content: newMessage }]
   }
 
   if (currentStream instanceof ReadableStream) {
@@ -341,10 +344,7 @@ export const postRunner = async (
       // now rebuild a message array with the right stuff
       // add the original message
 
-      messageArray = [
-        toolCallMessage,
-        ...toolResponses
-      ];
+      messageArray = [toolCallMessage, ...toolResponses]
 
       const { currentStream } = await postChat(systemPrompt, messageArray, null, 'auto', tools)
 

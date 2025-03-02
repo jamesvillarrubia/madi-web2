@@ -198,14 +198,14 @@ const ChatBox = forwardRef<CustomRef, ChatProps>((props, ref) => {
             >
               {isLoading && (
                 <>
-                  {((loadingMessage != '') && (
+                  {loadingMessage != '' && (
                     <Flex
                       className="text-xs italic"
                       style={{ color: 'var(--accent-11)', minWidth: '100px' }}
                     >
                       {loadingMessage}
                     </Flex>
-                  ))}
+                  )}
                   <Flex
                     width="6"
                     height="6"
