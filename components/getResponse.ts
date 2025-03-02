@@ -1,8 +1,6 @@
-import { overArgs } from 'lodash-es'
 import { ChatMessage, ResponseSet, Tool, ToolCall } from '../components/interface'
 import { API_CHAT_PATH, API_HOST, API_TOOL_PATH, GCP_IAP_HEADERS } from '../constants'
 import client from './feathersClient'
-import { m } from 'framer-motion'
 
 // @ts-expect-error - This is a polyfill for ReadableStream
 ReadableStream.prototype[Symbol.asyncIterator] = async function* () {
@@ -31,6 +29,14 @@ type Item = {
 
 type Accumulator = {
   [key: string]: DeltaValue // Define a more specific type if possible
+}
+
+type AsyncTaskInfo = {
+  task_id: string
+  status: string
+  args: string
+  result: string
+  progress: number
 }
 
 export function messageReducer(previous: ChatMessage, item: Item): ChatMessage {
@@ -212,19 +218,19 @@ export const postTools = async (
   const tool_call_handles = await res.json()
 
   // now, poll the tool calls until they are all completed
-  const result = await new Promise((resolve, reject) => {
+  const result = await new Promise((resolve) => {
     const poll = async () => {
       // get the status of each tool call
       const tool_info = await client.service('tasks').find({ query: { 
-        id: {$in: tool_call_handles.map((t:any) => t.task_id) } 
+        id: {$in: tool_call_handles.map((t:AsyncTaskInfo) => t.task_id) } 
       } });
 
       // if all tool calls are completed, resolve the promise
-      if (tool_info.every((t:any) => t.status === 'Completed')) {
+      if (tool_info.every((t:AsyncTaskInfo) => t.status === 'Completed')) {
         // clear loading status
         if (setLoadingMessage) setLoadingMessage('');
 
-        resolve(tool_info.map((t:any) => {
+        resolve(tool_info.map((t:AsyncTaskInfo) => {
           const args = JSON.parse(t.args);
           return {
             tool_call_id: args.id,
@@ -235,14 +241,14 @@ export const postTools = async (
         }));
       } else {
         // otherwise, set the loading message appropriately and wait some second(s) and poll again
-        let messages = tool_info.map((t:any) => t.status );
+        const messages = tool_info.map((t:AsyncTaskInfo) => t.status );
 
         if (setLoadingMessage) {
           if (messages.length == 1) {
             setLoadingMessage(messages[0]);
           } else {
             // choose the most incomplete status (minimum of `progress`)
-            let most_incomplete = messages.reduce((a:any, b:any) => a.progress < b.progress ? a : b);
+            const most_incomplete = messages.reduce((a:AsyncTaskInfo, b:AsyncTaskInfo) => a.progress < b.progress ? a : b);
             setLoadingMessage(most_incomplete.status);
           }
         }

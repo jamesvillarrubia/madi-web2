@@ -1,4 +1,4 @@
-import {feathers} from '@feathersjs/feathers';
+import {feathers, HookContext} from '@feathersjs/feathers';
 import rest from '@feathersjs/rest-client';
 import { API_HOST, GCP_IAP_HEADERS } from '../constants';
 import axios from 'axios';
@@ -13,7 +13,7 @@ client.configure(rest(API_HOST).axios(axios));
 client.hooks({
   before: {
     all: [
-      async (context: any) => {
+      async (context:HookContext) => {
         context.params.headers = {
           ...context.params.headers,
           ...GCP_IAP_HEADERS,
